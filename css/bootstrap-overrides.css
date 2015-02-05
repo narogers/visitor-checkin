@@ -59,4 +59,15 @@ a:focus {
   color: #FFF;
 }
 
-
+/**
+ * Creates a caption overlay while still maintaining accessibility
+ */
+h2.caption {
+  position: absolute;
+  margin: 0;
+  padding: 0.5em;
+  bottom: 0;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.7);
+  width: 95%;
+}
