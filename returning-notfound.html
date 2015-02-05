@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width="device-width, initial-scale=1, user-scalable=no">
+    <title>Patron Checkin</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-overrides.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="/patron-checkin">
+            <img alt="Ingalls Library" src="images/cma-logo.png">
+          </a>
+       </div>
+          <h1>Ingalls Library</h1>
+          <span class="btn btn-primary pull-right"><a href="/patron-checkin">Home</a></span>
+       </div>
+    </nav>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+            <figure>
+              <img src="images/1942.638.png" alt="" class="img-responsive">
+            </figure>
+          </div>
+          <div class="col-sm-6">
+            <h2>Registration not found</h2>
+            <p>Your patron information could not be located. Please correct any mistakes below and
+               resubmit.</p>
+            <form action="returning-expired.html" method="GET">
+              <label for="identifier" class="sr-only">Name or Member ID</label>
+              <input type="text" class="form-control" id="identifier" value="John Smith">
+
+              <label for="patron_type" class="sr-only">Visitor type</label>
+              <select class="form-control">
+              <optgroup label="Visitor type">
+                <option disabled>Select one</option>
+                <option>Academic</option>
+                <option>Docent</option>
+                <option>Fellow</option>
+                <option>Intern</option>
+                <option selected>Member</option>
+                <option>Public</option>
+                <option>Staff</option>
+                <option>Volunteer</option>
+              </optgroup>
+              </select>
+              <span class="btn btn-primary"><a href="index.html">Cancel registration</a></span>
+              <input type="submit" class="btn btn-primary" value="Register">
+            </form>
+          </div>
+        </div>
+     </div>
+  </body>
+  <script src="js/jquery-2.1.3.js" type="text/js"></script>
+  <script src="js/bootstrap.js"></script>
+</html>
