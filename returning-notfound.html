@@ -23,19 +23,19 @@
     </nav>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <figure>
               <img src="images/1942.638.png" alt="" class="img-responsive">
             </figure>
           </div>
-          <div class="col-sm-6">
-            <h2>Registration not found</h2>
-            <p>Your patron information could not be located. Please correct any mistakes below and
-               resubmit.</p>
+          <div class="col-sm-8">
+            <h2>Visitor information not found</h2>
+            <p>Your visitor information could not be located. Correct any mistakes below and resubmit. If you continue to have problems contact <em>helpful person</a>.</p>
             <form action="returning-expired.html" method="GET">
               <label for="identifier" class="sr-only">Name or Member ID</label>
               <input type="text" class="form-control" id="identifier" value="John Smith">
 
+              <!--
               <label for="patron_type" class="sr-only">Visitor type</label>
               <select class="form-control">
               <optgroup label="Visitor type">
@@ -50,7 +50,10 @@
                 <option>Volunteer</option>
               </optgroup>
               </select>
-              <span class="btn btn-primary"><a href="index.html">Cancel registration</a></span>
+              -->
+              <label for="email_address" class="sr-only">Email Address</label>
+              <input type="text" name="email_address" id="email_address" class="form-control" value="bad@example.com">
+              <span class="btn btn-primary"><a href="index.html">Cancel check in</a></span>
               <input type="submit" class="btn btn-primary" value="Register">
             </form>
           </div>
