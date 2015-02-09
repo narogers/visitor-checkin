@@ -29,16 +29,15 @@
             </figure>
           </div>
           <div class="col-sm-8">
-            <h2>Visitor information not found</h2>
-            <p>Your visitor information could not be located. Trying entering your full name. If the record still cannot be found ask the desk for assistance.</p>
-            <form action="returning-expired.html" method="GET">
-              <label for="identifier" class="sr-only">Name or Member ID</label>
-              <input type="text" class="form-control" id="identifier" value="John Smith">
+            <h2>Multiple users found</h2>
+            <p>Multiple records were found for <strong>John Smith</strong>. Confirm your check in by choosing the email address that matches your account.</p>
 
-              <input type="submit" class="btn btn-primary" value="Check in">
-              <span class="btn btn-primary"><a href="index.html">Cancel check in</a></span>
-            </form>
-          </div>
+            <ul class="list-group">
+              <li class="list-group-item"><a href="returning-welcome.html">jsmith@clevelandart.org</a></li>
+              <li class="list-group-item"><a href="returning-welcome.html">j.smith@gmail.com</a></li>
+              <li class="list-group-item"><a href="new-visitor.html">I need to register</a></li>
+            </ul>
+         </div>
         </div>
      </div>
   </body>
