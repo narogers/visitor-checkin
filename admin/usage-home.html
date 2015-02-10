@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width="device-width, initial-scale=1, user-scalable=no">
+    <title>Patron Checkin</title>
+
+     <link href="../css/bootstrap.min.css" rel="stylesheet">
+     <link href="../css/bootstrap-overrides.css" rel="stylesheet">
+     <link href="../css/admin-overrides.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="http://library.clevelandart.org">
+            <img alt="Ingalls Library home page" src="../images/cma-logo.png">
+          </a>
+       </div>
+       <!-- Since there are only three links run them across the top -->
+       <ul class="nav navbar-nav">
+         <li><a href="index.html">Home</a></li>
+         <li class="active"><a href="usage-home.html">Library usage</a></li>
+         <li><a href="pending-home.html">Pending registrations</a></li>
+       </ul>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Library Visits for February 8th to 14th, 2015</h1>
+        <hr />
+      </div>     
+      <!-- Search bar and other tools -->
+      <div class="col-lg-4">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Filter by">
+          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
+        </div>
+      </div>  
+      <div class="col-lg-4">
+        <div class="dropdown">
+          <button class="btn btn-default dropdown-toggle" type="button" id="date_range" data-toggle="dropdown" aria-expanded="true">
+            Select range
+            <span class="caret"></span>
+          </button>
+
+          <ul class="dropdown-menu" role="menu" aria-labelledby="date_range">
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=all">All available</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=today">Today (February 10)</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=week">This week (Feb. 8th to 15th)</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=currentmonth">This month (Feb 2015)</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=lastmonth">Previous month (Jan 2015)</a></li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- Begin the main page which just lists all checkins without any sort of pagination. If this
+           gets unwieldly adding pagination should be fairly straightforward -->
+      <div class="col-lg-10">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#academic" data-toggle='collapse' data-target='#visitor-table-1'
+               aria-expanded='false' aria-controls="visitor-table-1">Academic 
+               <span class="badge">10</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-1">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#docent" data-toggle='collapse' data-target='#visitor-table-2'
+               aria-expanded='false' aria-controls="visitor-table-2">Docents 
+               <span class="badge">7</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-2">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#fellow" data-toggle='collapse' data-target='#visitor-table-3'
+               aria-expanded='false' aria-controls="visitor-table-3">Fellows 
+               <span class="badge">3</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-3">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#intern" data-toggle='collapse' data-target='#visitor-table-4'
+               aria-expanded='false' aria-controls="visitor-table-4">Interns 
+               <span class="badge">8</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-4">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#member" data-toggle='collapse' data-target='#visitor-table-5'
+               aria-expanded='false' aria-controls="visitor-table-5">Interns 
+               <span class="badge">2</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-5">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+         <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#public" data-toggle='collapse' data-target='#visitor-table-6'
+               aria-expanded='false' aria-controls="visitor-table-6">Public Guests 
+               <span class="badge">4</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-6">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#staff" data-toggle='collapse' data-target='#visitor-table-7'
+               aria-expanded='false' aria-controls="visitor-table-7">Staff Members 
+               <span class="badge">15</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-7">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <a href="#volunteer" data-toggle='collapse' data-target='#visitor-table-8'
+               aria-expanded='false' aria-controls="visitor-table-8">Volunteers
+               <span class="badge">9</span>
+               <span class="caret pull-right"></span>
+            </a>
+          </div>
+
+          <table class="table table-striped collapse" id="visitor-table-8">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Checkins</th>
+              <th>Last checkin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="usage-visitor.html">Jane Doe</a></td>
+              <td>2</td>
+              <td>February 8, 2015</td>
+            </tr>
+            <tr>
+              <td><a href="usage-visitor.html">Nathan Rogers</a></td>
+              <td>1</td>
+              <td>February 2, 2015</td>
+            </tr>
+             <tr>
+              <td><a href="usage-visitor.html">John Smith</a></td>
+              <td>5</td>
+              <td>February 5, 2015</td>
+            </tr>
+          </tbody>
+          </table>
+        </div>
+
+
+    </div>
+     </div>
+
+    </div>
+  </div>
+ </body>
+  <script src="../js/jquery-2.1.3.js"></script>
+  <script src="../js/bootstrap.js"></script>
+</html>

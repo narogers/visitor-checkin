@@ -1,0 +1,35 @@
+/**
+ * Override some aspects of the default Bootstrap theme so that the 
+ * interface looks better
+ */
+
+/**
+ * With the fixed navbar header things need to be shifted down to
+ * compensate. The default navbar is 50 px
+ */
+body {
+  padding-top: 0;
+}
+
+/**
+ * An inverse navbar works well but in case black is not ideal let's
+ * tweak the background to a more soothing blue color
+ */
+.navbar-inverse {
+  background-color: #777777;
+  border-color: #46B8DA;
+}
+
+/**
+ * An inelegant hack for a quick prototype
+ */
+.navbar-brand img {
+  margin-top: -8px;
+}
+
+.navbar h1 {
+  display: inline-block;
+  font-size: 175%;
+  color: #FFF;
+}
+
