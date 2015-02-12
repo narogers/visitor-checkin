@@ -32,11 +32,14 @@
             <h2>Visitor information not found</h2>
             <p>Your visitor information could not be located. Trying entering your full name. If the record still cannot be found ask the desk for assistance.</p>
             <form action="returning-expired.html" method="GET">
-              <label for="identifier" class="sr-only">Name or Member ID</label>
-              <input type="text" class="form-control" id="identifier" value="John Smith">
-
-              <input type="submit" class="btn btn-primary" value="Check in">
-              <span class="btn btn-primary"><a href="index.html">Cancel check in</a></span>
+              <div class="form-group">
+                  <label for="identifier" class="sr-only">Name or Member ID</label>
+                  <input type="text" class="form-control" id="identifier" value="John Smith">
+              </div>
+              <div class="form-group">
+                  <input type="submit" class="btn btn-primary" value="Check in">
+                  <span class="btn btn-primary"><a href="index.html">Cancel check in</a></span>
+              </div>
             </form>
           </div>
         </div>
