@@ -1,11 +1,17 @@
 # Working VIM files
 .*.swp
 
+# Scratch files
+*.bak
+
 # PHP related resources
-tmp/*
+/tmp/*
+/logs/*
+/config/app.php
 [Cc]onfig/core.php
 [Cc]onfig/database.php
 app/tmp/*
 app/[Cc]onfig/core.php
 app/[Cc]onfig/database.php
+/vendor/*
 !empty
