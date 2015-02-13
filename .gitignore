@@ -1,17 +1,8 @@
-# Working VIM files
-.*.swp
-
-# Scratch files
+# Temporary scratch files
 *.bak
+*.swp
 
-# PHP related resources
-/tmp/*
-/logs/*
-/config/app.php
-[Cc]onfig/core.php
-[Cc]onfig/database.php
-app/tmp/*
-app/[Cc]onfig/core.php
-app/[Cc]onfig/database.php
-/vendor/*
-!empty
+# Laravel specific exclusions
+/vendor
+/node_modules
+.env
