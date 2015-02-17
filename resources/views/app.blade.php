@@ -4,10 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width="device-width, initial-scale=1, user-scalable=no">
-    <title>Patron Checkin</title>
+    <title>Visitor Checkin</title>
 
-     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-overrides.css" rel="stylesheet">
+    {!! HTML::style('css/bootstrap.min.css') !!}
+    {!! HTML::style('css/checkin.css') !!}
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
