@@ -1,29 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width="device-width, initial-scale=1, user-scalable=no">
-    <title>Patron Checkin</title>
+@extends('layouts/master')
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-overrides.css" rel="stylesheet">
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="./">
-            <img alt="Ingalls Library" src="images/cma-logo.png">
-          </a>
-       </div>
-          <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right"><a href="./">Reset</a></span>
-       </div>
-    </nav>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-sm-12">
+@section('content')
+
          <h2>Policies and Terms of Use</h2>
          <p class="lead">The Ingalls Library is a non-circulating art research collection intended to assist visitors with research needs that cannot be met by local public, university, and college library collections. Visitors are expected to complete the Patron Registration Form and this Policies and Terms of Use Agreement, and to abide by the stated policies with respect for the rights of others and with respect for the collections. Failure to do so will result in loss of library privileges and removal from the library and the Museum. Access to the Ingalls Library and Museum Archives is granted at the sole discretion of the library’s staff and such access may be denied or revoked at any time.</p>
          <h3>Library Use Policies</h3>
@@ -71,22 +49,20 @@
 
         <form action="new-welcome.html" method="GET">
           <div id="signature"></div>
-          <input type="submit" class="btn btn-primary btn-lg" value="I agree">
+
           <span class="btn btn-primary"><a href="new-member.html">Go back</a></span>
+          <input type="submit" class="btn btn-primary btn-lg" value="I agree">
         </form>
-        </div>
-      </div>
-    </div>
-  </body>
-  <script src="js/jquery-2.1.3.js"></script>
-  <script src="js/jSignature.min.js"></script>
+@stop
+
+@section('scripts')
   <!-- Fire up the signature panel and inject it into the page. We don't
        need to rely on FlashCanvas because we do not care about browsers
-       such as Internet Explorer 7 and 8 for this use case -->
+      such as Internet Explorer 7 and 8 for this use case -->
+  {!! HTML::script('js/jSignature.min.js') !!}
   <script>
     $(function() {
       $('#signature').jSignature();
     })
   </script>
-  <script src="js/bootstrap.min.js"></script>
-</html>
+@stop

@@ -1,11 +1,14 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests\RegistrationTypeRequest;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests;
+use App\Http\Requests\RegistrationDetailsRequest;
+use App\Http\Requests\RegistrationTypeRequest;
+use App\Registration;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class RegistrationController extends Controller {
 
@@ -49,6 +52,11 @@ class RegistrationController extends Controller {
  				break;
  			case "intern":
  				$active_view = 'registration.forms.intern';
+ 				$label = 'Intern';
+ 				break;
+ 			case "member":
+ 				$active_view = 'registration.forms.member';
+ 				$label = 'Member';
  				break;
  			case "public":
  				$active_view = 'registration.forms.public';
@@ -58,8 +66,8 @@ class RegistrationController extends Controller {
  				$active_view = 'registration.forms.staff';
  				$label = 'Staff';
  				break;
- 			case "visitor":
- 				$active_view = 'registrations.forms.visitor';
+ 			case "volunteer":
+ 				$active_view = 'registration.forms.volunteer';
  				$label = 'Visitor';
  		}
 
@@ -70,17 +78,37 @@ class RegistrationController extends Controller {
  		if (null == $active_view) {
  			return redirect('register')->with('notice', 'Please select a valid role');	
  		}
+
  		/**
- 		 * Otherwise continue the process by loading the registration form
- 		 * and supplying it the proper content. Since all forms funnel to
- 		 * the terms of use there is no need for the workflow to diverge here
+ 		 * Store everything in the session so that at the end of the
+ 		 * registration process you can build up a Registration object
+ 		 * that gets stored to the database
+ 		 */
+ 		$current_registration = new Registration;
+ 		$current_registration->name = $request->input('name');
+ 		$current_registration->email_address = $request->input('email_address');
+ 		$current_registration->registration_type = $request->input('role');
+ 		Session::put('registration', $current_registration);
+
+ 		/**
+ 		 * Otherwise continue the process by loading the registration 
+ 		 * form and supplying it the proper content. Since all forms 
+ 		 * funnel to the terms of use there is no need for the 
+ 		 * workflow to diverge here
  		 */
  		return view('registration.new')->nest('registration_form', $active_view)->with('label', $label);
 	}
 
-	public function postTermsOfUse() {
+	public function postTermsOfUse(RegistrationDetailsRequest $request) {
 		Log::info('Submission processed - forwarding to the terms of use for acceptance');
-
+		Log::info('Session contains ...');
+	 	foreach ($request->session()->all() as $value) {
+			Log::info($value);
+		}
+		Log::info('Request contains ...');
+		foreach ($request->all() as $value) {
+			Log::info($value);
+		}
 		return view('registration.termsofuse');
 	}
 }

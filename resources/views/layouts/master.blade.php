@@ -30,4 +30,5 @@
   
   {!! HTML::script('js/jquery-2.1.3.js') !!}
   {!! HTML::script('js/bootstrap.min.js') !!}
+  @yield('scripts')
 </html>
