@@ -13,8 +13,4 @@
 
 Route::get('/', 'HomeController@index');
 
-Route::get('/register', 'RegistrationController@index');
-
-Route::get('users', function() {
-  return 'Fezzes are cool';
-});
+Route::controller('register', 'RegistrationController');

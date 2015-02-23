@@ -14,7 +14,7 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="./">
-            <img alt="Ingalls Library" src="images/cma-logo.png">
+            <img alt="Ingalls Library" src="{{ URL::asset('images/cma-logo.png')}}">
           </a>
        </div>
           <h1>Ingalls Library</h1>

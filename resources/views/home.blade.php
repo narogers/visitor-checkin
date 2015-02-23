@@ -10,7 +10,7 @@
               </a>
             </div>
         <div class="col-sm-6">
- 	      <a href="{{ action('RegistrationController@index') }}">
+ 	      <a href="{{ action('RegistrationController@getIndex') }}">
               <figure>
                 <img src="images/1915.534.png" alt="New visitors" class="img-responsive">
               </figure>
