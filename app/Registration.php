@@ -38,7 +38,6 @@ class Registration extends Model {
 	    	default:
 	    		return $value;
 	    }
-	
 	}
 
 	/**

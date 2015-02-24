@@ -28,10 +28,18 @@ class RegistrationController extends Controller {
 	}
 
 	public function getNew() {
-		Log::info('SESSION');
-		Log::info(var_dump(Session::all()));
-		
-		return view('registration.forms.academic');
+		/**
+		 * This is probably not the way you are meant to do this but
+		 * it gets the job done for now. Consider a serious refactoring
+		 * once some proper unit tests are in place
+		 */
+		$properties = $this->getRoleView(Session::get('registration')
+			->registration_type);
+		Log::info('[GET] Directing request to ' . $properties['view']);
+ 		
+ 		return view('registration.new')
+ 		  ->nest('registration_form', $properties['view'])
+ 		  ->with('label', $properties['label']);		
 	}
 
 	public function postNew(RegistrationTypeRequest $request) {
@@ -44,50 +52,13 @@ class RegistrationController extends Controller {
 		 * It might be helpful not to hardcode this views but that can come
 		 * in a later refactoring
 		 */
-		Log::info('Processing registration for a(n) ' . $request->input('role'));
+		$properties = $this->getRoleView($request->input('role'));
 
- 		$active_view = null;
- 		$label = null;
-
- 		switch (strtolower($request->input('role'))) {
- 			case "academic":
- 				$active_view = 'registration.forms.academic';
- 				$label = 'Academic Guest';
- 				break;
- 			case "docent":
- 				$active_view = 'registration.forms.docent';
- 				$label = 'Docent';
- 				break;
- 			case "fellow":
- 				$active_view = 'registration.forms.fellow';
- 				$label = 'Fellow';
- 				break;
- 			case "intern":
- 				$active_view = 'registration.forms.intern';
- 				$label = 'Intern';
- 				break;
- 			case "member":
- 				$active_view = 'registration.forms.member';
- 				$label = 'Member';
- 				break;
- 			case "public":
- 				$active_view = 'registration.forms.public';
- 				$label = 'Public';
- 				break;
- 			case "staff":
- 				$active_view = 'registration.forms.staff';
- 				$label = 'Staff';
- 				break;
- 			case "volunteer":
- 				$active_view = 'registration.forms.volunteer';
- 				$label = 'Visitor';
- 		}
-
- 		Log::info('Directing request to ' . $active_view);
+		Log::info('[POST] Directing request to ' . $properties['view']);
  		/**
  		 * Bail if you don't have a view to supply
  		 */
- 		if (null == $active_view) {
+ 		if (null == $properties['view']) {
  			return redirect('register')
  			  ->with('notice', 'Please select a valid role')
  			  ->with('registration', $registration);	
@@ -98,7 +69,7 @@ class RegistrationController extends Controller {
  		 * registration process you can build up a Registration object
  		 * that gets stored to the database
  		 */
- 		$registration = new Registration;
+ 		$registration = Session::get('registration', new Registration);
  		$registration->name = $request->input('name');
  		$registration->email_address = $request->input('email_address');
  		$registration->registration_type = $request->input('role');
@@ -111,9 +82,8 @@ class RegistrationController extends Controller {
  		 * workflow to diverge here
  		 */
  		return view('registration.new')
- 		  ->nest('registration_form', $active_view)
- 		  ->with('label', $label)
- 		  ->with('registration', $registration);
+ 		  ->nest('registration_form', $properties['view'])
+ 		  ->with('label', $properties['label']);
 	}
 
 	public function postTermsOfUse(RegistrationDetailsRequest $request) {
@@ -139,5 +109,46 @@ class RegistrationController extends Controller {
 		Log::error('Could not match request to a specified route - redirecting to the index page');
 		Log::error(var_dump($parameters));
 		return redirect()->action('RegistrationController@getIndex');
+	}
+
+	protected function getRoleView($role = '') {
+		Log::info('Processing registration for a(n) ' . $role);
+
+ 		switch ($role) {
+ 			case "Academic":
+ 				return ['view' => 'registration.forms.academic',
+ 						'label' => 'Academic Guest'];
+
+ 			case "Docent":
+ 				return ['view' => 'registration.forms.docent',
+ 						'label' => 'Docent'];
+
+ 			case "Fellow":
+ 				return ['view' => 'registration.forms.fellow',
+ 						'label' => 'Fellow'];
+
+ 			case "Intern":
+ 				return ['view' => 'registration.forms.intern',
+ 						'label' => 'Intern'];
+
+ 			case "Member":
+ 				return ['view' => 'registration.forms.member',
+ 						'label' => 'Member'];
+
+ 			case "Public":
+ 				return ['view' => 'registration.forms.public',
+ 						'label' => 'Public'];
+
+ 			case "Staff":
+ 				return ['view' => 'registration.forms.staff',
+ 						'label' => 'Staff'];
+
+ 			case "Volunteer":
+ 				return ['view' => 'registration.forms.volunteer',
+ 						'label' => 'Volunteer'];
+ 			default:
+ 				return ['view' => null,
+ 						'label' => null];
+ 		}
 	}
 }

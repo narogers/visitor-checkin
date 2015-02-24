@@ -1,28 +1,37 @@
             <div class="form-group">
-              <label for="street-address">Address</label>
-              <input type="text" class="form-control" id="street-address" placeholder="Street Address">
+              {!! Form::label('street_address', 'Address') !!}
+              {!! Form::text('street_address', '', 
+                    ['class' => 'form-control',
+                     'placeholder' => 'Street address']) !!}
 
-            <label for="city" class="sr-only">City</label>
-            <input type="text" class="form-control" id="city" placeholder="City">
+              {!! Form::label('city', '', 
+                    ['class' => 'sr-only']) !!}
+              {!! Form::text('city', '', 
+                    ['class' => 'form-control',
+                     'placeholder' => 'City']) !!}
 
-            <label for="zipcode" class="sr-only">Zip Code</label>
-            <input type="text" class="form-control" id="zipcode" placeholder="Zip code">
-            </div>
-            <div class="form-group">
-              <label for="telephone">Telephone</label>
-              <input type="text" class="form-control" id="telephone" placeholder="(xxx)xxx-xxxx">
-            </div>
-            <div class="form-group">
-              <label for="department">Department</label>
-              <input type="text" class="form-control" id="department">
-            </div>
-  
-            <div class="form-group">  
-              <label for="supervisor">Supervisor</label>
-              <input type="text" class="form-control" id="supervisor">
-            </div>
-         
-            <div class="form-group">
-              <label for="end_date">End date</label>
-              <input type="date" class="form-control" id="end_date">
-            </div>
+              {!! Form::label('zip_code', '', 
+                    ['class' => 'sr-only']) !!}
+              {!! Form::text('zip_code', '', 
+                    ['class' => 'form-control',
+                     'maxlength' => 5,
+                     'placeholder' => 'Zip code']) !!}
+           </div>
+
+           <div class="form-group">
+              {!! Form::label('department', 'Department') !!}
+              {!! Form::text('department', '', 
+                    ['class' => 'form-control']) !!}
+          </div>
+
+          <div class="form-group">
+              {!! Form::label('supervisor', 'Supervisor') !!}
+              {!! Form::text('supervisor', '', 
+                    ['class' => 'form-control']) !!}
+          </div>
+
+          <div class="form-group">
+              <label for='ending_date'>Date</label>
+              <input type="date" name="ending_date" id="ending_date" 
+                     class="form-control col-sm-4">
+          </div>
