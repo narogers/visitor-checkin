@@ -19,10 +19,15 @@ class RegistrationController extends Controller {
 	 */
 	public function getIndex()
 	{
-        return view('registration.index');
+		$registration = new Registration;
+        return view('registration.index')->with('registration', $registration);
 	}
 
-	public function postIndex(RegistrationTypeRequest $request) {
+	public function postIndex() {
+		return view('registration.index');
+	}
+
+	public function postNew(RegistrationTypeRequest $request) {
 		/**
 		 * Switch on the role input to determine which view to
 		 * render in the form. If given an invalid role (or no role
@@ -76,7 +81,9 @@ class RegistrationController extends Controller {
  		 * Bail if you don't have a view to supply
  		 */
  		if (null == $active_view) {
- 			return redirect('register')->with('notice', 'Please select a valid role');	
+ 			return redirect('register')
+ 			  ->with('notice', 'Please select a valid role')
+ 			  ->with('registration', $registration);	
  		}
 
  		/**
@@ -84,11 +91,11 @@ class RegistrationController extends Controller {
  		 * registration process you can build up a Registration object
  		 * that gets stored to the database
  		 */
- 		$current_registration = new Registration;
- 		$current_registration->name = $request->input('name');
- 		$current_registration->email_address = $request->input('email_address');
- 		$current_registration->registration_type = $request->input('role');
- 		Session::put('registration', $current_registration);
+ 		$registration = new Registration;
+ 		$registration->name = $request->input('name');
+ 		$registration->email_address = $request->input('email_address');
+ 		$registration->registration_type = $request->input('role');
+ 		Session::put('registration', $registration);
 
  		/**
  		 * Otherwise continue the process by loading the registration 
@@ -96,7 +103,10 @@ class RegistrationController extends Controller {
  		 * funnel to the terms of use there is no need for the 
  		 * workflow to diverge here
  		 */
- 		return view('registration.new')->nest('registration_form', $active_view)->with('label', $label);
+ 		return view('registration.new')
+ 		  ->nest('registration_form', $active_view)
+ 		  ->with('label', $label)
+ 		  ->with('registration', $registration);
 	}
 
 	public function postTermsOfUse(RegistrationDetailsRequest $request) {
@@ -109,6 +119,17 @@ class RegistrationController extends Controller {
 		foreach ($request->all() as $value) {
 			Log::info($value);
 		}
+
 		return view('registration.termsofuse');
+	}
+
+	/**
+	 * Safe methd that captures any requests which could not be matched. It logs the request to the
+	 * system and then redirects to the New Visitor Registration page. This does not replace the need
+	 * for proper error handling - think of it more as a debugging tool and safeguard
+	 */
+	public function missingMethod($parameters = array()) {
+		Log::error('Could not match request to a specified route - redirecting to the index page');
+		return redirect()->action('RegistrationController@getIndex');
 	}
 }

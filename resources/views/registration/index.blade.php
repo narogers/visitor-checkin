@@ -24,14 +24,14 @@
           </div>
           @endif
 
-          {!! Form::open(["action" => "RegistrationController@postIndex"]) !!}
+          {!! Form::model($registration, ["action" => "RegistrationController@postNew"]) !!}
             <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" placeholder="Name" name="name">
+              {!! Form::label('name') !!}
+              {!! Form::text('name', '', ['class' => 'form-control']) !!}
             </div>
             <div class="form-group">
-            <label for="email_address">Email address</label>
-            <input type="text" class="form-control" id="email_address" name="email_address">
+              {!! Form::label('email_address') !!}
+              {!! Form::text('email_address', '', ['class' => 'form-control']) !!}
             </div>
  
             <div class="form-group">

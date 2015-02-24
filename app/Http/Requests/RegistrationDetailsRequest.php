@@ -1,6 +1,8 @@
 <?php namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class RegistrationDetailsRequest extends Request {
@@ -25,7 +27,7 @@ class RegistrationDetailsRequest extends Request {
 	 */
 	public function rules()
 	{
-		$role = Session::get('role');
+		$role = Session::get('registration')->registration_type;
 		$rules = $this->rules;
 
 		/**
@@ -75,6 +77,9 @@ class RegistrationDetailsRequest extends Request {
 			$rules['supervisor'] = 'required';
 			$rules['ending_date'] = 'required|date';
 		}
+
+		Log::info('Following rules have been applied to data');
+		Log::info($rules);
 
 		return $rules;
 	}

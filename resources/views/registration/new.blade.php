@@ -9,9 +9,9 @@
           </figure>
         </div>
         <div class="col-sm-6">
-          <h2>{{ Session::get('label') }}</h2>
-          {!! Form::open(['action' => 
-                'RegistrationController@postTermsOfUse']) !!}
+          <h2>{{ $label }}</h2>
+          {!! Form::model($registration, 
+                ['action' => 'RegistrationController@postTermsOfUse']) !!}
             {!! $registration_form !!}
 
             {!! Form::submit('Go back', 
