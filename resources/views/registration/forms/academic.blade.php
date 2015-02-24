@@ -1,7 +1,7 @@
 
             <div class="form-group">
-              {!! Form::label('street-address', 'Address') !!}
-              {!! Form::text('street-address', '', 
+              {!! Form::label('street_address', 'Address') !!}
+              {!! Form::text('street_address', '', 
                     ['class' => 'form-control',
                      'placeholder' => 'Street address']) !!}
 

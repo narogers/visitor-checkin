@@ -15,6 +15,6 @@
                 <img src="images/1915.534.png" alt="New visitors" class="img-responsive">
               </figure>
               </a>
-              <h2 class="caption">New visitors</h2>
+              <h2 class="caption"><a href="{{ action('RegistrationController@getIndex') }}">New visitors</a></h2>
             </div>
 @stop

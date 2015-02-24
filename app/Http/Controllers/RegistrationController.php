@@ -27,6 +27,13 @@ class RegistrationController extends Controller {
 		return view('registration.index');
 	}
 
+	public function getNew() {
+		Log::info('SESSION');
+		Log::info(var_dump(Session::all()));
+		
+		return view('registration.forms.academic');
+	}
+
 	public function postNew(RegistrationTypeRequest $request) {
 		/**
 		 * Switch on the role input to determine which view to
@@ -130,6 +137,7 @@ class RegistrationController extends Controller {
 	 */
 	public function missingMethod($parameters = array()) {
 		Log::error('Could not match request to a specified route - redirecting to the index page');
+		Log::error(var_dump($parameters));
 		return redirect()->action('RegistrationController@getIndex');
 	}
 }

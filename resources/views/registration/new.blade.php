@@ -10,7 +10,7 @@
         </div>
         <div class="col-sm-6">
           <h2>{{ $label }}</h2>
-          {!! Form::model($registration, 
+          {!! Form::model(new App/Http/Requests/RegistrationDetailsRequest, 
                 ['action' => 'RegistrationController@postTermsOfUse']) !!}
             {!! $registration_form !!}
 

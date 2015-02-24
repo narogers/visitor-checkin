@@ -47,7 +47,7 @@ class RegistrationDetailsRequest extends Request {
 		 * Driver's license is only required for two cases
 		 */
 		if (in_array($role, ['Academic', 'Public'])) {
-			$rules['license'] = 'required';
+			$rules['drivers_license'] = 'required';
 		}
 		/**
 		 * But the similar field member's number is only used in a
