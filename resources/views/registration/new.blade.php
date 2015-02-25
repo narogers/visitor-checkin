@@ -26,10 +26,10 @@
 
             {!! Form::submit('Go back', 
                   ['class' => 'btn btn-primary',
-                   'name' => 'go_back']) !!}
+                   'name' => 'previous_step']) !!}
             {!! Form::submit('Continue',
                   ['class' => 'btn btn-primary',
-                   'name' => 'submit']) !!}
+                   'name' => 'next_step']) !!}
           {!! Form::close() !!}
         </div>
 @stop

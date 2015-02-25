@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\RegistrationDetailsRequest;
 use App\Http\Requests\RegistrationTypeRequest;
+use App\Http\Requests\TermsOfUseAgreementRequest;
 use App\Registration;
 
 use Illuminate\Http\Request;
@@ -11,6 +12,15 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class RegistrationController extends Controller {
+
+	/**
+	 * Instantiate a new RegistrationController
+	 */
+	public function __construct() {
+		$this->middleware('back_button');
+		// Eventually make an exception for the confirmation page at
+		// the end of the workflow
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -86,18 +96,21 @@ class RegistrationController extends Controller {
  		  ->with('label', $properties['label']);
 	}
 
+	public function getTermsOfUse() {
+		return view('registration.termsofuse');
+
+	}
 	public function postTermsOfUse(RegistrationDetailsRequest $request) {
 		Log::info('Submission processed - forwarding to the terms of use for acceptance');
-		Log::info('Session contains ...');
-	 	foreach ($request->session()->all() as $value) {
-			Log::info($value);
-		}
-		Log::info('Request contains ...');
-		foreach ($request->all() as $value) {
-			Log::info($value);
-		}
 
 		return view('registration.termsofuse');
+	}
+
+	public function postWelcome(TermsOfUseAgreementRequest $request) {
+		$registration = Session::get('registration');
+		return view('registration.index')
+			->with('notice', 'Registration complete')
+			->with('registration', $registration);
 	}
 
 	/**

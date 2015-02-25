@@ -47,13 +47,16 @@
             </div>
             <p class="lead">It is your responsibility to observe the legal use of copyrighted data or information. Abuse of these regulations and policies will result in immediate withdrawal of all ID and password access privileges, loss of library privileges and will be reported to the academic authorities or other appropriate authority. Visitors to the Ingalls Library and Museum Archives agree to indemnify and hold harmless the Cleveland Museum of Art, its officers, trustees and employees, from and against all claims or actions arising out of or related to such visitor’s (a) use of library or archived items; and (b) violation of this use agreement or any of the rules or procedures of the Ingalls Library or Museum Archives.</p>         
 
-        <form action="new-welcome.html" method="GET">
+        {!! Form::open(['action' => 'RegistrationController@postWelcome']) !!}
           <div id="signature"></div>
 
-          <span class="btn btn-primary"><a href="new-member.html">Go back</a></span>
-          <input type="submit" class="btn btn-primary btn-lg" value="I agree">
-        </form>
-@stop
+          {!! Form::submit('Go back', 
+                ['class' => 'btn btn-primary',
+                 'name' => 'previous_step']) !!}
+          {!! Form::submit('Continue',
+                ['class' => 'btn btn-primary',
+                 'name' => 'next_step']) !!}
+        {!! Form::close() !!}@stop
 
 @section('scripts')
   <!-- Fire up the signature panel and inject it into the page. We don't

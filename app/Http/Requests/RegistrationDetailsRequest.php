@@ -78,9 +78,6 @@ class RegistrationDetailsRequest extends Request {
 			$rules['ending_date'] = 'required|date';
 		}
 
-		Log::info('Following rules have been applied to data');
-		Log::info($rules);
-
 		return $rules;
 	}
 }
