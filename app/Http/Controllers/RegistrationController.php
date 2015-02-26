@@ -29,8 +29,16 @@ class RegistrationController extends Controller {
 	 */
 	public function getIndex()
 	{
-		$registration = new Registration;
-        return view('registration.index')->with('registration', $registration);
+		$registration = '';
+		if (Session::has('registration')) {
+			$registration = Session::get('registration');
+			Log::info('[INDEX] Retrieved registration inforation from the session');
+		} else {
+			$registration = new Registration;
+			Log::info('[INDEX] Generating a new registration');
+		}
+
+        return view('registration.index')->withRegistration($registration);
 	}
 
 	public function postIndex() {

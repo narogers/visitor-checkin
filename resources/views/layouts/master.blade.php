@@ -18,7 +18,8 @@
           </a>
        </div>
           <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right"><a href="{{ link_to('/') }}">Reset</a></span>
+          <span class="btn btn-primary pull-right">{!! link_to('/', 
+            'Reset') !!}</span>
        </div>
     </nav>
     <div class="container-fluid">

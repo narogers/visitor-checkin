@@ -24,7 +24,14 @@
           </div>
           @endif
 
-          {!! Form::model($registration, ["action" => "RegistrationController@postNew"]) !!}
+          <div class='alert alert-warning'>
+            Name: {{ $registration->name }}
+            <br />
+            Email address: {{ $registration->email_address }}
+          </div>
+
+          {!! Form::model($registration,
+                ["action" => "RegistrationController@postNew"]) !!}
             <div class="form-group">
               {!! Form::label('name') !!}
               {!! Form::text('name', '', ['class' => 'form-control']) !!}

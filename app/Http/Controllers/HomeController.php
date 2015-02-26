@@ -1,5 +1,7 @@
 <?php namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Session;
+
 class HomeController extends Controller {
 
 	/*
@@ -29,6 +31,11 @@ class HomeController extends Controller {
 	 */
 	public function index()
 	{
+		/**
+		 * Reset the session contents whenever you hit the home
+		 * page
+		 */
+		Session::invalidate();
 		return view('home');
 	}
 
