@@ -30,7 +30,7 @@
         </div>
         <div class="col-sm-6">
           <h2>New Visitor Registration</h2>
-          <form action="new-member.html" method="GET">
+          <form action="new-vistor.html" method="GET" id="page_1">
             <div class="form-group">
             <label for="identifier">Name</label>
             <input type="text" class="form-control" id="identifier" placeholder="Name">
@@ -45,14 +45,14 @@
             <select class="form-control" id="visitor_type">
             <optgroup label="Visitor type">
               <option disabled selected>Select one</option>
-              <option>Academic</option>
-              <option>Docent</option>
-              <option>Fellow</option>
-              <option>Intern</option>
-              <option>Member</option>
-              <option>Public</option>
-              <option>Staff</option>
-              <option>Volunteer</option>
+              <option data-target="new-academic">Academic</option>
+              <option data-target="new-docent">Docent</option>
+              <option data-target="new-fellow">Fellow</option>
+              <option data-target="new-intern">Intern</option>
+              <option data-target="new-member">Member</option>
+              <option data-target="new-public">Public</option>
+              <option data-target="new-staff">Staff</option>
+              <option data-target="new-volunteer">Volunteer</option>
             </optgroup>
           </select>
           </div>
@@ -61,6 +61,15 @@
       </div>
     </div>
   </body>
-  <script src="js/jquery-2.1.3.js" type="text/js"></script>
+  <script src="js/jquery-2.1.3.js"></script>
   <script src="js/bootstrap.js"></script>
+  <script>
+    // Fake the form submission by updating the form's target when a different    // target is selected. Obviously this is not for production.
+    $(function() {
+      $('#visitor_type').change(function() {
+        form_target = $('#visitor_type option:selected').data('target');
+        $('form').attr('action', form_target + '.html');	 
+      })
+    });
+  </script>
 </html>
