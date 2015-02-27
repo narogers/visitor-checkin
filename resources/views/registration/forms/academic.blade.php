@@ -1,19 +1,19 @@
 
             <div class="form-group">
-              {!! Form::label('street_address', 'Address') !!}
-              {!! Form::text('street_address', '', 
+              {!! Form::label('address_street', 'Address') !!}
+              {!! Form::text('address_street', null, 
                     ['class' => 'form-control',
                      'placeholder' => 'Street address']) !!}
 
-              {!! Form::label('city', '', 
+              {!! Form::label('address_city', '', 
                     ['class' => 'sr-only']) !!}
-              {!! Form::text('city', '', 
+              {!! Form::text('address_city', null, 
                     ['class' => 'form-control',
                      'placeholder' => 'City']) !!}
 
-              {!! Form::label('zip_code', '', 
+              {!! Form::label('address_zip', '', 
                     ['class' => 'sr-only']) !!}
-              {!! Form::text('zip_code', '', 
+              {!! Form::text('address_zip', null, 
                     ['class' => 'form-control',
                      'maxlength' => 5,
                      'placeholder' => 'Zip code']) !!}
@@ -21,12 +21,6 @@
 
            <div class="form-group">
               {!! Form::label('telephone', 'Telephone Number') !!}
-              {!! Form::text('telephone', '', 
+              {!! Form::text('telephone', null, 
                     ['class' => 'form-control']) !!}
-          </div>
-
-          <div class="form-group">
-              {!! Form::label('drivers_license', "Driver's License") !!}
-              {!! Form::text('drivers_license', '', 
-                    ['class' => 'form-control']) !!} 
           </div>

@@ -23,19 +23,19 @@ class RegistrationController extends Controller {
 	}
 
 	/**
-	 * Display a listing of the resource.
+	 * Initial page of the registration process where the visitor is
+	 * able to provide reqired information that includes name, email
+	 * address, and registration type.
 	 *
 	 * @return Response
 	 */
 	public function getIndex()
 	{
-		$registration = '';
 		if (Session::has('registration')) {
 			$registration = Session::get('registration');
-			Log::info('[INDEX] Retrieved registration inforation from the session');
+			Log::info('[INDEX] Retrieved form information from the session');
 		} else {
 			$registration = new Registration;
-			Log::info('[INDEX] Generating a new registration');
 		}
 
         return view('registration.index')->withRegistration($registration);
@@ -86,12 +86,23 @@ class RegistrationController extends Controller {
  		 * Store everything in the session so that at the end of the
  		 * registration process you can build up a Registration object
  		 * that gets stored to the database
+ 		 *
+ 		 * Also cache the request object so that you can extract it in
+ 		 * case somebody navigates backwards
  		 */
  		$registration = Session::get('registration', new Registration);
  		$registration->name = $request->input('name');
  		$registration->email_address = $request->input('email_address');
  		$registration->registration_type = $request->input('role');
  		Session::put('registration', $registration);
+
+ 		if (Session::has('registration_values')) {
+ 			$registration_values = Session::get('registration_values');
+ 		} else {
+ 			$registration_values = [];
+ 		}
+ 		$registration_values[0] = $request;
+ 		//Session::put('registration_values', $registration_values);
 
  		/**
  		 * Otherwise continue the process by loading the registration 
@@ -101,7 +112,7 @@ class RegistrationController extends Controller {
  		 */
  		return view('registration.new')
  		  ->nest('registration_form', $properties['view'])
- 		  ->with('label', $properties['label']);
+ 		  ->withLabel($properties['label']);
 	}
 
 	public function getTermsOfUse() {

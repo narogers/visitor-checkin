@@ -8,17 +8,10 @@ class Registration extends Model {
 		'email_address',
 	];
 
-	public function getDriversLicense() {
+	public function getBadgeNumberAttribute() {
 		return $this->barcode;
 	}
-	public function setDriversLicense($value) {
-		$this->barcode = $value;
-	}
-
-	public function getBadgeNumber() {
-		return $this->barcode;
-	}
-	public function setBadgeNumber($value) {
+	public function setBadgeNumberAttribute($value) {
 		$this->barcode = $value;
 	}
 
@@ -28,13 +21,13 @@ class Registration extends Model {
 	 */
 	public function getTelephoneAttribute($value) {
 	    $value = strval($value);
+	    echo 'Telephone value: ' . $value . ' (' . strlen($value) . ')';
 	    switch (strlen($value)) {
-	    	case 4:
-	    		return 'x' . $value;
 	    	case 7:
 	    		return preg_replace('/(\d{3])(\d{4})/', '$1-$2', $value);
 	    	case 10:
-	    		return preg_replace("/(\d{3})(\d{3})(\d{4])", "($1)$2-$3", $value);
+	    		return preg_replace("/(\d{3})(\d{3})(\d{4])/", "$1-$2-$3", 
+	    			$value);
 	    	default:
 	    		return $value;
 	    }

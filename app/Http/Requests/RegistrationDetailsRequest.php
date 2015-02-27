@@ -44,12 +44,6 @@ class RegistrationDetailsRequest extends Request {
 		}
 
 		/**
-		 * Driver's license is only required for two cases
-		 */
-		if (in_array($role, ['Academic', 'Public'])) {
-			$rules['drivers_license'] = 'required';
-		}
-		/**
 		 * But the similar field member's number is only used in a
 		 * single case
 		 */
@@ -67,7 +61,7 @@ class RegistrationDetailsRequest extends Request {
 		 * But the other two are not for temporary interns
 		 */
 		if (in_array($role, ['Fellow', 'Staff'])) {
-			$rules['job_title'] = 'required';
+			$rules['title'] = 'required';
 			$rules['extension'] = 'required|int';
 		}
 		/**
@@ -75,7 +69,7 @@ class RegistrationDetailsRequest extends Request {
 		 */
 		if ('Intern' == $role) {
 			$rules['supervisor'] = 'required';
-			$rules['ending_date'] = 'required|date';
+			$rules['ending_on'] = 'required|date';
 		}
 
 		return $rules;

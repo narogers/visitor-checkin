@@ -34,11 +34,11 @@
                 ["action" => "RegistrationController@postNew"]) !!}
             <div class="form-group">
               {!! Form::label('name') !!}
-              {!! Form::text('name', '', ['class' => 'form-control']) !!}
+              {!! Form::text('name', null, ['class' => 'form-control']) !!}
             </div>
             <div class="form-group">
               {!! Form::label('email_address') !!}
-              {!! Form::text('email_address', '', ['class' => 'form-control']) !!}
+              {!! Form::text('email_address', null, ['class' => 'form-control']) !!}
             </div>
  
             <div class="form-group">
