@@ -1,4 +1,3 @@
-
             <div class="form-group">
               {!! Form::label('address_street', 'Address') !!}
               {!! Form::text('address_street', null, 

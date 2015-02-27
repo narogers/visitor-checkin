@@ -36,9 +36,9 @@ class RegistrationDetailsRequest extends Request {
 		 * with 'sometimes' because no field is required for every case
 		 */
 		if (!in_array($role, ['Fellow', 'Staff'])) {
-			$rules['street_address'] = 'required';
-			$rules['city'] = 'required';
-			$rules['zip_code'] = 'required|numeric';
+			$rules['address_street'] = 'required';
+			$rules['address_city'] = 'required';
+			$rules['address_zip'] = 'required|numeric';
 
 			$rules['telephone'] = 'required|alpha_dash';
 		}
@@ -48,7 +48,7 @@ class RegistrationDetailsRequest extends Request {
 		 * single case
 		 */
 		if ('Member' == $role) {
-			$rules['badge_number'] = 'required|int';
+			$rules['badge_number'] = 'required|integer';
 		}
 
 		/**

@@ -20,9 +20,9 @@
           </div>
           @endif
           
-          {!! Form::model(new App\Http\Requests\RegistrationDetailsRequest, 
+          {!! Form::model($registration, 
                 ['action' => 'RegistrationController@postTermsOfUse']) !!}
-            {!! $registration_form !!}
+            @include($registration_form)
 
             {!! Form::submit('Go back', 
                   ['class' => 'btn btn-primary',

@@ -17,7 +17,10 @@ class RegistrationController extends Controller {
 	 * Instantiate a new RegistrationController
 	 */
 	public function __construct() {
-		$this->middleware('back_button');
+		$this->middleware('navigation.back',
+			['except' => '']);
+		$this->middleware('session.registration',
+			['except' => '']);
 		// Eventually make an exception for the confirmation page at
 		// the end of the workflow
 	}
@@ -31,14 +34,7 @@ class RegistrationController extends Controller {
 	 */
 	public function getIndex()
 	{
-		if (Session::has('registration')) {
-			$registration = Session::get('registration');
-			Log::info('[INDEX] Retrieved form information from the session');
-		} else {
-			$registration = new Registration;
-		}
-
-        return view('registration.index')->withRegistration($registration);
+        return view('registration.index');
 	}
 
 	public function postIndex() {
@@ -49,16 +45,20 @@ class RegistrationController extends Controller {
 		/**
 		 * This is probably not the way you are meant to do this but
 		 * it gets the job done for now. Consider a serious refactoring
-		 * once some proper unit tests are in place
+		 * once some proper unit tests are in place.
+		 *
+		 * We can be certain that the session exists because a filter
+		 * in the middleware will redirect all requests without one to
+		 * the index with a 'Session expired' flash notice
 		 */
-		$properties = $this->getRoleView(Session::get('registration')
-			->registration_type);
+		$registration = Session::get('registration');
+		$properties = $this->getRoleView($registration->registration_type);
 		Log::info('[GET] Directing request to ' . $properties['view']);
- 		
+
  		return view('registration.new')
- 		  ->nest('registration_form', $properties['view'])
- 		  ->with('label', $properties['label']);		
-	}
+ 		  ->withLabel($properties['label'])
+		  ->withRegistrationForm($properties['view']);
+ 	}
 
 	public function postNew(RegistrationTypeRequest $request) {
 		/**
@@ -78,8 +78,7 @@ class RegistrationController extends Controller {
  		 */
  		if (null == $properties['view']) {
  			return redirect('register')
- 			  ->with('notice', 'Please select a valid role')
- 			  ->with('registration', $registration);	
+ 			  ->with('notice', 'Please select a valid role');
  		}
 
  		/**
@@ -96,14 +95,6 @@ class RegistrationController extends Controller {
  		$registration->registration_type = $request->input('role');
  		Session::put('registration', $registration);
 
- 		if (Session::has('registration_values')) {
- 			$registration_values = Session::get('registration_values');
- 		} else {
- 			$registration_values = [];
- 		}
- 		$registration_values[0] = $request;
- 		//Session::put('registration_values', $registration_values);
-
  		/**
  		 * Otherwise continue the process by loading the registration 
  		 * form and supplying it the proper content. Since all forms 
@@ -111,8 +102,8 @@ class RegistrationController extends Controller {
  		 * workflow to diverge here
  		 */
  		return view('registration.new')
- 		  ->nest('registration_form', $properties['view'])
- 		  ->withLabel($properties['label']);
+ 		  ->withLabel($properties['label'])
+		  ->withRegistrationForm($properties['view']);
 	}
 
 	public function getTermsOfUse() {
@@ -120,22 +111,27 @@ class RegistrationController extends Controller {
 
 	}
 	public function postTermsOfUse(RegistrationDetailsRequest $request) {
-		Log::info('Submission processed - forwarding to the terms of use for acceptance');
+		$registration = Session::get('registration');
+		$registration->fill($request->all());
+		Session::put('registration', $registration);
 
 		return view('registration.termsofuse');
 	}
 
 	public function postWelcome(TermsOfUseAgreementRequest $request) {
 		$registration = Session::get('registration');
+		$registration->signature = $request->get('signature');
+		$registration->save();
+		
 		return view('registration.index')
-			->with('notice', 'Registration complete')
-			->with('registration', $registration);
+			->with('notice', 'Registration complete');
 	}
 
 	/**
-	 * Safe methd that captures any requests which could not be matched. It logs the request to the
-	 * system and then redirects to the New Visitor Registration page. This does not replace the need
-	 * for proper error handling - think of it more as a debugging tool and safeguard
+	 * Safe methd that captures any requests which could not be matched. It 
+	 * logs the request to the system and then redirects to the New Visitor 
+	 * Registration page. This does not replace the need for proper error 
+	 * handling - think of it more as a debugging tool and safeguard
 	 */
 	public function missingMethod($parameters = array()) {
 		Log::error('Could not match request to a specified route - redirecting to the index page');

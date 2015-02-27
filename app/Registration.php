@@ -3,9 +3,16 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Registration extends Model {
-	protected $fillable = [
+	/**
+	 * Only the intermediate screen needs to be mass assignable. Everything
+	 * else should be handled by explicitly setting the name, email address,
+	 * signature, and so on.
+	 */
+	protected $guarded = [
 		'name',
 		'email_address',
+		'role',
+		'expires_on'
 	];
 
 	public function getBadgeNumberAttribute() {
@@ -16,12 +23,11 @@ class Registration extends Model {
 	}
 
 	/**
-	 * Convert the integer into (xxx)xxx-xxxx format when it comes out of the database. Normally you would
-	 * place a break between each case but since they return the function will end anyways.
+	 * Convert the integer into xxxxxx-xxxx format when it comes out of the 
+	 * database. Normally you would place a break between each case but since * they return the function will end anyways.
 	 */
 	public function getTelephoneAttribute($value) {
 	    $value = strval($value);
-	    echo 'Telephone value: ' . $value . ' (' . strlen($value) . ')';
 	    switch (strlen($value)) {
 	    	case 7:
 	    		return preg_replace('/(\d{3])(\d{4})/', '$1-$2', $value);

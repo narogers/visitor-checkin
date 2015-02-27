@@ -5,6 +5,7 @@
 	"license": "MIT",
 	"type": "project",
 	"require": {
+		"doctrine/dbal": "~2.3",
 		"laravel/framework": "5.0.*",
 		"Illuminate/html": "~5.0"
 	},
