@@ -6,8 +6,7 @@
     <meta name="viewport" content="width="device-width, initial-scale=1, user-scalable=no">
     <title>Visitor Checkin</title>
 
-    {!! HTML::style('css/bootstrap.min.css') !!}
-    {!! HTML::style('css/checkin.css') !!}
+    {!! HTML::style('css/app.css') !!}
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
@@ -18,7 +17,7 @@
           </a>
        </div>
           <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right">{!! link_to('/', 
+          <span class="btn btn-info pull-right">{!! link_to('/', 
             'Reset') !!}</span>
        </div>
     </nav>

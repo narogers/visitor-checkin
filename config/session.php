@@ -29,9 +29,9 @@ return [
 	|
 	*/
 
-	'lifetime' => 120,
+	'lifetime' => 10,
 
-	'expire_on_close' => false,
+	'expire_on_close' => true,
 
 	/*
 	|--------------------------------------------------------------------------
@@ -109,7 +109,7 @@ return [
 	|
 	*/
 
-	'cookie' => 'laravel_session',
+	'cookie' => 'cma_ingalls_checkin',
 
 	/*
 	|--------------------------------------------------------------------------

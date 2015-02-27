@@ -3,6 +3,92 @@
 @btn-font-weight: 300;
 @font-family-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
 
+@brand-primary: #005cb9;
+@brand-info: #57c1e8;
+
 body, label, .checkbox label {
 	font-weight: 300;
 }
+
+/**
+ * With the fixed navbar header things need to be shifted down to
+ * compensate. The default navbar is 50 px
+ */
+body {
+  padding-top: 70px;
+}
+
+/**
+ * An inverse navbar works well but in case black is not ideal let's
+ * tweak the background to a more soothing blue color
+ */
+.navbar-inverse {
+  background-color: @brand-primary;
+}
+
+/**
+ * An inelegant hack for a quick prototype
+ */
+.navbar-brand img {
+  margin-top: -5px;
+}
+
+.navbar h1 {
+  display: inline-block;
+  margin: 10px 0;
+  color: #FFF;
+}
+
+.navbar .btn {
+  font-size: 150%;
+  margin-top: 6px;
+}
+
+/**
+ * Global overrides for anchor tags to behave more like buttons - ie not underlines,
+ * hovers, etc
+ */
+a,
+a:hover,
+a:visited,
+a:focus {
+  text-decoration: none;
+}
+
+/**
+ * Overrides for buttons with embdded links. This is more relevant to the 
+ * prototype than the actual application since the back buttons will be 
+ * smarter in that case and retain context
+ */
+.btn a,
+.navbar  {
+  color: #FFF;
+}
+
+/**
+ * Creates a caption overlay while still maintaining accessibility
+ */
+h2.caption {
+  position: absolute;
+  margin: 0;
+  padding: 0.5em;
+  bottom: 0;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.7);
+  width: 94%;
+}
+
+.caption a,
+.caption a:hover,
+.caption a:focus {
+  color: inherit;
+}
+/**
+ * Wrap the signature panel in a grey box so that it stands apart from the
+ * rest of the page and its borders are visible
+ */
+#signature {
+  border: 1px dashed rgb(119, 119, 119);
+  margin-bottom: 20px /* One standard line height */
+}
+
