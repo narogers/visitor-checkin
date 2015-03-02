@@ -22,6 +22,10 @@ body {
  * An inverse navbar works well but in case black is not ideal let's
  * tweak the background to a more soothing blue color
  */
+.navbar {
+  height: 75px;
+}
+
 .navbar-inverse {
   background-color: @brand-primary;
 }
@@ -29,8 +33,13 @@ body {
 /**
  * An inelegant hack for a quick prototype
  */
+.navbar-brand {
+  height: 75px;
+  margin: 0;
+  padding: 0;
+}
 .navbar-brand img {
-  margin-top: -5px;
+  margin: 0;
 }
 
 .navbar h1 {

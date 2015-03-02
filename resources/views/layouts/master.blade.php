@@ -13,11 +13,10 @@
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="./">
-            <img alt="Ingalls Library" src="{{ URL::asset('images/cma-logo.png')}}">
+            <img alt="Ingalls Library" src="{{ URL::asset('images/ingalls-library-banner.png')}}">
           </a>
        </div>
-          <h1>Ingalls Library</h1>
-          <span class="btn btn-info pull-right">{!! link_to('/', 
+          <a href="{{ link_to('/') }}"><img src="{{ URL::asset('images/reset-button.png') }}" class="pull-right"></a>
             'Reset') !!}</span>
        </div>
     </nav>
