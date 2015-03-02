@@ -8,11 +8,26 @@ class Registration extends Model {
 	 * else should be handled by explicitly setting the name, email address,
 	 * signature, and so on.
 	 */
-	protected $guarded = [
-		'name',
-		'email_address',
-		'role',
-		'expires_on'
+	protected $fillable = [
+		'address_city',
+		'address_street',
+		'address_zip',
+		/**
+		 * Contact information
+		 */
+		'telephone',
+		'extension',
+		/**
+		 * Internal registrations only
+		 */
+		'department',
+		'title',
+		'supervisor',
+		'ending_on',
+		/**
+		 * Lookup details for members
+		 */
+		'badge_number'
 	];
 
 	public function getBadgeNumberAttribute() {

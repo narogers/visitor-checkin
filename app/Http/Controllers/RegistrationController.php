@@ -120,11 +120,15 @@ class RegistrationController extends Controller {
 
 	public function postWelcome(TermsOfUseAgreementRequest $request) {
 		$registration = Session::get('registration');
-		$registration->signature = $request->get('signature');
+		$registration->signature = $request->get('signature_data');
 		$registration->save();
 		
-		return view('registration.index')
-			->with('notice', 'Registration complete');
+		/**
+		 * For now hardcode the internal / external flag but eventually
+		 * this too can be neatly handled by a piece of middleware
+		 */
+		return view('registration.welcome')
+			->withInternalIp('false');
 	}
 
 	/**

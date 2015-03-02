@@ -24,12 +24,6 @@
           </div>
           @endif
 
-          <div class='alert alert-warning'>
-            Name: {{ $registration->name }}
-            <br />
-            Email address: {{ $registration->email_address }}
-          </div>
-
           {!! Form::model($registration,
                 ["action" => "RegistrationController@postNew"]) !!}
             <div class="form-group">

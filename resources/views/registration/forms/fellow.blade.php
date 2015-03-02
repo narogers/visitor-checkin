@@ -5,8 +5,8 @@
           </div>
 
           <div class="form-group">
-              {!! Form::label('title', 'Title') !!}
-              {!! Form::text('title', null, 
+              {!! Form::label('job_title', 'Title') !!}
+              {!! Form::text('job_title', null, 
                     ['class' => 'form-control']) !!}
           </div>
 

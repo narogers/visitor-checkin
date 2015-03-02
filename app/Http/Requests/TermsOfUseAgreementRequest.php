@@ -22,7 +22,7 @@ class TermsOfUseAgreementRequest extends Request {
 	public function rules()
 	{
 		return [
-			//
+			'signature_data' => 'required'
 		];
 	}
 

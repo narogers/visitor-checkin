@@ -61,8 +61,8 @@ class RegistrationDetailsRequest extends Request {
 		 * But the other two are not for temporary interns
 		 */
 		if (in_array($role, ['Fellow', 'Staff'])) {
-			$rules['title'] = 'required';
-			$rules['extension'] = 'required|int';
+			$rules['job_title'] = 'required';
+			$rules['extension'] = 'required|integer';
 		}
 		/**
 		 * which get their own special fields
