@@ -24,11 +24,11 @@
                 ['action' => 'RegistrationController@postTermsOfUse']) !!}
             @include($registration_form)
 
-            {!! Form::submit('Go back', 
-                  ['class' => 'btn btn-primary',
+            {!! Form::submit('&laquo; Go back', 
+                  ['class' => 'btn btn-primary btn-lg pull-left',
                    'name' => 'previous_step']) !!}
-            {!! Form::submit('Continue',
-                  ['class' => 'btn btn-primary',
+            {!! Form::submit('Continue &raquo;',
+                  ['class' => 'btn btn-primary btn-lg',
                    'name' => 'next_step']) !!}
           {!! Form::close() !!}
         </div>

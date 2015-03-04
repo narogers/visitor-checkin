@@ -17,7 +17,6 @@
           </a>
        </div>
           <a href="{{ link_to('/') }}"><img src="{{ URL::asset('images/reset-button.png') }}" class="pull-right"></a>
-            'Reset') !!}</span>
        </div>
     </nav>
     <div class="container-fluid">

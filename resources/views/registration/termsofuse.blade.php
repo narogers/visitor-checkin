@@ -52,11 +52,11 @@
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
-          {!! Form::submit('Go back', 
-                ['class' => 'btn btn-primary',
+          {!! Form::submit('&laquo; Go back', 
+                ['class' => 'btn btn-primary btn-lg pull-left',
                  'name' => 'previous_step']) !!}
-          {!! Form::submit('Continue',
-                ['class' => 'btn btn-primary',
+          {!! Form::submit('Register &raquo;',
+                ['class' => 'btn btn-primary btn-lg pull-right',
                  'name' => 'next_step']) !!}
         {!! Form::close() !!}
 @stop

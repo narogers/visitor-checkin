@@ -6236,7 +6236,7 @@ label,
  * compensate. The default navbar is 50 px
  */
 body {
-  padding-top: 70px;
+  padding-top: 80px;
 }
 /**
  * An inverse navbar works well but in case black is not ideal let's
