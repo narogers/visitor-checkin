@@ -143,13 +143,16 @@ class RegistrationController extends Controller {
 		return redirect()->action('RegistrationController@getIndex');
 	}
 
+	/**
+	 * This could be refactored as a helper instead
+	 */
 	protected function getRoleView($role = '') {
 		Log::info('Processing registration for a(n) ' . $role);
 
  		switch ($role) {
  			case "Academic":
  				return ['view' => 'registration.forms.academic',
- 						'label' => 'Academic Guest'];
+ 						'label' => 'Academic'];
 
  			case "Docent":
  				return ['view' => 'registration.forms.docent',

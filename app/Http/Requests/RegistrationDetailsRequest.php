@@ -38,9 +38,9 @@ class RegistrationDetailsRequest extends Request {
 		if (!in_array($role, ['Fellow', 'Staff'])) {
 			$rules['address_street'] = 'required';
 			$rules['address_city'] = 'required';
-			$rules['address_zip'] = 'required|numeric';
+			$rules['address_zip'] = 'required|regex:/\d{5}/';
 
-			$rules['telephone'] = 'required|alpha_dash';
+			$rules['telephone'] = 'required|alpha_dash|min:10|max:13';
 		}
 
 		/**
@@ -62,7 +62,7 @@ class RegistrationDetailsRequest extends Request {
 		 */
 		if (in_array($role, ['Fellow', 'Staff'])) {
 			$rules['job_title'] = 'required';
-			$rules['extension'] = 'required|integer';
+			$rules['extension'] = 'required|integer|size:4';
 		}
 		/**
 		 * which get their own special fields
