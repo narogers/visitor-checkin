@@ -1,8 +1,15 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Registration extends Model {
+	/**
+	 * For archival reasons we hang on to all registrations but hide them
+	 * using this handy helper
+	 */
+	use SoftDeletes;
+
 	/**
 	 * Only the intermediate screen needs to be mass assignable. Everything
 	 * else should be handled by explicitly setting the name, email address,
@@ -61,5 +68,4 @@ class Registration extends Model {
 	public function setTelephoneAttribute($value) {
 		$this->attributes['telephone'] = preg_replace('/\D/', '', $value);
 	}
-
 }

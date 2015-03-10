@@ -16,7 +16,7 @@
             <img alt="Ingalls Library" src="{{ URL::asset('images/ingalls-library-banner.png')}}">
           </a>
        </div>
-          <a href="{{ link_to('/') }}"><img src="{{ URL::asset('images/reset-button.png') }}" class="pull-right"></a>
+          <a href="{{ URL::action('HomeController@index') }}"><img src="{{ URL::asset('images/reset-button.png') }}" class="pull-right"></a>
        </div>
     </nav>
     <div class="container-fluid">
