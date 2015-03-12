@@ -37,6 +37,10 @@ class Registration extends Model {
 		'badge_number'
 	];
 
+	public function user() {
+		return $this->belongs_to('App\User');
+	}
+	
 	public function getBadgeNumberAttribute() {
 		return $this->barcode;
 	}
