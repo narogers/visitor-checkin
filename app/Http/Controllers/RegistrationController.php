@@ -6,6 +6,8 @@ use App\Http\Requests\RegistrationDetailsRequest;
 use App\Http\Requests\RegistrationTypeRequest;
 use App\Http\Requests\TermsOfUseAgreementRequest;
 use App\Registration;
+use App\Role;
+use App\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -42,17 +44,17 @@ class RegistrationController extends Controller {
 	}
 
 	public function getNew() {
-		/**
-		 * This is probably not the way you are meant to do this but
-		 * it gets the job done for now. Consider a serious refactoring
-		 * once some proper unit tests are in place.
-		 *
+		/*
 		 * We can be certain that the session exists because a filter
 		 * in the middleware will redirect all requests without one to
 		 * the index with a 'Session expired' flash notice
 		 */
-		$registration = Session::get('registration');
-		$properties = $this->getRoleView($registration->registration_type);
+		$user = Session::get('user');
+		if ($user->role) {
+			$properties = $this->getRoleView($user->role->role);
+		} else {
+		    $properties = $this->getRoleView($request->input('role'));
+		}
 		Log::info('[GET] Directing request to ' . $properties['view']);
 
  		return view('registration.new')
@@ -89,11 +91,15 @@ class RegistrationController extends Controller {
  		 * Also cache the request object so that you can extract it in
  		 * case somebody navigates backwards
  		 */
- 		$registration = Session::get('registration', new Registration);
- 		$registration->name = $request->input('name');
- 		$registration->email_address = $request->input('email_address');
- 		$registration->registration_type = $request->input('role');
- 		Session::put('registration', $registration);
+ 		$user = Session::get('user', new User);
+ 		$user->name = $request->input('name');
+ 		$user->email_address = $request->input('email_address');
+ 		// We do it this way to avoid having to save an incomplete
+ 		// version of the User record prematurely
+ 		$role = Role::where('role', '=', $request->input('role'))->first();
+ 		$user->role_id = $role->id;
+ 		
+ 		Session::put('user', $user);
 
  		/**
  		 * Otherwise continue the process by loading the registration 
@@ -111,24 +117,32 @@ class RegistrationController extends Controller {
 
 	}
 	public function postTermsOfUse(RegistrationDetailsRequest $request) {
-		$registration = Session::get('registration');
+		$user = Session::get('user');
+
+		$registration = new Registration;
 		$registration->fill($request->all());
+
+		Session::put('user', $user);
 		Session::put('registration', $registration);
 
 		return view('registration.termsofuse');
 	}
 
 	public function postWelcome(TermsOfUseAgreementRequest $request) {
+		$user = Session::get('user');
+		$user->signature = $request->get('signature_data');
+		// If we don't do this the registration will be lost forever
 		$registration = Session::get('registration');
-		$registration->signature = $request->get('signature_data');
-		$registration->save();
+		$user->save();
+		$user->registration()->save($registration);
 		
 		/**
 		 * For now hardcode the internal / external flag but eventually
 		 * this too can be neatly handled by a piece of middleware
 		 */
 		return view('registration.welcome')
-			->withInternalIp('false');
+			->withInternalIp('false')
+			->withUser($user);
 	}
 
 	/**

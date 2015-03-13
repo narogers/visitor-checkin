@@ -30,7 +30,7 @@ class RegistrationTypeRequest extends Request {
 		 */
 		return [
 			'name' => 'required',
-			'email_address' => 'required|email|unique:registrations',
+			'email_address' => 'required|email|unique:users',
 			'role' => 'required|in:Academic,Docent,Fellow,Intern,Member,Public,Staff,Volunteer'
 		];
 	}

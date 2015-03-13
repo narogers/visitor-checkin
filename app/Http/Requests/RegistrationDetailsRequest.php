@@ -27,7 +27,7 @@ class RegistrationDetailsRequest extends Request {
 	 */
 	public function rules()
 	{
-		$role = Session::get('registration')->registration_type;
+		$role = Session::get('user')->role->role;
 		$rules = $this->rules;
 
 		/**
@@ -62,7 +62,7 @@ class RegistrationDetailsRequest extends Request {
 		 */
 		if (in_array($role, ['Fellow', 'Staff'])) {
 			$rules['job_title'] = 'required';
-			$rules['extension'] = 'required|integer|size:4';
+			$rules['extension'] = 'required|integer';
 		}
 		/**
 		 * which get their own special fields

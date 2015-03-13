@@ -2,6 +2,10 @@
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Checkin;
+use App\Registration;
+use App\Role;
+
 class User extends Model {
 	/**
 	 * The attributes that are mass assignable.
@@ -11,7 +15,7 @@ class User extends Model {
 	protected $fillable = ['name', 'email_address'];
 
 	public function role() {
-		return $this->hasOne('App\Role');
+		return $this->belongsTo('App\Role');
 	}
 
 	public function registration() {

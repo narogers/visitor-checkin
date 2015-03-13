@@ -28,7 +28,7 @@ class Registration extends Model {
 		 * Internal registrations only
 		 */
 		'department',
-		'title',
+		'job_title',
 		'supervisor',
 		'ending_on',
 		/**

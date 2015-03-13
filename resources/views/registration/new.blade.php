@@ -28,7 +28,7 @@
                   ['class' => 'btn btn-primary btn-lg pull-left',
                    'name' => 'previous_step']) !!}
             {!! Form::submit('Continue &raquo;',
-                  ['class' => 'btn btn-primary btn-lg',
+                  ['class' => 'btn btn-primary btn-lg pull-right',
                    'name' => 'next_step']) !!}
           {!! Form::close() !!}
         </div>

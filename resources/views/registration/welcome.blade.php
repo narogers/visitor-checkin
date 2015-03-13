@@ -17,13 +17,13 @@
           <hr>
           <dl>
             <dt>Name</dt>
-            <dd>{{ $registration->name }}</dd>
+            <dd>{{ $user->name }}</dd>
           
             <dt>Email address</dt>
-            <dd>{{ $registration->email_address }}</dd>
+            <dd>{{ $user->email_address }}</dd>
 
             <dt>Visitor Type</dt>
-            <dd>{{ $registration->registration_type }}</dd>
+            <dd>{{ $user->role->role }}</dd>
           </dl>
 @stop
 
