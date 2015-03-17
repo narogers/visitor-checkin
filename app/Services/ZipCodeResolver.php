@@ -13,7 +13,7 @@ class ZipCodeResolver {
  	 *
  	 * TODO: In case of error return null unless the server cannot be contacted * in which case the method should throw a RunimeException
  	 */
-	public static function resolve($zipcode = '') {
+	public function resolve($zipcode = '') {
 		/**
    	 	 * Hard coding this is not a viable long term solution but since this 
    	 	 * is just a prototype we'll let it slide for now

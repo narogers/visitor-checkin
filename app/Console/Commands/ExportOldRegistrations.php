@@ -72,6 +72,8 @@ class ExportOldRegistrations extends Command {
 				$data->patronType = array_key_exists('patronType', $data) ? $data->patronType : '';
 				
 				$registrations[$data->name] = [
+				    'aleph_id' => substr($data->fname, 0, 1) . "." . $data->lname,
+				    'aleph_alt_id' => substr($data->fname, 0, 1) . $data->lname,
 					'email' => $data->email,
 					'role' => $data->patronType,
 					'count' => 1
@@ -90,6 +92,8 @@ class ExportOldRegistrations extends Command {
 		if ($fh) {
 			fputcsv($fh, [
 				"Name", 
+				"ID (main)",
+				"ID (alternate)",
 				"Email Address", 
 				"Role", 
 				"Registrations"]
@@ -97,6 +101,8 @@ class ExportOldRegistrations extends Command {
 			foreach (array_keys($registrations) as $visitor) {
 				fputcsv($fh, [
 					$visitor,
+					$registrations[$visitor]['aleph_id'],
+					$registrations[$visitor]['aleph_alt_id'],
 					$registrations[$visitor]['email'],
 					$registrations[$visitor]['role'],
 					$registrations[$visitor]['count']

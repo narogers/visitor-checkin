@@ -8,7 +8,7 @@ set :repo_url, 'git@github.com:ClevelandArtGIT/visitor-checkin.git'
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/home/web/wwwtest/rails/visitor-checkin'
+set :deploy_to, '/home/web/wwwtest/php/visitor-checkin'
 
 # Default value for :scm is :git
 set :scm, :git
@@ -36,8 +36,9 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
-namespace :deploy do
+SSHKit.config.command_map[:composer] = "php #{shared_path.join("composer.phar")}"
 
+namespace :deploy do  
   after :restart, :clear_cache do
     on roles(:web), in: :groups, limit: 3, wait: 10 do
       # Here we can do anything such as:
@@ -46,5 +47,4 @@ namespace :deploy do
       # end
     end
   end
-
 end
