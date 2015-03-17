@@ -40,46 +40,9 @@ class ExportOldRegistrations extends Command {
 	 */
 	public function fire()
 	{
-		// Since we are using the same table space there's no need to define a 
-		// new schema
-		$total_rows = DB::table('registrations_old')->count();;
+		$oldRegistrations = new oldRegistrations;
 
-		// Need to iterate through results 50 at a time so we don't blow up the
-		// stack
-		$offset = 0;
-		$rows_per_page = 50;
-		$bad_records = 0;
-		$registrations = [];
-
-		while (($offset < $total_rows)) {
-			$patrons = DB::table('registrations_old')->skip($offset)->take($rows_per_page)->get();
-
-			foreach ($patrons as $p) {
-				$offset++;
-				$data = json_decode($p->regJSON);
-				if (null == $data) {
-					$this->error('WARNING: Registration ' . $p->regID . " is invalid");
-					continue;
-				}
-
-				$data->name = $data->fname . " " . $data->lname;
-				if (array_key_exists($data->name, $registrations)) {
-					$registrations[$data->name]['count']++;
-					continue;
-				}
-
-				$data->email = array_key_exists('email', $data) ? $data->email : '';
-				$data->patronType = array_key_exists('patronType', $data) ? $data->patronType : '';
-				
-				$registrations[$data->name] = [
-				    'aleph_id' => substr($data->fname, 0, 1) . "." . $data->lname,
-				    'aleph_alt_id' => substr($data->fname, 0, 1) . $data->lname,
-					'email' => $data->email,
-					'role' => $data->patronType,
-					'count' => 1
-				];
-			} 
-		}
+		$archivedRegistrations = $oldRegistrations->getUsers();
 
 		/** 
 		 * Now export to the file. The format will be
@@ -92,8 +55,7 @@ class ExportOldRegistrations extends Command {
 		if ($fh) {
 			fputcsv($fh, [
 				"Name", 
-				"ID (main)",
-				"ID (alternate)",
+				"Aleph ID",
 				"Email Address", 
 				"Role", 
 				"Registrations"]
@@ -102,7 +64,6 @@ class ExportOldRegistrations extends Command {
 				fputcsv($fh, [
 					$visitor,
 					$registrations[$visitor]['aleph_id'],
-					$registrations[$visitor]['aleph_alt_id'],
 					$registrations[$visitor]['email'],
 					$registrations[$visitor]['role'],
 					$registrations[$visitor]['count']
