@@ -10,6 +10,7 @@ class OldRegistration {
 	 */
 	public function __construct()
 	{
+		// TODO: See if this is needed or not
 		$conn = DB::Connection('mysql');
 	}
 
@@ -42,22 +43,53 @@ class OldRegistration {
 					Log::warning('WARNING: Registration ' . $p->regID . " is invalid");
 					continue;
 				}
+				if ((null == $data->fname) or
+					(null == $data->lname)) {
+					Log::warning('WARNING: Record contains no valid data');
+					continue;
+				}
 
 				$data->name = $data->fname . " " . $data->lname;
+
 				if (array_key_exists($data->name, $registrations)) {
 					$registrations[$data->name]['count']++;
 				} else {
 					$data->email = array_key_exists('email', $data) ? $data->email : '';
 
 					$registrations[$data->name] = [
-					'email' => $data->email,
-					'count' => 1
+					  'id' => $p->regID,
+					  'email' => $data->email,
+					  'count' => 1
 					];
 				}
 			}
 		}
 
 		return $registrations;
+	}
+
+	/**
+	 * Resolves an ID into a Registration object. This is not
+	 * completely well formed because it only takes transforms the
+	 * JSON and does not actually do any further validation.
+	 */
+	public function find($id) {
+		$record = DB::table('registrations_old')->where('regID', $id)->first();
+		if (null == $record) {
+			Log::info('WARNING: Registration ' . $id . " could not be resolved");
+			return null;
+		}
+
+		$registration = json_decode($record->regJSON);
+		if (null == $registration) {
+			Log::warning('WARNING: Registration details for ' . $p->regID . " are invalid");
+			return null;
+		}
+		$registration->signature = $registration->{'image/png;base64'};
+		unset($registration->{'image/png;base64'});
+
+		// Otherwise we are in the clear
+		return $registration;
 	}
 }		
 ?>

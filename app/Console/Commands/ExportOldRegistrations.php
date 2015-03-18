@@ -1,5 +1,7 @@
 <?php namespace App\Console\Commands;
 
+use App\OldRegistration;
+
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -40,7 +42,7 @@ class ExportOldRegistrations extends Command {
 	 */
 	public function fire()
 	{
-		$oldRegistrations = new oldRegistrations;
+		$oldRegistrations = new OldRegistration;
 
 		$archivedRegistrations = $oldRegistrations->getUsers();
 
