@@ -59,6 +59,7 @@ class OldRegistration {
 					$registrations[$data->name] = [
 					  'id' => $p->regID,
 					  'email' => $data->email,
+					  'role' => $data->patronType,
 					  'count' => 1
 					];
 				}
