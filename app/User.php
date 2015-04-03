@@ -14,6 +14,13 @@ class User extends Model {
 	 */
 	protected $fillable = ['name', 'email_address'];
 
+	public function scopeActiveCheckin($query, $string) {
+		$qry = $query->where('name', 'LIKE', '%' . $string);
+		$qry->orWhere('aleph_id', $string);
+
+		return $qry;
+	} 
+
 	public function role() {
 		return $this->belongsTo('App\Role');
 	}

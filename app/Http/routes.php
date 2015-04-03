@@ -14,3 +14,4 @@
 Route::get('/', 'HomeController@index');
 
 Route::controller('register', 'RegistrationController');
+Route::controller('checkin', 'CheckinController');

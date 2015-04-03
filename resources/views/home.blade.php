@@ -2,7 +2,7 @@
 
 @section('content')
        <div class="col-sm-6">
-              <a href="returning-visitor.html">
+              <a href="{{ URL::action('CheckinController@getIndex') }}">
                 <figure>
                   <img src="images/1991.163.png" alt="Returning visitors" class="img-responsive">
                 </figure>
