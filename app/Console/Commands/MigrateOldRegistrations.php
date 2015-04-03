@@ -69,6 +69,7 @@ class MigrateOldRegistrations extends Command {
 				array_push($failures, $user->name);
 				continue;
 			}
+			$user->aleph_id = $aleph_id;
 			
 			// Now try to resolve the user's role from Aleph using a
 			// mapping. If not provided then set the role to 0 which

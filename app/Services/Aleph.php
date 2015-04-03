@@ -12,16 +12,24 @@ use Illuminate\Support\Facades\Log;
 class Aleph {
 	// These are the URLs for the specific services that will be appended 
 	// following the patron ID
-	protected $aleph_base = "http://lib-aleph-01.clevelandart.org:1891/rest-dlf/patron/";
-	protected $endpoints = [
+	protected $AlephHost = "http://lib-aleph-01.clevelandart.org";
+
+	protected $AlephWebService;
+	protected $AlephXService;
+
+	protected $Endpoint = [
 		// General information
 		'address' => '/patronInformation/address',
 		// Expiration date
 		'status' => '/patronStatus/registration'
+		// Barcode validation for X Service
 	];
 	protected $user;
 
 	public function __construct(User $user) {
+		$this->AlephWebService = $this->AlephHost . ":1891/rest-dlf/patron/";
+		$this->AlephXService = $this->AlephHost . "/X?";
+
 		$this->user = $user;
 	}
 
@@ -53,7 +61,6 @@ class Aleph {
 			 *
 			 * See https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Address
 			 */
-			Log::info('Reply Code is ' . $aleph_data->{'reply-code'});
 			if ('0000' != $aleph_data->{'reply-code'}) {
 				continue;
 			}
@@ -91,10 +98,10 @@ class Aleph {
 		Log::info('Resolving ' . $target . "\r\n");
 		switch ($target) {
 			case 'address':
-				return $this->endpoints['address'];
+				return $this->Endpoint['address'];
 				break;
 			case 'status':
-				return $this->endpoints['status'];
+				return $this->Endpoint['status'];
 				break;
 			default:
 				Log::warning('ERROR: Could not resolve endpoint');
@@ -103,9 +110,9 @@ class Aleph {
 	}
 
 	protected function build_endpoint($service, $aleph_id) {
-		Log::info('Constructing call to ' . $this->aleph_base . urlencode($aleph_id) . $this->endpoint('address'));
-		return $this->aleph_base . urlencode($aleph_id) . 
-				$this->endpoint('address');
+		Log::info('Constructing call to ' . $this->AlephWebService . urlencode($aleph_id) . $this->Endpoint('address'));
+		return $this->AlephWebService . urlencode($aleph_id) . 
+				$this->Endpoint('address');
 	}
 
 	protected function parse_name() {
