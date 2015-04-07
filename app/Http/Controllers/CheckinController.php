@@ -52,9 +52,11 @@ class CheckinController extends Controller {
 				$view = "checkin.retry";
 				break;
 			case 1:
-				$message_key = "checkin.success";
-				$view = "checkin.welcome";
+			  list($message_key, $view) = validateCheckin('user', $user_matches->first()->aleph_id);
 				$user = $user_matches->first();
+				// TODO: Should expired checkins count or not be counted?
+				//       This may require a tweak to the database model to
+				//       add a status flag.
 				$this->saveCheckin($user);
 				break;
 			case 2:
@@ -83,5 +85,38 @@ class CheckinController extends Controller {
 	protected function saveCheckin(User $user) {
 		$checkin = new Checkin();
 		$user->checkins()->save($checkin);
+	}
+
+	/**
+	 * Makes a call to the Aleph service based on the key and
+	 * determines if the particular record is current or not.
+	 */
+	protected function validateCheckin($field, $key) {
+		if (!$field) {
+			$field = 'user';
+		}
+		$return_values = [];
+		// Default to true unless proven otherwise
+		$expired = true;
+
+		switch($field) {
+			case "user":
+				$expired = validateCheckinByUser($key);
+				break;
+			case "barcode":
+				$expired = validateCheckinByBarcode($key);
+				break;
+			default:
+				// TODO: Make a notice about the exception in the logs
+				$expired = true;
+		}
+
+		if ($expired) {
+			return ['message_key' => 'checkin.expired',
+							'view' => 'checkin.expired'];
+		} else {
+			return ['message_key' => 'checkin.success',
+						  'view' => 'checkin.welcome'];
+		}
 	}
 }

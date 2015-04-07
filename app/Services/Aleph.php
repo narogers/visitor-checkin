@@ -21,16 +21,15 @@ class Aleph {
 		// General information
 		'address' => '/patronInformation/address',
 		// Expiration date
-		'status' => '/patronStatus/registration'
+		'status' => '/patronStatus/registration',
 		// Barcode validation for X Service
+		'barcode' => 'library=CMA50&base=STACKS&loans=N&cash=N&hold=N&op=bor_info'
 	];
 	protected $user;
 
-	public function __construct(User $user) {
+	public function __construct() {
 		$this->AlephWebService = $this->AlephHost . ":1891/rest-dlf/patron/";
 		$this->AlephXService = $this->AlephHost . "/X?";
-
-		$this->user = $user;
 	}
 
 	/**
@@ -44,13 +43,13 @@ class Aleph {
 	 * either 'Last Name, First Name' or 'First Name Last Name' then go ahead and
 	 * report it as a match.
 	 */
-	public function getPatronID() {
-		$aleph_ids = $this->parse_name();
+	public function getPatronID($user) {
+		$aleph_ids = $this->parse_name($user->name);
 		Log::info('Attempting to resolve IDs');
 		
 		foreach ($aleph_ids as $aleph_id) {
 			// Get it working and then refactor
-			$response = file_get_contents($this->build_endpoint('address', $aleph_id));
+			$response = file_get_contents($this->endpoint('address', $aleph_id));
 			$aleph_data = simplexml_load_string($response);
 
 			/*
@@ -67,7 +66,7 @@ class Aleph {
 			// If we get here assume the data is valid. In that case we need to
 			// take a look at the <z304-address-1> field and compare it to the
 			// name in the User model
-			if($this->compare_name_equality($this->user->name,
+			if($this->compare_name_equality($user->name,
 				$aleph_data->{'address-information'}->{'z304-address-1'})) {
 				return $aleph_id;
 			}
@@ -76,7 +75,7 @@ class Aleph {
 		// If we happen to fall through to here then there are no valid IDs.
 		// Returning NULL is a bandaid until something better can be done.
 		Log::warning('WARNING: Unable to resolve an Aleph ID for ' . 
-			$this->user->name);
+			$user->name);
 		return null;
 	}
 
@@ -91,17 +90,24 @@ class Aleph {
 	 * In the last case messages will be written to the logs but the user 
 	 * interface won't say anything by default
 	 */
-	public function isExpired($patronID) {
+	public function isActive($patronID) {
+		if (preg_match("/^\d*$/", $patronID)) {
+			return $this->validatePatronByBarcode($patronID);			
+		} else {
+			return $this->validatePatronByName($patronID);
+		}
 	}
 
-	public function endpoint($target) {
+	public function endpoint($target, $key) {
 		Log::info('Resolving ' . $target . "\r\n");
 		switch ($target) {
 			case 'address':
-				return $this->Endpoint['address'];
+				return $this->AlephWebService . urlencode($key) . $this->Endpoint['address'];
 				break;
+			case 'barcode':
+				return $this->AlephXService . "&bor_id=" . urlencode($key);
 			case 'status':
-				return $this->Endpoint['status'];
+				return $this->AlephWebService . urlencode($key) . $this->Endpoint['status'];
 				break;
 			default:
 				Log::warning('ERROR: Could not resolve endpoint');
@@ -109,17 +115,46 @@ class Aleph {
 		}
 	}
 
-	protected function build_endpoint($service, $aleph_id) {
-		Log::info('Constructing call to ' . $this->AlephWebService . urlencode($aleph_id) . $this->Endpoint('address'));
-		return $this->AlephWebService . urlencode($aleph_id) . 
-				$this->Endpoint('address');
+	protected function validatePatronByName($name) {
+		$endpoint = $this->endpoint('status', $name);
+		$response = file_get_contents($endpoint);
+		$aleph_data = simplexml_load_string($response);
+
+		/**
+		 * At this point we just need to look at the 
+		 * <z305-expiry-date> element and compare it to the
+		 * current date and time. 
+		 *
+		 * First though we handle the
+		 * cases where the user's record was not found by
+		 * automatically reporting it expired
+		 */
+		if ('0000' != $aleph_data->{'reply-code'}) {
+			return false;
+	  }
+
+	  return $this->isActivePatron($aleph_data->xpath('//z305-expiry-date')[0]);
+
 	}
 
-	protected function parse_name() {
+	protected function validatePatronByBarcode($code) {
+		return false;	
+	}
+
+	/**
+	 * Compare UNIX timestamps to see if the record should be
+	 * considered expired or valid
+	 */
+	protected function isActivePatron($timestamp) {
+		$expiry = strtotime($timestamp);
+		return ($expiry > time());
+
+	}
+	protected function parse_name($name) {
 		// It is assumed that the first and second values are the important
 		// ones. Code to handle edge cases lie hyphenation can be added down
 		// the road
-		$name = $this->normalize_name($this->user->name);
+		$name = $this->normalize_name($name);
 
 		// We will be returning two versions - one without a . and one
 		// with it. For example
@@ -156,8 +191,8 @@ class Aleph {
 		$input = preg_replace("/\(.*\)/", "", $input);
 		// Now split on the first whitespace (, or space)
 		
-		$name_parts = preg_split("/,?\s+/", $this->user->name);
-		if (preg_match("/,/", $this->user->name)) {
+		$name_parts = preg_split("/,?\s+/", $input);
+		if (preg_match("/,/", $input)) {
 			$first_name = $name_parts[1];
 			$last_name = $name_parts[0];
 		} else {
