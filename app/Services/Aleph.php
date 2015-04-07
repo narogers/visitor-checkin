@@ -105,7 +105,7 @@ class Aleph {
 				return $this->AlephWebService . urlencode($key) . $this->Endpoint['address'];
 				break;
 			case 'barcode':
-				return $this->AlephXService . "&bor_id=" . urlencode($key);
+				return $this->AlephXService . $this->Endpoint['barcode'] . "&bor_id=" . urlencode($key);
 			case 'status':
 				return $this->AlephWebService . urlencode($key) . $this->Endpoint['status'];
 				break;
@@ -138,8 +138,25 @@ class Aleph {
 	}
 
 	protected function validatePatronByBarcode($code) {
-		return false;	
-	}
+		$endpoint = $this->endpoint('barcode', $code);
+		$response = file_get_contents($endpoint);
+		$aleph_data = simplexml_load_string($response);
+
+		/**
+		 * At this point we just need to look at the 
+		 * <z305-expiry-date> element and compare it to the
+		 * current date and time. 
+		 *
+		 * First though we handle the
+		 * cases where the user's record was not found by
+		 * automatically reporting it expired
+		 */
+
+		if ($aleph_data->{'error'}) {
+			return false;
+	  }
+
+	  return $this->isActivePatron($aleph_data->xpath('//z305-expiry-date')[0]);	}
 
 	/**
 	 * Compare UNIX timestamps to see if the record should be

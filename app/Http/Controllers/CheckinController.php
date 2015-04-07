@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Checkin;
 use App\User;
+use App\Services\Aleph;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,7 +53,7 @@ class CheckinController extends Controller {
 				$view = "checkin.retry";
 				break;
 			case 1:
-			  list($message_key, $view) = validateCheckin('user', $user_matches->first()->aleph_id);
+			  list($message_key, $view) = $this->validateCheckin('user', $user_matches->first()->aleph_id);
 				$user = $user_matches->first();
 				// TODO: Should expired checkins count or not be counted?
 				//       This may require a tweak to the database model to
@@ -97,26 +98,21 @@ class CheckinController extends Controller {
 		}
 		$return_values = [];
 		// Default to true unless proven otherwise
-		$expired = true;
+		$active = false;
+		$aleph = new Aleph();
 
 		switch($field) {
 			case "user":
-				$expired = validateCheckinByUser($key);
+				$active = $aleph->isActive($key);
 				break;
 			case "barcode":
-				$expired = validateCheckinByBarcode($key);
-				break;
-			default:
-				// TODO: Make a notice about the exception in the logs
-				$expired = true;
+				$active = validateCheckinByBarcode($key);
 		}
 
-		if ($expired) {
-			return ['message_key' => 'checkin.expired',
-							'view' => 'checkin.expired'];
+		if ($active) {
+			return ['checkin.success', 'checkin.welcome'];
 		} else {
-			return ['message_key' => 'checkin.success',
-						  'view' => 'checkin.welcome'];
+			return ['checkin.expired', 'checkin.expired'];
 		}
 	}
 }
