@@ -98,6 +98,34 @@ class Aleph {
 		}
 	}
 
+  /**
+   * Given a barcode ID uses the X Service to retrieve the
+   * email address, name, and other details to shadow in the
+   * local database. Returns a data structute that looks like
+   *
+   * name: Name normalized into 'First Last' format
+   * email: Email address
+   * role: Role as described in the Z304 patron information section
+   */
+  public function getUserByBarcode($barcode) {
+  	$endpoint = $this->endpoint('barcode');
+  	$response = file_get_contents($endpoint);
+  	$aleph_data = simplexml_load_string($response);
+
+  	// Now just check to see if there no error tag. If not
+  	// return a complete user. If so return nil and let the
+  	// caller deal with the issue upstream
+  	$user = null;
+  	if (0 == sizeof($aleph_data->xpath("//error")) {
+  		$user['name'] = $aleph_data->xpath("//z304-address-0")[0];
+  		$user['email'] = $aleph_data
+  		->xpath("//z304-email-address")[0];
+  		$user['role'] = $aleph_data->xpath("//z305-bor-type")[0];
+  	}
+
+  	return $user;
+  }
+
 	public function endpoint($target, $key) {
 		Log::info('Resolving ' . $target . "\r\n");
 		switch ($target) {
@@ -156,6 +184,12 @@ class Aleph {
 			return false;
 	  }
 
+	  /**
+	   * TODO: As a side effect of validation should some
+	   *       information be mirrored to the local database.
+	   *       It feels as if this is a bad side effect to not
+	   *       explicitly document
+	   */
 	  return $this->isActivePatron($aleph_data->xpath('//z305-expiry-date')[0]);	}
 
 	/**

@@ -7,7 +7,7 @@
 
               {!! Form::label('address_city', '', 
                     ['class' => 'sr-only']) !!}
-              {!! Form::text('city', null, 
+              {!! Form::text('address_city', null, 
                     ['class' => 'form-control',
                      'placeholder' => 'City']) !!}
 

@@ -1,26 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Visitor Checkin</title>
-
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-overrides.css" rel="stylesheet">
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="./">
-            <img alt="Ingalls Library" src="images/cma-logo.png">
-          </a>
-       </div>
-          <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right"><a href="index.html">Home</a></span>
-       </div>
-    </nav>
     <div class="container-fluid">
       <div class="row">
         <div class="col-sm-12">
@@ -68,25 +45,3 @@
                 </div>
             </div>
             <p class="lead">It is your responsibility to observe the legal use of copyrighted data or information. Abuse of these regulations and policies will result in immediate withdrawal of all ID and password access privileges, loss of library privileges and will be reported to the academic authorities or other appropriate authority. Visitors to the Ingalls Library and Museum Archives agree to indemnify and hold harmless the Cleveland Museum of Art, its officers, trustees and employees, from and against all claims or actions arising out of or related to such visitor’s (a) use of library or archived items; and (b) violation of this use agreement or any of the rules or procedures of the Ingalls Library or Museum Archives.</p>         
-
-        <form action="new-welcome.html" method="GET">
-          <div id="signature"></div>
-          <input type="submit" class="btn btn-primary btn-lg" value="I agree">
-          <span class="btn btn-primary"><a href="new-member.html">I do not agree</a></span>
-        </form>
-        </div>
-      </div>
-    </div>
-  </body>
-  <script src="js/jquery-2.1.3.js"></script>
-  <script src="js/jSignature.min.js"></script>
-  <!-- Fire up the signature panel and inject it into the page. We don't
-       need to rely on FlashCanvas because we do not care about browsers
-       such as Internet Explorer 7 and 8 for this use case -->
-  <script>
-    $(function() {
-      $('#signature').jSignature();
-    })
-  </script>
-  <script src="js/bootstrap.min.js"></script>
-</html>
