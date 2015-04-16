@@ -17,7 +17,9 @@
       
           <h3>Visitor type</h3>
           <p>{{ $user->role->role }}</p>
-          <span class="btn btn-primary"><a href="index.html">Reset check in</a></span>                
+          <span class="btn btn-primary">
+            <a href="{{ URL::action('HomeController@index') }}">Reset application</a>
+          </span>               
         </div>
       </div>
 @stop

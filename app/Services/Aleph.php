@@ -108,7 +108,7 @@ class Aleph {
    * role: Role as described in the Z304 patron information section
    */
   public function getUserByBarcode($barcode) {
-  	$endpoint = $this->endpoint('barcode');
+  	$endpoint = $this->endpoint('barcode', $barcode);
   	$response = file_get_contents($endpoint);
   	$aleph_data = simplexml_load_string($response);
 
@@ -116,11 +116,11 @@ class Aleph {
   	// return a complete user. If so return nil and let the
   	// caller deal with the issue upstream
   	$user = null;
-  	if (0 == sizeof($aleph_data->xpath("//error")) {
-  		$user['name'] = $aleph_data->xpath("//z304-address-0")[0];
+  	if (0 == sizeof($aleph_data->xpath("//error"))) {
+  		$user['name'] = $aleph_data->xpath("//z304-address-0")[0]->__toString();
   		$user['email'] = $aleph_data
-  		->xpath("//z304-email-address")[0];
-  		$user['role'] = $aleph_data->xpath("//z305-bor-type")[0];
+  		->xpath("//z304-email-address")[0]->__toString();
+  		$user['role'] = $aleph_data->xpath("//z305-bor-type")[0]->__toString();
   	}
 
   	return $user;
@@ -177,11 +177,13 @@ class Aleph {
 		 *
 		 * First though we handle the
 		 * cases where the user's record was not found by
-		 * automatically reporting it expired
+		 * automatically reporting it null. The reason for not
+		 * reporting false is to avoid false negatives and give
+		 * some indications that something went wrong
 		 */
 
 		if ($aleph_data->{'error'}) {
-			return false;
+			return null;
 	  }
 
 	  /**

@@ -3,6 +3,7 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Checkin;
+use App\Role;
 use App\User;
 use App\Services\Aleph;
 
@@ -32,15 +33,16 @@ class CheckinController extends Controller {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
 			list($message_key, $view) = $this->validateCheckin('barcode', $barcode);
 			/**
-			 * If the barcode was valid but there is no information in 
-			 * the local database create a shadow copy with a stub of
-			 * the signature so that the record is valid
+			 * TODO: Consider refactoring everything to be more DRY
 			 */
+			$user = null;
+			if ('checkin.welcome' == $view) {
+				$user = User::whereBarcode($barcode)->first();
+			}
 
-			//return view($view)
-			//	->withMessageKey($message_key);
-			return view('checkin.expired')
-			 	->withMessageKey('checkin.expired');
+			return view($view)
+				->withMessageKey($message_key)
+				->withUser($user);		
 		} else {
 		  return view('checkin.index');
 		}
@@ -64,11 +66,8 @@ class CheckinController extends Controller {
 				$view = "checkin.retry";
 				break;
 			case 1:
-			  list($message_key, $view) = $this->validateCheckin('user', $user_matches->first()->aleph_id);
-				$user = $user_matches->first();
-				// TODO: Should expired checkins count or not be counted?
-				//       This may require a tweak to the database model to
-				//       add a status flag.
+			  $user = $user_matches->first();			  
+			  list($message_key, $view) = $this->validateCheckin('user', $user->aleph_id);
 				$this->saveCheckin($user);
 				break;
 			case 2:
@@ -97,10 +96,24 @@ class CheckinController extends Controller {
 	 * this scenario
 	 */
 	public function postExpired(Request $request) {
-		// TODO: Fix this
-		$user = User::all()->first();
-		return view('checkin.success')
-			->withMessageKey('checkin.success')
+		$user_count = User::where('email_address', $request->input['email']);
+		$view = '';
+		$message_key = '';
+		$user = null;
+
+		switch ($user_count->count()) {
+			case 1:
+				$user = $user->get()->first();
+				$user->signature = $request->input['signature'];
+				$user->save();
+				saveCheckin($user);
+
+				$view = 'checkin.success';
+			default:
+				$view = 'checkin.notfound';
+		}
+		return view($view)
+			->withMessageKey($view)
 			->withUser($user);
 	}
 
@@ -130,19 +143,23 @@ class CheckinController extends Controller {
 
 		if (in_array($field, ['user', 'barcode'])) {
 				$active = $aleph->isActive($key);
+				Log::info('User key => ' . $key);
+				Log::info('Response =>' . $active);
+
 				/**
 		 			* If the requested barcode does not already exist
 		 			* create a shadow account with just the email address,
 		 			* name, and role. Zero out the signature
 		 		 */
 			if ('barcode' == $field && $active) {
-				importUserFromAleph($key);
+				$this->importUserFromAleph($key);
 			}
 		}
 		
-
 		if ($active) {
 			return ['checkin.success', 'checkin.welcome'];
+		} elseif (is_null($active)) {
+			return ['checkin.notfound', 'checkin.retry'];
 		} else {
 			return ['checkin.expired', 'checkin.expired'];
 		}
@@ -156,18 +173,17 @@ class CheckinController extends Controller {
 	 */
 	protected function importUserFromAleph($barcode) {
 		$aleph = new Aleph();
-		$aleph_data = $aleph->getUserDetails();
-
-		$user_qry = User::where('email_address', $aleph_data->email);
-		switch ($user_qry->count) {
+		$aleph_data = $aleph->getUserByBarcode($barcode);
+		$user_qry = User::where('email_address', $aleph_data['email']);
+		switch ($user_qry->count()) {
 			case 0:
 			  // Create a new user stub with an empty signature to
 			  // make sure that it passes validation properly
 			  $user = new User();
-			  $user->email_address = $aleph_data->email;
-			  $user->name = $aleph_data->name;
+			  $user->email_address = $aleph_data['email'];
+			  $user->name = $aleph_data['name'];
 			  $user->signature = '';
-			  $user->role = Role::ofType($aleph_data->role)->get()->first();
+			  $user->role_id = Role::ofType($aleph_data['role'])->get()->first()->id;
 			  $user->save();
 			  break;
 			case 1:

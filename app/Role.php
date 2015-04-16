@@ -23,7 +23,7 @@ class Role extends Model {
 		return $this->hasMany('App\User');
 	}
 
-	public function scopeOfRole($query, $type) {
+	public function scopeOfType($query, $type) {
 		if (key_exists($type, $this->roles_map)) {
 			$type = $this->roles_map[$type];
 		}

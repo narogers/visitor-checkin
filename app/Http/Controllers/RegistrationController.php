@@ -153,7 +153,6 @@ class RegistrationController extends Controller {
 	 */
 	public function missingMethod($parameters = array()) {
 		Log::error('Could not match request to a specified route - redirecting to the index page');
-		Log::error(var_dump($parameters));
 		return redirect()->action('RegistrationController@getIndex');
 	}
 

@@ -11,8 +11,9 @@
 
           <p>Your registration has been saved. Please have identification ready when
               you visit Ingalls Library.</p>
-          <span class="btn btn-primary">{!! link_to('/', 
-            'Reset application') !!}</span>
+          <span class="btn btn-primary">
+            <a href="{{ URL::action('HomeController@index') }}">Reset application</a>
+          </span>
 
           <hr>
           <dl>

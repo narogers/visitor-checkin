@@ -17,6 +17,7 @@ class User extends Model {
 	public function scopeActiveCheckin($query, $string) {
 		$qry = $query->where('name', 'LIKE', '%' . $string);
 		$qry->orWhere('aleph_id', $string);
+		$qry->orWhere('email_address', $string);
 
 		return $qry;
 	} 

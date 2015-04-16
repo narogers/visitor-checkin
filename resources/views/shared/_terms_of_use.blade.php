@@ -1,5 +1,3 @@
-    <div class="container-fluid">
-      <div class="row">
         <div class="col-sm-12">
          <h2>Policies and Terms of Use</h2>
          <p class="lead">The Ingalls Library is a non-circulating art research collection intended to assist visitors with research needs that cannot be met by local public, university, and college library collections. Visitors are expected to complete the Patron Registration Form and this Policies and Terms of Use Agreement, and to abide by the stated policies with respect for the rights of others and with respect for the collections. Failure to do so will result in loss of library privileges and removal from the library and the Museum. Access to the Ingalls Library and Museum Archives is granted at the sole discretion of the library’s staff and such access may be denied or revoked at any time.</p>
