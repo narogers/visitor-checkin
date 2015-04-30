@@ -22,7 +22,7 @@
               </div>
               <div class="form-group">
                   <input type="submit" class="btn btn-primary" value="Retry check in">
-                  <span class="span-4 btn btn-primary"><a href="p2spro://scan?formats=CODABAR,CODE39&callback={{ URL::action('CheckinController@getNew') }}?code=CODE">Scan badge</span>
+                  <span class="span-4 btn btn-primary"><a href="p2spro://scan?formats=CODABAR,CODE39&amp;callback={{ URL::action('CheckinController@getNew') }}%3Fcode%3DCODE%26type%3DFORMAT">Scan badge</span>
               </div>
             </form>
           </div>
