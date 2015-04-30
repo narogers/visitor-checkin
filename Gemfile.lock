@@ -13,6 +13,7 @@ GEM
       capistrano-composer (>= 0.0.3)
       capistrano-file-permissions
     colorize (0.7.5)
+    highline (1.7.2)
     i18n (0.7.0)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
@@ -30,3 +31,4 @@ DEPENDENCIES
   capistrano
   capistrano-composer
   capistrano-laravel
+  highline

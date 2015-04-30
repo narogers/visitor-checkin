@@ -5,6 +5,8 @@
  */
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class ZipCodeResolver {
 	/**
  	 * This API call acts as a resolver for zip codes to states. Assuming there 
