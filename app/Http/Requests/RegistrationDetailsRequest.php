@@ -39,7 +39,8 @@ class RegistrationDetailsRequest extends Request {
 			$rules['address_street'] = 'required';
 			$rules['address_city'] = 'required';
 			$rules['address_zip'] = 'required|regex:/\d{5}/';
-
+		}
+		if (!in_array($role, ['Fellow', 'Staff', 'Intern'])) {
 			$rules['telephone'] = 'required|alpha_dash|min:10|max:13';
 		}
 
@@ -69,7 +70,7 @@ class RegistrationDetailsRequest extends Request {
 		 */
 		if ('Intern' == $role) {
 			$rules['supervisor'] = 'required';
-			$rules['ending_on'] = 'required|date';
+			$rules['expires_on'] = 'required|date';
 		}
 
 		return $rules;

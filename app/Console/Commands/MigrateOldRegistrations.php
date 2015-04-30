@@ -54,8 +54,8 @@ class MigrateOldRegistrations extends Command {
 		// duplicates exist they will update existing records.
 		// That means this migration can be run multiple times
 		// and will just pick up where it left off
-		$aleph = new Aleph();
 		foreach (array_keys($archivedRegistrations) as $patron) {
+			$aleph = new Aleph();
 			$user = User::firstOrNew(['email_address' =>
 				$archivedRegistrations[$patron]['email']]);
 			$user->name = $patron;

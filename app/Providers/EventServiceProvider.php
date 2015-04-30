@@ -41,7 +41,8 @@ class EventServiceProvider extends ServiceProvider {
 	   */
 	  Registration::saving(function($registration) {
 		if ($registration->address_zip) {
-			$registration->address_state = ZipCodeResolver::resolve($registration->address_zip);
+			$resolver = new ZipCodeResolver;
+			$registration->address_state = $resolver->resolve($registration->address_zip);
 		} else {
 			$registration->address_state = '';
 		}

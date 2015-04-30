@@ -2,3 +2,6 @@
 gem 'capistrano'
 gem 'capistrano-composer'
 gem 'capistrano-laravel'
+
+# Support gems
+gem 'highline'

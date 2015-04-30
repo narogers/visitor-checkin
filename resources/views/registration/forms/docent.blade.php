@@ -22,5 +22,5 @@
               {!! Form::label('telephone', 'Telephone Number') !!}
               {!! Form::text('telephone', null, 
                     ['class' => 'form-control',
-                     'placeholder' => 'xxx-xxx-xxxx') !!}
+                     'placeholder' => 'xxx-xxx-xxxx']) !!}
           </div>

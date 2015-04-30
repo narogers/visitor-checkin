@@ -31,7 +31,7 @@
           </div>
 
           <div class="form-group">
-              <label for='ending_date'>Date</label>
-              {!! Form::input('date', 'ending_on',
+              <label for='ending_date'>Ending date</label>
+              {!! Form::input('date', 'expires_on',
                     null, ['class' => 'form-control col-sm-4']) !!}
           </div>
