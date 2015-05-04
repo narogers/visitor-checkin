@@ -7,8 +7,8 @@
         {!! Form::open(['action' => 'CheckinController@postExpired']) !!}
           <div id="signature"></div>
 
-          {!! Form::hidden('email'), $user->email,
-                ['id' => 'email'] !!}
+          {!! Form::hidden('email', $user->email,
+                ['id' => 'email']) !!}
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
           {!! Form::submit('&laquo; Go back', 
