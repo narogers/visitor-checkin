@@ -33,7 +33,7 @@ class CheckinController extends Controller {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
 			$is_active = $this->validateCheckin('barcode', $barcode);
 			$user = null;
-			
+
 			/**
 			 * TODO: Consider refactoring everything to be more DRY
 			 */
@@ -116,8 +116,9 @@ class CheckinController extends Controller {
 
 				$view = 'checkin.success';
 			default:
-				$view = 'checkin.notfound';
+				$view = 'checkin.retry';
 		}
+		
 		return view($view)
 			->withMessageKey($view)
 			->withUser($user);
