@@ -32,6 +32,8 @@ class CheckinController extends Controller {
 		if ($request->input('code')) {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
 			$is_active = $this->validateCheckin('barcode', $barcode);
+			$user = null;
+			
 			/**
 			 * TODO: Consider refactoring everything to be more DRY
 			 */
