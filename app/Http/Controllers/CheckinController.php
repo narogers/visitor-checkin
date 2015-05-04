@@ -148,7 +148,7 @@ class CheckinController extends Controller {
 		if (in_array($field, ['user', 'barcode'])) {
 				$active = $aleph->isActive($key);
 				Log::info('User key => ' . $key);
-				Log::info('Response =>' . $active);
+				Log::info('Response => ' . $active);
 
 				/**
 		 			* If the requested barcode does not already exist
@@ -173,6 +173,7 @@ class CheckinController extends Controller {
 		$aleph = new Aleph();
 		$aleph_data = $aleph->getUserByBarcode($barcode);
 		$user_qry = User::where('email_address', $aleph_data['email']);
+		$user = null;
 		switch ($user_qry->count()) {
 			case 0:
 			  // Create a new user stub with an empty signature to
@@ -182,12 +183,14 @@ class CheckinController extends Controller {
 			  $user->name = $aleph_data['name'];
 			  $user->signature = '';
 			  $user->role_id = Role::ofType($aleph_data['role'])->first()->id;
-			  $user->save();
 			  break;
 			case 1:
 				$user = $user_qry->get()->first();
-				$user->barcode = $barcode;
-				$user->save();
+		}
+		# These two things should happen regardless
+		if ($user) {
+		  $user->barcode = $barcode;
+		  $user->save();
 		}
 	}
 
