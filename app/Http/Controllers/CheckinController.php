@@ -200,11 +200,11 @@ class CheckinController extends Controller {
 		  $message_key = '';
 
 			if ($status) {
-			  $view = 'checkin.success';
-			  $message_key = 'checkin.welcome';
+			  $view = 'checkin.welcome';
+			  $message_key = 'checkin.success';
 		  } elseif (is_null($status)) {
-			  $view = 'checkin.notfound';
-			  $message_key = 'checkin.retry';
+			  $view = 'checkin.retry';
+			  $message_key = 'checkin.notfound';
 		  } else {
 			  $view = 'checkin.expired';
 			  $message_key = 'checkin.expired';
