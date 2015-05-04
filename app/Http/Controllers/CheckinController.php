@@ -114,13 +114,15 @@ class CheckinController extends Controller {
 				$user->save();
 				$this->saveCheckin($user);
 
-				$view = 'checkin.success';
+				$view = 'checkin.welcome';
+				$message_key = 'checkin.success';
 			default:
 				$view = 'checkin.retry';
+				$message_key = 'checkin.notfound';
 		}
-		
+
 		return view($view)
-			->withMessageKey($view)
+			->withMessageKey($message_key)
 			->withUser($user);
 	}
 
