@@ -39,7 +39,7 @@ class CheckinController extends Controller {
 
 			if ($is_active) {
 				$user = User::whereBarcode($barcode)->first();
-				saveCheckin($user);
+				$this->saveCheckin($user);
 			}
 
 			return view($view)
