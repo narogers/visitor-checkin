@@ -35,22 +35,9 @@ class CheckinController extends Controller {
 			/**
 			 * TODO: Consider refactoring everything to be more DRY
 			 */
-			$user = null;
-			$view = '';
-			$message_key = '';
+			list($view, $message_key) = $this->getView($is_active);
 
 			if ($is_active) {
-			  $view = 'checkin.success';
-			  $message_key = 'checkin.welcome';
-		  } elseif (is_null($is_active)) {
-			  $view = 'checkin.notfound';
-			  $message_key = 'checkin.retry';
-		  } else {
-			  $view = 'checkin.expired';
-			  $message_key = 'checkin.expired';
-			}
-
-			if ($active) {
 				$user = User::whereBarcode($barcode)->first();
 				saveCheckin($user);
 			}
@@ -83,7 +70,8 @@ class CheckinController extends Controller {
 				break;
 			case 1:
 			  $user = $user_matches->first();			  
-			  list($message_key, $view) = $this->validateCheckin('user', $user->aleph_id);
+			  $is_active = $this->validateCheckin('user', $user->aleph_id);
+			  list($view, $message_key) = $this->getView($is_active);
 				$this->saveCheckin($user);
 				break;
 			case 2:
@@ -201,5 +189,27 @@ class CheckinController extends Controller {
 				$user->barcode = $barcode;
 				$user->save();
 		}
+	}
+
+	/**
+	 * Uses a registration status to determine which view to return for the
+	 * checkin process (getNew and postNew)
+	 */
+	protected function getView($status) {
+		  $view = '';
+		  $message_key = '';
+
+			if ($status) {
+			  $view = 'checkin.success';
+			  $message_key = 'checkin.welcome';
+		  } elseif (is_null($status)) {
+			  $view = 'checkin.notfound';
+			  $message_key = 'checkin.retry';
+		  } else {
+			  $view = 'checkin.expired';
+			  $message_key = 'checkin.expired';
+			}
+
+			return [$view, $message_key];
 	}
 }
