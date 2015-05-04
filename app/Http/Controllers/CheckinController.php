@@ -31,19 +31,35 @@ class CheckinController extends Controller {
 		 */
 		if ($request->input('code')) {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
-			list($message_key, $view) = $this->validateCheckin('barcode', $barcode);
+			$is_active = $this->validateCheckin('barcode', $barcode);
 			/**
 			 * TODO: Consider refactoring everything to be more DRY
 			 */
 			$user = null;
-			if ('checkin.welcome' == $view) {
+			$view = '';
+			$message_key = '';
+
+			if ($is_active) {
+			  $view = 'checkin.success';
+			  $message_key = 'checkin.welcome';
+		  } elseif (is_null($is_active)) {
+			  $view = 'checkin.notfound';
+			  $message_key = 'checkin.retry';
+		  } else {
+			  $view = 'checkin.expired';
+			  $message_key = 'checkin.expired';
+			}
+
+			if ($active) {
 				$user = User::whereBarcode($barcode)->first();
+				saveCheckin($user);
 			}
 
 			return view($view)
 				->withMessageKey($message_key)
 				->withUser($user);		
 		} else {
+			// If no barcode was supplied
 		  return view('checkin.index');
 		}
 	}
@@ -103,10 +119,10 @@ class CheckinController extends Controller {
 
 		switch ($user_count->count()) {
 			case 1:
-				$user = $user->get()->first();
+				$user = $user->first();
 				$user->signature = $request->input['signature'];
 				$user->save();
-				saveCheckin($user);
+				$this->saveCheckin($user);
 
 				$view = 'checkin.success';
 			default:
@@ -155,14 +171,8 @@ class CheckinController extends Controller {
 				$this->importUserFromAleph($key);
 			}
 		}
-		
-		if ($active) {
-			return ['checkin.success', 'checkin.welcome'];
-		} elseif (is_null($active)) {
-			return ['checkin.notfound', 'checkin.retry'];
-		} else {
-			return ['checkin.expired', 'checkin.expired'];
-		}
+
+		return $active;
 	}
 
 	/**
@@ -183,7 +193,7 @@ class CheckinController extends Controller {
 			  $user->email_address = $aleph_data['email'];
 			  $user->name = $aleph_data['name'];
 			  $user->signature = '';
-			  $user->role_id = Role::ofType($aleph_data['role'])->get()->first()->id;
+			  $user->role_id = Role::ofType($aleph_data['role'])->first()->id;
 			  $user->save();
 			  break;
 			case 1:
