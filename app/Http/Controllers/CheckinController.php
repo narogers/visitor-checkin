@@ -74,7 +74,9 @@ class CheckinController extends Controller {
 			  $user = $user_matches->first();			  
 			  $is_active = $this->validateCheckin('user', $user->aleph_id);
 			  list($view, $message_key) = $this->getView($is_active);
-				$this->saveCheckin($user);
+			  if ($is_active) {
+				  $this->saveCheckin($user);
+			  }
 				break;
 			case 2:
 				$message_key = "checkin.multiplefound";
@@ -135,37 +137,6 @@ class CheckinController extends Controller {
 	protected function saveCheckin(User $user) {
 		$checkin = new Checkin();
 		$user->checkins()->save($checkin);
-	}
-
-	/**
-	 * Makes a call to the Aleph service based on the key and
-	 * determines if the particular record is current or not.
-	 */
-	protected function validateCheckin($field, $key) {
-		if (!$field) {
-			$field = 'user';
-		}
-		$return_values = [];
-		// Default to expired unless proven otherwise
-		$active = false;
-		$aleph = new Aleph();
-
-		if (in_array($field, ['user', 'barcode'])) {
-				$active = $aleph->isActive($key);
-				Log::info('User key => ' . $key);
-				Log::info('Response => ' . $active);
-
-				/**
-		 			* If the requested barcode does not already exist
-		 			* create a shadow account with just the email address,
-		 			* name, and role. Zero out the signature
-		 		 */
-			if ('barcode' == $field && $active) {
-				$this->importUserFromAleph($key);
-			}
-		}
-
-		return $active;
 	}
 
 	/**
