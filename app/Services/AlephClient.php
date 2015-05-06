@@ -9,7 +9,7 @@ namespace App\Services;
 use App\User;
 use Illuminate\Support\Facades\Log;
 
-class Aleph {
+class AlephClient {
 	// These are the URLs for the specific services that will be appended 
 	// following the patron ID
 	protected $AlephHost = "http://lib-aleph-01.clevelandart.org";
@@ -30,6 +30,8 @@ class Aleph {
 	public function __construct() {
 		$this->AlephWebService = $this->AlephHost . ":1891/rest-dlf/patron/";
 		$this->AlephXService = $this->AlephHost . "/X?";
+
+		Log::info('[ALEPH] Client has been initialized and is ready for use');
 	}
 
 	/**
@@ -40,7 +42,7 @@ class Aleph {
 	 * Returns a string if a match is found or NULL for error cases
 	 */
 	public function getPatronID($user_key) {
-		$response = file_get_contents($this->endpoint('id'), $user_key);
+		$response = file_get_contents($this->endpoint('id', $user_key));
 		$aleph_data = simplexml_load_string($response);
 
 		// Default to NULL if the identifier cannot be resolved
@@ -54,9 +56,9 @@ class Aleph {
 			 *
 			 * In the first case log the error for troubleshooting down the road
 			 */
-		if ($aleph_data->{'error'}) {
+		if (!$aleph_data->{'error'}) {
 			Log::info("[ALEPH] Could not resolve " . $user_key . " to a canonical ID");
-			Log::info("[ALEPH] " . $aleph_data->{'error'});
+			Log::info("[ALEPH] " . $response);
 		}
 
 		if ($aleph_data->{'internal-id'}) {
@@ -85,7 +87,7 @@ class Aleph {
 
 			// Take a look at the <z304-address-1> field and compare it to the
 			// name in the User model to ensure this is the right person
-			$response = file_get_contents($this->endpoint('address'), $canonical_aleph_id);
+			$response = file_get_contents($this->endpoint('address', $canonical_aleph_id));
 			$aleph_data = simplexml_load_string($response);
 
 			if($this->compare_names($user->name,
@@ -116,7 +118,7 @@ class Aleph {
 	 * interface won't say anything by default
 	 */
 	public function isActive($patron_id) {
-		$canonical_aleph_id = $this->getCanonicalID($patron_id);
+		$canonical_aleph_id = $this->getPatronID($patron_id);
 		// The only case we care about is a NULL result. Eventually this could be redone with
 		// exceptions but that would slow down development another week or two
 		if (null == $canonical_aleph_id) {
@@ -124,7 +126,7 @@ class Aleph {
 		}
 		
 		// Assume the best - handle any other edge cases in the above method
-		$response = file_get_contents($this->endpoint('status'), $canonical_aleph_id);
+		$response = file_get_contents($this->endpoint('status', $canonical_aleph_id));
 		$aleph_data = simplexml_load_string($response);
 
 		/**

@@ -1,11 +1,12 @@
 <?php namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 use App\Checkin;
 use App\Registration;
 use App\Role;
-use App\Services\Aleph;
+use App\Services\AlephClient;
 
 class User extends Model {
 	/**
@@ -27,12 +28,12 @@ class User extends Model {
    * Create an Aleph instance that can be shared across the model rather than
    * having to instantiate it every time
    */
-  protected $alephInterface = null;
+  protected $aleph_client = null;
 
   public function __construct($attributes = array()) {
   	parent::__construct($attributes = array());
   	# Do local stuff now
-  	$this->alephInterface = new Aleph();
+  	$this->aleph_client = new AlephClient;
   }
 
 	public function role() {
@@ -51,12 +52,12 @@ class User extends Model {
 	 * Makes a call to the Aleph service based on the key and
 	 * determines if the particular record is current or not.
 	 */
-	public function isActiveUser($user_key) {
+	public function isActive($user_key) {
 		// Default to expired unless proven otherwise
 		$active = false;
 		
-		$active = $this->alephInterface->isActive($user_key);
-		Log::info('[USER] User key => ' . $key);
+		$active = $this->aleph_client->isActive($user_key);
+		Log::info('[USER] User key => ' . $user_key);
 		Log::info('[USER] Response => ' . $active);
 
 		/**
@@ -73,7 +74,7 @@ class User extends Model {
 	}
 
 	public function importPatronDetails($user_key) {
-		$patron_data = $this->alephInterface->getPatronDetails($user_key);
+		$patron_data = $this->aleph_client->getPatronDetails($user_key);
 		$user_qry = $this->where('email_address', $patron_data['email']);
 		
 		if (0 == $user_qry->count()) {

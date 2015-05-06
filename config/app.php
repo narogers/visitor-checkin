@@ -146,6 +146,10 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 
+		/**
+		 * Custom providers
+		 */
+		'App\Providers\AlephServiceProvider',
 	],
 
 	/*
