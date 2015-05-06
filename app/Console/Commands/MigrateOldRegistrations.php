@@ -54,8 +54,8 @@ class MigrateOldRegistrations extends Command {
 		// duplicates exist they will update existing records.
 		// That means this migration can be run multiple times
 		// and will just pick up where it left off
+		$aleph_interface = new Aleph();
 		foreach (array_keys($archivedRegistrations) as $patron) {
-			$aleph = new Aleph();
 			$user = User::firstOrNew(['email_address' =>
 				$archivedRegistrations[$patron]['email']]);
 			$user->name = $patron;
@@ -63,24 +63,13 @@ class MigrateOldRegistrations extends Command {
 			// Try to resolve the Aleph ID at this point so that if
 			// you do not save the record can be destroyed. Skip to
 			// the next record after emitting a warning
-			$aleph_id = $aleph->getPatronID($user);
+			$aleph_id = $aleph_interface->validatePatronID($user);
 			if (null == $aleph_id) {
 				$this->error('WARNING: Could not resolve an Aleph ID for ' . $patron);
 				array_push($failures, $user->name);
 				continue;
 			}
-			$user->aleph_id = $aleph_id;
-			
-			// Now try to resolve the user's role from Aleph using a
-			// mapping. If not provided then set the role to 0 which
-			// should never happen. These records can be resolved
-			// manually via the back end
-			$role = Role::where(['role' => $archivedRegistrations[$patron]['role']])->first();
-			if (null == $role) {
-				$user->role_id = 0;
-			} else {
-				$user->role_id = $role->id;
-			}
+			$user->importPatronDetails($aleph_id);
 
 			// This is not the most efficient way of pulling the
 			// signature but it gets the job done well enough. If
@@ -91,7 +80,6 @@ class MigrateOldRegistrations extends Command {
 				continue;
 			}
 
-			$user->email_address = $patronRegistration->email;
 			$user->signature = $patronRegistration->signature;
 			$user->save();
 			array_push($successes, $user->name);

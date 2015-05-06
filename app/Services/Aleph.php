@@ -20,10 +20,10 @@ class Aleph {
 	protected $Endpoint = [
 		// General information
 		'address' => '/patronInformation/address',
-		// Expiration date
+		// Expiration date and registration details
 		'status' => '/patronStatus/registration',
-		// Barcode validation for X Service
-		'barcode' => 'library=CMA50&base=STACKS&loans=N&cash=N&hold=N&op=bor_info'
+		// Resolve alternate IDs to a canonical internal reference
+		'id' => 'library=CMA50&op=bor_by_key&bor_id='
 	];
 	protected $user;
 
@@ -33,50 +33,75 @@ class Aleph {
 	}
 
 	/**
-	 * Invoke this as a callback once the record has been uploaded into Aleph
-	 * to get back a list of all identifiers which can then be cached locally.
-	 * From there you can easily make requests to find out if a patron's record
-	 * has expired.
+	 * Given a key uses it to query Aleph for a canonical identifier. Unlike
+	 * the other version this one does no quality assurance to avoid possible
+	 * false positives
 	 *
-	 * To verify that we have the right record and not a false positive we look
-	 * at the <z304-address-1> field of the patron's address. If it matches 
-	 * either 'Last Name, First Name' or 'First Name Last Name' then go ahead and
-	 * report it as a match.
+	 * Returns a string if a match is found or NULL for error cases
 	 */
-	public function getPatronID($user) {
+	public function getPatronID($user_key) {
+		$response = file_get_contents($this->endpoint('id'), $user_key);
+		$aleph_data = simplexml_load_string($response);
+
+		// Default to NULL if the identifier cannot be resolved
+		$canonical_aleph_id = null;
+
+			/*
+			 * The two most likely responses are
+			 *
+			 * <error>Error in verification</error>
+			 * <internal-id>Aleph's internal ID for patron</internal-id>
+			 *
+			 * In the first case log the error for troubleshooting down the road
+			 */
+		if ($aleph_data->{'error'}) {
+			Log::info("[ALEPH] Could not resolve " . $user_key . " to a canonical ID");
+			Log::info("[ALEPH] " . $aleph_data->{'error'});
+		}
+
+		if ($aleph_data->{'internal-id'}) {
+			$canonical_aleph_id = $aleph_data->{'internal-id'};
+		}
+		return $canonical_aleph_id;
+	}
+
+	/**
+	 * Invoke this as a callback once the record has been uploaded into Aleph
+	 * to get resolve the canonical identifier. Unlike the other method of
+	 * resolving IDs this one double checks the details against Aleph for a
+	 * match. If you just need to quickly get the canonical ID then use
+	 * getPatronID()
+	 */
+	public function validatePatronID(User $user) {
 		$aleph_ids = $this->parse_name($user->name);
 		Log::info('Attempting to resolve IDs');
 		
 		foreach ($aleph_ids as $aleph_id) {
-			// Get it working and then refactor
-			$response = file_get_contents($this->endpoint('address', $aleph_id));
-			$aleph_data = simplexml_load_string($response);
-
-			/*
-			 * 0000 and 0002 are the two most likely responses
-			 *
-			 * 0000 means a record was found and can be parsed
-			 * 0002 means that the ID was invalid
-			 *
-			 * See https://developers.exlibrisgroup.com/aleph/apis/Aleph-RESTful-APIs/Address
-			 */
-			if ('0000' != $aleph_data->{'reply-code'}) {
+			// In case of a null result assume the worst and move on to the next possible match
+			$canonical_aleph_id = $this->getPatronID($aleph_id);
+			if (null == $canonical_aleph_id) {
 				continue;
 			}
-			// If we get here assume the data is valid. In that case we need to
-			// take a look at the <z304-address-1> field and compare it to the
-			// name in the User model
-			if($this->compare_name_equality($user->name,
+
+			// Take a look at the <z304-address-1> field and compare it to the
+			// name in the User model to ensure this is the right person
+			$response = file_get_contents($this->endpoint('address'), $canonical_aleph_id);
+			$aleph_data = simplexml_load_string($response);
+
+			if($this->compare_names($user->name,
 				$aleph_data->{'address-information'}->{'z304-address-1'})) {
-				return $aleph_id;
+				$canonical_aleph_id = $aleph_id;
+				break;
 			}
 		}
 
 		// If we happen to fall through to here then there are no valid IDs.
 		// Returning NULL is a bandaid until something better can be done.
-		Log::warning('WARNING: Unable to resolve an Aleph ID for ' . 
+		if (null == $canonical_aleph_id) {
+			Log::warning('[ALEPH] WARNING: Unable to resolve an Aleph ID for ' . 
 			$user->name);
-		return null;
+		}
+		return $canonical_aleph_id;
 	}
 
 	/**
@@ -90,50 +115,67 @@ class Aleph {
 	 * In the last case messages will be written to the logs but the user 
 	 * interface won't say anything by default
 	 */
-	public function isActive($patronID) {
-		if (preg_match("/^\d*$/", $patronID)) {
-			return $this->validatePatronByBarcode($patronID);			
-		} else {
-			return $this->validatePatronByName($patronID);
+	public function isActive($patron_id) {
+		$canonical_aleph_id = $this->getCanonicalID($patron_id);
+		// The only case we care about is a NULL result. Eventually this could be redone with
+		// exceptions but that would slow down development another week or two
+		if (null == $canonical_aleph_id) {
+			return false;
 		}
+		
+		// Assume the best - handle any other edge cases in the above method
+		$response = file_get_contents($this->endpoint('status'), $canonical_aleph_id);
+		$aleph_data = simplexml_load_string($response);
+
+		/**
+		 * If we've got a valid record then we can just compare the expiry date to the
+		 * current time and return a 'yeah' or 'nay'
+		 */
+		return $this->isActivePatron($aleph_data->xpath("//z305-expiry-date")[0]);
+	}
+
+	public function isExpired($patron_id) {
+		return !($this->isActive($patron_id));
 	}
 
   /**
-   * Given a barcode ID uses the X Service to retrieve the
-   * email address, name, and other details to shadow in the
-   * local database. Returns a data structute that looks like
+   * Given a Aleph ID retrieves the email address, name, and other details to shadow 
+   * in the local database. Returns a data structute that looks like
    *
    * name: Name normalized into 'First Last' format
    * email: Email address
    * role: Role as described in the Z304 patron information section
+   * aleph_id: Canonical identifier
    */
-  public function getUserByBarcode($barcode) {
-  	$endpoint = $this->endpoint('barcode', $barcode);
-  	$response = file_get_contents($endpoint);
-  	$aleph_data = simplexml_load_string($response);
-
-  	// Now just check to see if there no error tag. If not
-  	// return a complete user. If so return nil and let the
-  	// caller deal with the issue upstream
+  public function getPatronDetails($patron_id) {
+  	$aleph_id = $this->getPatronID($patron_id);
   	$user = null;
-  	if (0 == sizeof($aleph_data->xpath("//error"))) {
-  		$user['name'] = $aleph_data->xpath("//z304-address-0")[0]->__toString();
-  		$user['email'] = $aleph_data
-  		->xpath("//z304-email-address")[0]->__toString();
-  		$user['role'] = $aleph_data->xpath("//z305-bor-type")[0]->__toString();
-  	}
 
+  	if ($aleph_id) {
+  		$response = file_get_contents('address', $aleph_id);
+  		$address_data = simplexml_load_string($response);
+
+  		$response = file_get_contents('status', $aleph_id);
+  		$registration_data = simplexml_load_string($response);
+
+  		$user['name'] = $this->normalizeName($address_data->xpath("//z304-address-0")[0]->__toString());
+  		$user['email'] = $address_data
+  			->xpath("//z304-email-address")[0]->__toString();
+  		$user['role'] = $registration_data->xpath("//z305-bor-type")[0]->__toString();
+  		$user['aleph_id'] = $canonical_aleph_id;
+  	}
+ 	
   	return $user;
   }
 
 	public function endpoint($target, $key) {
-		Log::info('Resolving ' . $target . "\r\n");
+		Log::info('[ALEPH] Resolving ' . $target . "\r\n");
 		switch ($target) {
 			case 'address':
 				return $this->AlephWebService . urlencode($key) . $this->Endpoint['address'];
 				break;
-			case 'barcode':
-				return $this->AlephXService . $this->Endpoint['barcode'] . "&bor_id=" . urlencode($key);
+			case 'id':
+				return $this->AlephXService . $this->Endpoint['id'] . "&bor_id=" . urlencode($key);
 			case 'status':
 				return $this->AlephWebService . urlencode($key) . $this->Endpoint['status'];
 				break;
@@ -142,57 +184,6 @@ class Aleph {
 				return null;
 		}
 	}
-
-	protected function validatePatronByName($name) {
-		$endpoint = $this->endpoint('status', $name);
-		$response = file_get_contents($endpoint);
-		$aleph_data = simplexml_load_string($response);
-
-		/**
-		 * At this point we just need to look at the 
-		 * <z305-expiry-date> element and compare it to the
-		 * current date and time. 
-		 *
-		 * First though we handle the
-		 * cases where the user's record was not found by
-		 * automatically reporting it expired
-		 */
-		if ('0000' != $aleph_data->{'reply-code'}) {
-			return false;
-	  }
-
-	  return $this->isActivePatron($aleph_data->xpath('//z305-expiry-date')[0]);
-
-	}
-
-	protected function validatePatronByBarcode($code) {
-		$endpoint = $this->endpoint('barcode', $code);
-		$response = file_get_contents($endpoint);
-		$aleph_data = simplexml_load_string($response);
-
-		/**
-		 * At this point we just need to look at the 
-		 * <z305-expiry-date> element and compare it to the
-		 * current date and time. 
-		 *
-		 * First though we handle the
-		 * cases where the user's record was not found by
-		 * automatically reporting it null. The reason for not
-		 * reporting false is to avoid false negatives and give
-		 * some indications that something went wrong
-		 */
-
-		if ($aleph_data->{'error'}) {
-			return null;
-	  }
-
-	  /**
-	   * TODO: As a side effect of validation should some
-	   *       information be mirrored to the local database.
-	   *       It feels as if this is a bad side effect to not
-	   *       explicitly document
-	   */
-	  return $this->isActivePatron($aleph_data->xpath('//z305-expiry-date')[0]);	}
 
 	/**
 	 * Compare UNIX timestamps to see if the record should be
@@ -203,11 +194,11 @@ class Aleph {
 		return ($expiry > time());
 
 	}
-	protected function parse_name($name) {
+	protected function parseName($name) {
 		// It is assumed that the first and second values are the important
 		// ones. Code to handle edge cases lie hyphenation can be added down
 		// the road
-		$name = $this->normalize_name($name);
+		$name = $this->normalizeName($name);
 
 		// We will be returning two versions - one without a . and one
 		// with it. For example
@@ -220,10 +211,10 @@ class Aleph {
 		return $username;
 	}
 
-	protected function compare_name_equality($local, $aleph) {
+	protected function compareNames($local, $aleph) {
 		$names = [
-		 	$this->normalize_name($local),
-			$this->normalize_name($aleph)
+		 	$this->normalizeName($local),
+			$this->normalizeName($aleph)
 		];
 
 		return (($names[0]['first'] == $names[1]['first']) &&
@@ -239,7 +230,7 @@ class Aleph {
 	 * LastName, FirstName Middle
 	 * FirstName () LastName
 	 */
-	protected function normalize_name($input) {
+	protected function normalizeName($input) {
 		// Start by stripping out anything in parens
 		$input = preg_replace("/\(.*\)/", "", $input);
 		// Now split on the first whitespace (, or space)

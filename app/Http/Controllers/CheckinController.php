@@ -2,7 +2,6 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Checkin;
 use App\Role;
 use App\User;
 use App\Services\Aleph;
@@ -41,7 +40,7 @@ class CheckinController extends Controller {
 
 			if ($is_active) {
 				$user = User::whereBarcode($barcode)->first();
-				$this->saveCheckin($user);
+				$user->addCheckin();
 			}
 
 			return view($view)
@@ -75,7 +74,7 @@ class CheckinController extends Controller {
 			  $is_active = $this->validateCheckin('user', $user->aleph_id);
 			  list($view, $message_key) = $this->getView($is_active);
 			  if ($is_active) {
-				  $this->saveCheckin($user);
+				  $user->addCheckin();
 			  }
 				break;
 			case 2:
@@ -113,8 +112,8 @@ class CheckinController extends Controller {
 			case 1:
 				$user = $user->first();
 				$user->signature = $request->input['signature'];
+				$user->addCheckin();
 				$user->save();
-				$this->saveCheckin($user);
 
 				$view = 'checkin.welcome';
 				$message_key = 'checkin.success';
@@ -126,48 +125,6 @@ class CheckinController extends Controller {
 		return view($view)
 			->withMessageKey($message_key)
 			->withUser($user);
-	}
-
-	/**
-	 * Simple method for now that creates a checkin and ties it to
-	 * the user. This might eventually be deduped so that it verifies
-	 * there was only one checkin per 24 hour period but that can
-	 * wait until everything else works
-	 */
-	protected function saveCheckin(User $user) {
-		$checkin = new Checkin();
-		$user->checkins()->save($checkin);
-	}
-
-	/**
-	 * Imports a user record from Aleph by making another query
-	 * only this time it retrieves the email address, role, and
-	 * name to be cached locally. If an email address already 
-	 * exists the record is simply updated
-	 */
-	protected function importUserFromAleph($barcode) {
-		$aleph = new Aleph();
-		$aleph_data = $aleph->getUserByBarcode($barcode);
-		$user_qry = User::where('email_address', $aleph_data['email']);
-		$user = null;
-		switch ($user_qry->count()) {
-			case 0:
-			  // Create a new user stub with an empty signature to
-			  // make sure that it passes validation properly
-			  $user = new User();
-			  $user->email_address = $aleph_data['email'];
-			  $user->name = $aleph_data['name'];
-			  $user->signature = '';
-			  $user->role_id = Role::ofType($aleph_data['role'])->first()->id;
-			  break;
-			case 1:
-				$user = $user_qry->get()->first();
-		}
-		# These two things should happen regardless
-		if ($user) {
-		  $user->barcode = $barcode;
-		  $user->save();
-		}
 	}
 
 	/**

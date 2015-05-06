@@ -51,35 +51,30 @@ class User extends Model {
 	 * Makes a call to the Aleph service based on the key and
 	 * determines if the particular record is current or not.
 	 */
-	public function isActiveUser($field, $key) {
-		if (!$field) {
-			$field = 'user';
-		}
-
+	public function isActiveUser($user_key) {
 		// Default to expired unless proven otherwise
 		$active = false;
 		
-		if (in_array($field, ['user', 'barcode'])) {
-				$active = $this->alephInterface->isActive($key);
-				Log::info('User key => ' . $key);
-				Log::info('Response => ' . $active);
+		$active = $this->alephInterface->isActive($user_key);
+		Log::info('[USER] User key => ' . $key);
+		Log::info('[USER] Response => ' . $active);
 
-				/**
-		 			* If the requested barcode does not already exist
-		 			* create a shadow account with just the email address,
-		 			* name, and role. Zero out the signature
-		 		 */
-			if ('barcode' == $field && $active) {
-				$this->importPatronDetails($key);
-			}
+		/**
+		 * If the requested user does not already exist and the user key appears
+		 * to be formatted as a barcode (as all digits) create a shadow account with just the 
+		 * email address, name, and role. Zero out the signature since it is assumed to
+		 * be valid by default if Aleph says so.
+		 */
+		if (preg_match("/^\d+$/", $user_key)) {
+			$this->importPatronDetails($user_key);
 		}
 
 		return $active;
 	}
 
-	public function importPatronDetails($barcode) {
-		$patron_data = $this->alephInterface->getUserByBarcode($barcode);
-		$user_qry = self::where('email_address', $patron_data['email']);
+	public function importPatronDetails($user_key) {
+		$patron_data = $this->alephInterface->getPatronDetails($user_key);
+		$user_qry = $this->where('email_address', $patron_data['email']);
 		
 		if (0 == $user_qry->count()) {
 			  // Create a new user stub with an empty signature to
@@ -91,7 +86,19 @@ class User extends Model {
 			  break;
 		}
 
+		$this->aleph_id = $patron_data['aleph_id'];
 		$this->barcode = $barcode;
 		$this->save();
+	}
+
+	/**
+	 * Inserts a checkin
+	 *
+	 * TODO: Prevent duplicate entries for the same day by updating a record rather than just carte blanche
+	 *       inserting a new one
+	 */
+	public function addCheckin() {
+		$checkin = new Checkin();
+		$this->checkins()->save($checkin);
 	}
 }
