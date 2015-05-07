@@ -62,10 +62,13 @@ class User extends Model {
 	 * Makes a call to the Aleph service based on the key and
 	 * determines if the particular record is current or not.
 	 */
-	public function isActive($user_key) {
+	public function isActive($user_key = null) {
 		// Default to expired unless proven otherwise
 		$active = false;
-		
+		// If no user_key is provided rely on the current Aleph ID
+		if (null == $user_key) {
+			$user_key = $this->aleph_id;
+		}
 		$active = $this->getAlephClient()->isActive($user_key);
 		Log::info('[USER] User key => ' . $user_key);
 		Log::info('[USER] Response => ' . $active);
@@ -86,13 +89,14 @@ class User extends Model {
 	public function importPatronDetails($user_key) {
 		$patron_data = $this->getAlephClient()->getPatronDetails($user_key);
 		$user_qry = $this->where('email_address', $patron_data['email']);
-		
+
 		if (0 == $user_qry->count()) {
 			  // Create a new user stub with an empty signature to
 			  // make sure that it passes validation properly
 			  $this->email_address = $patron_data['email'];
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
+			  Log::info('Role => ' . $patron_data['role']);
 			  $this->role_id = Role::ofType($patron_data['role'])->first()->id;
 		}
 

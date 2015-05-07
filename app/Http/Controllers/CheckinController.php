@@ -30,8 +30,8 @@ class CheckinController extends Controller {
 		 */
 		if ($request->input('code')) {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
-			$is_active = $this->validateCheckin('barcode', $barcode);
-			$user = null;
+			$user = new User;
+			$is_active = $user->isActive($barcode);
 
 			/**
 			 * TODO: Consider refactoring everything to be more DRY
@@ -62,7 +62,7 @@ class CheckinController extends Controller {
     
     Log::info('[CHECKIN] Looking up users that match the string ' . $query_string);		
 
-		$user_matches = User::activeCheckin($query_string);
+		$user_matches = User::RegisteredUsers($query_string);
 
 		switch ($user_matches->count()) {
 			case 0:
@@ -71,7 +71,7 @@ class CheckinController extends Controller {
 				break;
 			case 1:
 			  $user = $user_matches->first();			  
-			  $is_active = $this->validateCheckin('user', $user->aleph_id);
+			  $is_active = $user->isActive();
 			  list($view, $message_key) = $this->getView($is_active);
 			  if ($is_active) {
 				  $user->addCheckin();
