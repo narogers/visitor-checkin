@@ -85,9 +85,15 @@ class User extends Model {
 		  if (preg_match("/^\d+$/", $user_key)) {
 			  $this->importPatronDetails($user_key);
 		  }
+		} else {
+			$active = null;
 		}
-		
+
 		return $active;
+	}
+
+	public function isExpired($user_key = null) {
+		return !$this->isActive($user_key);
 	}
 
 	public function importPatronDetails($user_key) {

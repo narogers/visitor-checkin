@@ -33,9 +33,6 @@ class CheckinController extends Controller {
 			$user = new User;
 			$is_active = $user->isActive($barcode);
 
-			/**
-			 * TODO: Consider refactoring everything to be more DRY
-			 */
 			list($view, $message_key) = $this->getView($is_active);
 
 			if ($is_active) {
