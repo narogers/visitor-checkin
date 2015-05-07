@@ -69,20 +69,24 @@ class User extends Model {
 		if (null == $user_key) {
 			$user_key = $this->aleph_id;
 		}
-		$active = $this->getAlephClient()->isActive($user_key);
-		Log::info('[USER] User key => ' . $user_key);
-		Log::info('[USER] Response => ' . $active);
+		$aleph_id = $this->getAlephClient()->getPatronID($user_key);
 
-		/**
-		 * If the requested user does not already exist and the user key appears
-		 * to be formatted as a barcode (as all digits) create a shadow account with just the 
-		 * email address, name, and role. Zero out the signature since it is assumed to
-		 * be valid by default if Aleph says so.
-		 */
-		if (preg_match("/^\d+$/", $user_key)) {
-			$this->importPatronDetails($user_key);
+		if (null != $aleph_id) {
+		  $active = $this->getAlephClient()->isActive($user_key);
+		  Log::info('[USER] User key => ' . $user_key);
+		  Log::info('[USER] Response => ' . $active);
+
+		  /**
+		   * If the requested user does not already exist and the user key appears
+		   * to be formatted as a barcode (as all digits) create a shadow account with just the 
+		   * email address, name, and role. Zero out the signature since it is assumed to
+		   * be valid by default if Aleph says so.
+		   */
+		  if (preg_match("/^\d+$/", $user_key)) {
+			  $this->importPatronDetails($user_key);
+		  }
 		}
-
+		
 		return $active;
 	}
 
