@@ -11,9 +11,16 @@ class UserTest extends TestCase {
 		Artisan::call('db:seed');
 
 		$this->aleph = Mockery::mock('App\Services\AlephClient');
+		$this->aleph->shouldReceive('getPatronID')->with('registered_id_active')->andReturn('registered_id_active');
 		$this->aleph->shouldReceive('isActive')->with('registered_id_active')->andReturn(true);
+
+		$this->aleph->shouldReceive('getPatronID')->with('registered_id_expired')->andReturn('registered_id_expired');
 		$this->aleph->shouldReceive('isActive')->with('registered_id_expired')->andReturn(false);
+
+		$this->aleph->shouldReceive('getPatronID')->with('123456')->andReturn('123456');
 		$this->aleph->shouldReceive('isActive')->with('123456')->andReturn(true);
+
+		$this->aleph->shouldReceive('getPatronID')->with('654321')->andReturn('654321');
 		$this->aleph->shouldReceive('isActive')->with('654321')->andReturn(false);
 
 		# Mock up responses for the getPatronDetails function to save making XML 
