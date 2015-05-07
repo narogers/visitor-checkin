@@ -15,13 +15,13 @@ class ReviseRegistrationFields extends Migration {
 	public function up()
 	{
 		Schema::table('registrations', function(Blueprint $table) {
-			$table->string('job_title');
-			$table->string('supervisor');
+			#$table->string('job_title');
+			#$table->string('supervisor');
 
-			$table->string('address_city');
+			#$table->string('address_city');
 
 			// Rename expiration_date to expires_on to follow conventions
-			$table->renameColumn('expiration_date', 'expires_on');
+			$table->renameColumn('expiration_date', 'expires_on')->default('');
 		});
 	}
 
@@ -33,9 +33,9 @@ class ReviseRegistrationFields extends Migration {
 	public function down()
 	{
 		Schema::table('registrations', function(Blueprint $table) {
-			$table->dropColumn('job_title');
-			$table->dropColumn('supervisor');
-			$table->dropColumn('address_city');
+			#$table->dropColumn('job_title');
+			#$table->dropColumn('supervisor');
+			#$table->dropColumn('address_city');
 
 			$table->renameColumn('expires_on', 'expiration_date');
 		});

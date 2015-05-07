@@ -26,15 +26,11 @@ class User extends Model {
 
   /**
    * Create an Aleph instance that can be shared across the model rather than
-   * having to instantiate it every time
+   * having to instantiate it every time. May need to add some checks that throw
+   * an error when 'find' or other methods are used that might not properly spawn
+   * the client as it could lead to wonky states.
    */
   protected $aleph_client = null;
-
-  public function __construct($attributes = array()) {
-  	parent::__construct($attributes = array());
-  	# Do local stuff now
-  	$this->aleph_client = new AlephClient;
-  }
 
 	public function role() {
 		return $this->belongsTo('App\Role');
@@ -48,7 +44,21 @@ class User extends Model {
 		return $this->hasMany('App\Checkin');
 	}
 
-		/**
+	/**
+	 * These are a bandaid until a better way can be found down the road with some
+	 * time to do proper refactoring. For now just get it working
+	 */
+	public function getAlephClient() {
+		if (null == $this->aleph_client) {
+			$this->aleph_client = new AlephClient;
+		}
+		return $this->aleph_client;
+	}
+	public function setAlephClient(AlephClient $aleph) {
+		$this->aleph_client = $aleph;
+	}
+
+	/**
 	 * Makes a call to the Aleph service based on the key and
 	 * determines if the particular record is current or not.
 	 */
@@ -56,7 +66,7 @@ class User extends Model {
 		// Default to expired unless proven otherwise
 		$active = false;
 		
-		$active = $this->aleph_client->isActive($user_key);
+		$active = $this->getAlephClient()->isActive($user_key);
 		Log::info('[USER] User key => ' . $user_key);
 		Log::info('[USER] Response => ' . $active);
 
@@ -74,7 +84,7 @@ class User extends Model {
 	}
 
 	public function importPatronDetails($user_key) {
-		$patron_data = $this->aleph_client->getPatronDetails($user_key);
+		$patron_data = $this->getAlephClient()->getPatronDetails($user_key);
 		$user_qry = $this->where('email_address', $patron_data['email']);
 		
 		if (0 == $user_qry->count()) {
@@ -84,11 +94,10 @@ class User extends Model {
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
 			  $this->role_id = Role::ofType($patron_data['role'])->first()->id;
-			  break;
 		}
 
 		$this->aleph_id = $patron_data['aleph_id'];
-		$this->barcode = $barcode;
+		$this->barcode = $user_key;
 		$this->save();
 	}
 

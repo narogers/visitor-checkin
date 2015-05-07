@@ -16,12 +16,12 @@ class CreateRolesTable extends Migration {
 		{
 			$table->increments('id');
 			$table->string('role')->unique();
-			$table->string('description');
+			$table->string('description')->nullable();
 		});
 
 		Schema::table('users', function(Blueprint $table) 
 		{
-			$table->integer('role_id')->references('id')->on('roles');
+			$table->integer('role_id')->references('id')->on('roles')->default(0);
 		});
 
 		Schema::table('registrations', function(Blueprint $table) 

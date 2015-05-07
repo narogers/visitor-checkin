@@ -13,7 +13,7 @@ class AddTypeColumn extends Migration {
 	public function up()
 	{
 		Schema::table('registrations', function(Blueprint $table) {
-			$table->string('registration_type');
+			$table->string('registration_type')->default('');
 		});
 	}
 

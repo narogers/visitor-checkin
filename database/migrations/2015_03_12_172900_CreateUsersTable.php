@@ -19,13 +19,14 @@ class CreateUsersTable extends Migration {
 			$table->integer('barcode')->nullable();
 			$table->string('email_address')->unique();
 			$table->string('name')->index();
-			$table->binary('signature');
+			$table->binary('signature')->default('');
 			$table->timestamps();
 		});
 
-		Schema::table('registrations', function(Blueprint $table) 
-		{
-			$table->integer('user_id')->references('id')->on('users');
+		Schema::table('registrations', function(Blueprint $table) {
+			$table->integer('user_id')->references('id')->on('users')->default(0);
+		});
+		Schema::table('registrations', function(Blueprint $table) {
 			$table->dropColumn(['name', 'email_address', 
 				'signature']);
 		});
