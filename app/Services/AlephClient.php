@@ -154,10 +154,10 @@ class AlephClient {
   	$user = null;
 
   	if ($aleph_id) {
-  		$response = file_get_contents('address', $aleph_id);
+  		$response = file_get_contents($this->endpoint('address', $aleph_id));
   		$address_data = simplexml_load_string($response);
 
-  		$response = file_get_contents('status', $aleph_id);
+  		$response = file_get_contents($this->endpoint('status', $aleph_id));
   		$registration_data = simplexml_load_string($response);
 
   		$user['name'] = $this->normalizeName($address_data->xpath("//z304-address-0")[0]->__toString());
