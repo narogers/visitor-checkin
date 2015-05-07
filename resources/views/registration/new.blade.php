@@ -3,7 +3,7 @@
 @section('content')  
       <div class="col-sm-4">
           <figure>
-            <img src="{{ URL::asset('images/1915.534.png') }}"
+            <img src="{{ URL::asset('images/1915.534.jpg') }}"
                  alt=""
                  class="img-responsive">
           </figure>

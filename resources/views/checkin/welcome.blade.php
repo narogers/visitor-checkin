@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-sm-6">
          <figure>
-            <img src="{{ URL::asset('images/1991.134.2.png') }}" alt="" class="img-responsive">
+            <img src="{{ URL::asset('images/1991.134.2.jpg') }}" alt="" class="img-responsive">
          </figure>
          </a>
         </div>
