@@ -62,7 +62,7 @@ class AlephClient {
 		}
 
 		if ($aleph_data->{'internal-id'}) {
-			$canonical_aleph_id = $aleph_data->{'internal-id'};
+			$canonical_aleph_id = $aleph_data->{'internal-id'}->__toString();
 		}
 		return $canonical_aleph_id;
 	}
@@ -75,7 +75,7 @@ class AlephClient {
 	 * getPatronID()
 	 */
 	public function validatePatronID(User $user) {
-		$aleph_ids = $this->parse_name($user->name);
+		$aleph_ids = $this->parseName($user->name);
 		Log::info('Attempting to resolve IDs');
 		
 		foreach ($aleph_ids as $aleph_id) {
@@ -90,8 +90,8 @@ class AlephClient {
 			$response = file_get_contents($this->endpoint('address', $canonical_aleph_id));
 			$aleph_data = simplexml_load_string($response);
 
-			if($this->compare_names($user->name,
-				$aleph_data->{'address-information'}->{'z304-address-1'})) {
+			if($this->compareNames($user->name,
+				$aleph_data->{'address-information'}->{'z304-address-1'}->__toString())) {
 				$canonical_aleph_id = $aleph_id;
 				break;
 			}
