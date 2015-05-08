@@ -39,6 +39,9 @@ class CheckinController extends Controller {
 			
 			$is_active = $user->isActive($barcode);
 			if ($is_active) {
+				# Need to save in case record is new or
+				# changed
+				$user->save();
 				$user->addCheckin();
 			}
 			list($view, $message_key) = $this->getView($is_active);
