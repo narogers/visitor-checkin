@@ -11,7 +11,7 @@
             <h2>{!! Lang::get($message_key . '.title') !!}</h2>
             <p>{!! Lang::get($message_key . '.message') !!}</p>
 
-            @if ($user && $user->count() >= 2)
+            @if ($user && (2 == $user->count()))
               @include('checkin.matches', ['users' => $user])
             @endif
 

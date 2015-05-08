@@ -12,3 +12,4 @@
     	  ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
 @endforeach
+<hr />
