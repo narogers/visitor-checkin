@@ -117,7 +117,7 @@ class User extends Model {
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
 			  Log::info('Role => ' . $patron_data['role']);
-			  $this->role = Role::ofType($patron_data['role'])->first();
+			  $this->role_id = Role::ofType($patron_data['role'])->first()->id;
 		}
 
 		$this->aleph_id = $patron_data['aleph_id'];
