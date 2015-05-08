@@ -34,7 +34,7 @@
 	<body>
 		<div class="container">
 			<div class="content">
-				<div class="title">Be right back.</div>
+				<div class="title">Visitor Registration is down for maintenance. Please check back later.</div>
 			</div>
 		</div>
 	</body>
