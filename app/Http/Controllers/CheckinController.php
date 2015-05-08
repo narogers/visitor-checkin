@@ -30,15 +30,18 @@ class CheckinController extends Controller {
 		 */
 		if ($request->input('code')) {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
-			$user = new User;
-			$is_active = $user->isActive($barcode);
-
-			list($view, $message_key) = $this->getView($is_active);
-
-			if ($is_active) {
+			$is_registered_user = User::whereBarcode($barcode)->count();
+			if ($is_registered_user) {
 				$user = User::whereBarcode($barcode)->first();
+			} else {
+				$user = new User;
+			}
+			
+			$is_active = $user->isActive($barcode);
+			if ($is_active) {
 				$user->addCheckin();
 			}
+			list($view, $message_key) = $this->getView($is_active);
 
 			return view($view)
 				->withMessageKey($message_key)
@@ -59,14 +62,16 @@ class CheckinController extends Controller {
     
     Log::info('[CHECKIN] Looking up users that match the string ' . $query_string);		
 
-		$user_matches = User::RegisteredUsers($query_string);
+		$user_matches = User::registeredUsers($query_string);
 
 		switch ($user_matches->count()) {
 			case 0:
+				Log::info("[CHECKIN] No results found");
 				$message_key = "checkin.notfound";
 				$view = "checkin.retry";
 				break;
 			case 1:
+				Log::info("[CHECKIN] Exact match found");
 			  $user = $user_matches->first();			  
 			  $is_active = $user->isActive();
 			  list($view, $message_key) = $this->getView($is_active);
@@ -75,11 +80,13 @@ class CheckinController extends Controller {
 			  }
 				break;
 			case 2:
+				Log::info("[CHECKIN] Two matches found");
 				$message_key = "checkin.multiplefound";
 				$view = "checkin.retry";
 				$user = $user_matches->get();
 				break;
 			default:
+				Log::info("[CHECKIN] Too many matches found");
 				$message_key = "checkin.notfound";
 				$view = "checkin.retry";
 		}

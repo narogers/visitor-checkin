@@ -122,7 +122,6 @@ class User extends Model {
 
 		$this->aleph_id = $patron_data['aleph_id'];
 		$this->barcode = $user_key;
-		$this->save();
 	}
 
 	/**

@@ -160,7 +160,8 @@ class AlephClient {
   		$response = file_get_contents($this->endpoint('status', $aleph_id));
   		$registration_data = simplexml_load_string($response);
 
-  		$user['name'] = $this->normalizeName($address_data->xpath("//z304-address-1")[0]->__toString());
+  		$normalized_name = $this->normalizeName($address_data->xpath("//z304-address-1")[0]->__toString());
+  		$user['name'] = $normalized_name['first'] . " " . $normalized_name['last'];
   		$user['email'] = $address_data
   			->xpath("//z304-email-address")[0]->__toString();
   		$user['role'] = $registration_data->xpath("//z305-bor-type")[0]->__toString();
