@@ -110,14 +110,14 @@ class User extends Model {
 			   * which is not legal to replace it
 			   */
 			  if (!empty($patron_data['email'])) {
-			    $this->email_address = $patron_data['email'];
+			  	$this->email_address = $patron_data['email'];
 			  } else {
 			  	$this->email_address = $this->generateEmailStub();
 			  }
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
 			  Log::info('Role => ' . $patron_data['role']);
-			  $this->role_id = Role::ofType($patron_data['role'])->first()->id;
+			  $this->role = Role::ofType($patron_data['role'])->first();
 		}
 
 		$this->aleph_id = $patron_data['aleph_id'];
