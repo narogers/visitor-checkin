@@ -11,17 +11,30 @@ class UserTest extends TestCase {
 		Artisan::call('db:seed');
 
 		$this->aleph = Mockery::mock('App\Services\AlephClient');
-		$this->aleph->shouldReceive('getPatronID')->with('registered_id_active')->andReturn('registered_id_active');
-		$this->aleph->shouldReceive('isActive')->with('registered_id_active')->andReturn(true);
+		$this->aleph->shouldReceive('getPatronID')
+		  ->andReturnUsing(function($patron_id) {
+		  	# List the IDs that should return themselves
+		  	$valid_ids = ['registered_id_active', 'registered_id_expired',
+		  								'123456', '654321'];
+		  	if (in_array($patron_id, $valid_ids)) {
+		  		return $patron_id;
+		  	} else {
+		  		return null;
+		  	}
+		  });
 
-		$this->aleph->shouldReceive('getPatronID')->with('registered_id_expired')->andReturn('registered_id_expired');
-		$this->aleph->shouldReceive('isActive')->with('registered_id_expired')->andReturn(false);
-
-		$this->aleph->shouldReceive('getPatronID')->with('123456')->andReturn('123456');
-		$this->aleph->shouldReceive('isActive')->with('123456')->andReturn(true);
-
-		$this->aleph->shouldReceive('getPatronID')->with('654321')->andReturn('654321');
-		$this->aleph->shouldReceive('isActive')->with('654321')->andReturn(false);
+		$this->aleph->shouldReceive('isActive')
+		  ->andReturnUsing(function($patron_id) {
+		  	$active_ids = ['registered_id_active', '123456'];
+		  	$expired_ids = ['registered_id_expired', '654321'];
+		  	if (in_array($patron_id, $active_ids)) {
+		  		return true;
+		  	} else if (in_array($patron_id, $expired_ids)) {
+		  		return false;
+		  	} else {
+		  		return null;
+		  	}
+		  });
 
 		# Mock up responses for the getPatronDetails function to save making XML 
 		# requests and remove variability from the process since we are not actually
@@ -94,6 +107,15 @@ class UserTest extends TestCase {
 		$this->assertEquals('John Smith (Expired)', $u->name);
 		$this->assertEquals('count2@sesame-street.org', $u->email_address);
 		$this->assertEquals('the_count2', $u->aleph_id);
+  }
+
+  public function testMissingRecord() {
+  	$u = new User;
+  	$u->setAlephClient($this->aleph);
+
+  	$patron_status = $u->isActive('no-such-user');
+  	$this->assertNull($patron_status);
+  	$this->assertNull($u->email_address);
   }
 }
 ?>

@@ -83,6 +83,7 @@ class User extends Model {
 		   * be valid by default if Aleph says so.
 		   */
 		  if (preg_match("/^\d+$/", $user_key)) {
+		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
 			  $this->importPatronDetails($user_key);
 		  }
 		} else {
@@ -101,9 +102,18 @@ class User extends Model {
 		$user_qry = $this->where('email_address', $patron_data['email']);
 
 		if (0 == $user_qry->count()) {
-			  // Create a new user stub with an empty signature to
-			  // make sure that it passes validation properly
-			  $this->email_address = $patron_data['email'];
+			  /** 
+			   * Create a new user stub with an empty signature to
+			   * make sure that it passes validation properly.
+			   *
+			   * If the email address happens to be empty then make up a stub
+			   * which is not legal to replace it
+			   */
+			  if (!empty($patron_data['email'])) {
+			    $this->email_address = $patron_data['email'];
+			  } else {
+			  	$this->email_address = $this->generateEmailStub();
+			  }
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
 			  Log::info('Role => ' . $patron_data['role']);
@@ -124,5 +134,20 @@ class User extends Model {
 	public function addCheckin() {
 		$checkin = new Checkin();
 		$this->checkins()->save($checkin);
+	}
+
+	/**
+	 * Generates a fake email address by hashing the date and time. This is only
+	 * a placeholder for edge cases where the email field is empty and not meant to
+	 * be used routinely
+	 *
+	 * @return String
+	 */
+	protected function generateEmailStub() {
+		$host = "null.null";
+		$address = substr(hash('md5', date('Y-m-d H:i:s')), 0, 10);
+
+		$faux_email = $address . "@" . $host;
+		return $faux_email;
 	}
 }
