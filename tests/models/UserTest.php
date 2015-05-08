@@ -117,5 +117,21 @@ class UserTest extends TestCase {
   	$this->assertNull($patron_status);
   	$this->assertNull($u->email_address);
   }
+
+  public function testOneCheckinPerDay() {
+    $u = User::where('email_address', 'count@sesame-street.org')->first();
+  	$u->setAlephClient($this->aleph);
+
+  	$this->assertEquals(0, sizeof($u->checkins));
+  	$u->addCheckin();
+
+  	# Need to reload the model to ensure the change
+  	$u = User::where('email_address', 'count@sesame-street.org')->first();
+  	$this->assertEquals(1, sizeof($u->checkins));
+  	$u->addCheckin();
+
+    $u = User::where('email_address', 'count@sesame-street.org')->first();
+  	$this->assertEquals(1, sizeof($u->checkins));
+  }
 }
 ?>

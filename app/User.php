@@ -132,8 +132,14 @@ class User extends Model {
 	 *       inserting a new one
 	 */
 	public function addCheckin() {
-		$checkin = new Checkin();
-		$this->checkins()->save($checkin);
+		# Check for existing checkins before you insert a new one. Otherwise just
+		# scroll right past
+		$not_checked_in = (0 == $this->checkins()
+			->where('created_at', '>=', new \DateTime('today'))->count());
+		if ($not_checked_in) {
+			$checkin = new Checkin();
+  		$this->checkins()->save($checkin);
+		}
 	}
 
 	/**
