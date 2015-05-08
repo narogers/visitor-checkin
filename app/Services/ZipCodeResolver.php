@@ -33,7 +33,7 @@ class ZipCodeResolver {
 		// goes down. Avoid silent errors!
 		$query_data = json_decode(file_get_contents($query));
 		if (array_key_exists('error', $query_data)) {
-			Logger::error('Zip code API returned an error: ' . $query_data['error']);
+			Log::error('Zip code API returned an error: ' . $query_data['error']);
 			return '';
 		} else {
 			// Here we should have a state that can be returned
