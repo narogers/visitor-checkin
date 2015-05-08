@@ -9,12 +9,24 @@
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
-          {!! Form::submit('&laquo; Go back', 
+          <div class="row">
+            <div class="col-sm-4">
+              {!! Form::submit('&laquo; Go back', 
                 ['class' => 'btn btn-primary btn-lg pull-left',
                  'name' => 'previous_step']) !!}
-          {!! Form::submit('Register &raquo;',
+            </div>
+            <div class="col-sm-1 col-sm-offset-1">
+               {!! Form::button('Clear',
+                ['class' => 'btn btn-primary btn-lg',
+                 'name' => 'reset_signature',
+                 'id' => 'reset']) !!}
+            </div>
+            <div class="col-sm-4 col-sm-offset-2">
+               {!! Form::submit('Register &raquo;',
                 ['class' => 'btn btn-primary btn-lg pull-right',
                  'name' => 'next_step']) !!}
+            </div>
+          </div>
         {!! Form::close() !!}
 @stop
 
@@ -34,7 +46,11 @@
       $('form').submit(function() {
         $img_data = $('#signature').jSignature('getData', 'svgbase64');
         $('#signature_data').val('data:' + $img_data[0] + ', ' + $img_data[1]);
-        // Does anything else need to be done?
+      })
+
+      $('#reset').click(function() {
+        $('#signature').jSignature('reset');
+        return false;
       })
     })
   </script>
