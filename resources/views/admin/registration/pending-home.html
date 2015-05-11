@@ -1,0 +1,53 @@
+@extends('layouts.admin')
+      <div class="col-md-12">
+        <h1>Pending Registration 
+          <span class="badge">{!! sizeof($users) !!}</span>
+        </h1>
+        <hr>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        @if sizeof($users) >= 1
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email address</th>
+              <th>Date Registered</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>{!! URL::link_to_action('AdminRegistrationController@getRegistration', 
+                $registration, 
+                ['registration' => $registration) !!}
+              <td>{!! $user->email_address !!}</td>
+              <td>{!! $registration->created_on !!}</td>
+              <td>
+                @if $user->hasAlephID()
+                  @include('admin.registration.aleph_record_verified)
+                @else
+                  @include ('admin.registration.aleph_record_unverified', 
+                    ['user' => $user])
+                @end
+                <br />
+                @if $user->idVerified
+                  @include('admin.registration.patron_id_verified)
+                @else
+                  @include ('admin.registration.patron_id_unverified', 
+                    ['user' => $user])
+                @end
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        @else
+          <p>There are currently no registrations pending.</p>
+        @end
+      </div>
+    </div>
+@stop

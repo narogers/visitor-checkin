@@ -24,6 +24,14 @@ class User extends Model {
 		return $qry;
 	} 
 
+	public function scopePendingRegistrations($query) {
+		$qry = $query->where('aleph_id', '');
+		$qry = $query->orWhere('aleph_id', null);
+		$qry = $query->orWhere('verified_user', false);
+
+		return $qry;
+	}
+
   /**
    * Create an Aleph instance that can be shared across the model rather than
    * having to instantiate it every time. May need to add some checks that throw

@@ -70,7 +70,10 @@ class MigrateOldRegistrations extends Command {
 				continue;
 			}
 			$user->importPatronDetails($aleph_id);
-
+			# Set the verified flag to true and assume all existing registrations
+			# have been validated already
+			$user->verified_user = true;
+			
 			// This is not the most efficient way of pulling the
 			// signature but it gets the job done well enough. If
 			// performance matters it could be refactored
