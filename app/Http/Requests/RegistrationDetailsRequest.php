@@ -41,7 +41,7 @@ class RegistrationDetailsRequest extends Request {
 			$rules['address_zip'] = 'required|regex:/\d{5}/';
 		}
 		if (!in_array($role, ['Fellow', 'Staff', 'Intern'])) {
-			$rules['telephone'] = 'required|alpha_dash|min:10|max:13';
+			$rules['telephone'] = 'required|alpha_dash|min:7|max:13';
 		}
 
 		/**

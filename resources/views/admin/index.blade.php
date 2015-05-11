@@ -8,7 +8,7 @@
         
           <p>See visitor counts for today, this week, and the last two months. Records are retained for the last 45 days before being archived.</p>
  
-          <h2><span class="glyphicon glyphicon-inbox" aria-hidden="true"></span><a href="{{ URL::action('AdminController@getIndex') }}"> Pending registrations</a></h2>
+          <h2><span class="glyphicon glyphicon-inbox" aria-hidden="true"></span><a href="{{ URL::action('AdminRegistrationController@getIndex') }}"> Pending registrations</a></h2>
           <p>See and process pending registrations</p>
       </div>
 @stop
