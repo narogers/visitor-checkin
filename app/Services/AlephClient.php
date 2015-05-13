@@ -76,7 +76,7 @@ class AlephClient {
 	 */
 	public function validatePatronID(User $user) {
 		$aleph_ids = $this->parseName($user->name);
-		Log::info('Attempting to resolve IDs');
+		Log::info('[ALEPH] Attempting to resolve IDs');
 		
 		foreach ($aleph_ids as $aleph_id) {
 			// In case of a null result assume the worst and move on to the next possible match
@@ -172,7 +172,7 @@ class AlephClient {
   }
 
 	public function endpoint($target, $key) {
-		Log::info('[ALEPH] Resolving ' . $target . "\r\n");
+		Log::info('[ALEPH] Looking up endpoint URL for ' . $target . "\r\n");
 		switch ($target) {
 			case 'address':
 				return $this->AlephWebService . urlencode($key) . $this->Endpoint['address'];

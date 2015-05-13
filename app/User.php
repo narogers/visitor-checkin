@@ -105,11 +105,25 @@ class User extends Model {
 		return !$this->isActive($user_key);
 	}
 
-	public function importPatronDetails($user_key) {
+	/**
+	 * Updates the patron record to reflect the information present in
+	 * Aleph *BUT* it does not save this automatically. Be sure to call
+	 * $user->save() if you want this information to persist
+	 */
+	public function importPatronDetails($user_key = null) {
+		if (null == $user_key) {
+			$user_key = $this->email_address;
+		} else {
+			$this->barcode = $user_key;
+		}
+		Log::info('[USER] Executing query using key ' . $user_key);
+		
 		$patron_data = $this->getAlephClient()->getPatronDetails($user_key);
-		$user_qry = $this->where('email_address', $patron_data['email']);
-
-		if (0 == $user_qry->count()) {
+		
+		/**
+		 * Only insert these details if the record is new
+		 */
+		if (!$this->id) {
 			  /** 
 			   * Create a new user stub with an empty signature to
 			   * make sure that it passes validation properly.
@@ -129,7 +143,6 @@ class User extends Model {
 		}
 
 		$this->aleph_id = $patron_data['aleph_id'];
-		$this->barcode = $user_key;
 	}
 
 	/**
