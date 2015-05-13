@@ -29,24 +29,47 @@
               <td>{!! link_to_action('AdminRegistrationController@getRegistration',
                 $user->name, 
                 ['user' => $user]) !!}
+                <p class="pending-step">
+  {!! Form::open(
+      ['action' => 'AdminRegistrationController@postRegistration',
+       'class' => 'form-inline']) !!}
+    {!! Form::hidden('user', $user->id) !!}
+    {!! Form::hidden('event', 'hide_registration') !!}
+    {!! Form::submit('Hide registration', ['class' => 'btn btn-primary']) !!}
+  {!! Form::close() !!}
+</p>
               <td>{!! $user->email_address !!}</td>
               <td>{!! date("F j, Y", strtotime($user->created_at)) !!}</td>
               <td>
                 @if (empty($user->aleph_id))
-                  @include('admin.registration.aleph_record_unverified', 
-                    ['user' => $user])
+<p class="pending-step">
+  {!! Form::open(
+      ['action' => 'AdminRegistrationController@postRegistration',
+       'class' => 'form-inline']) !!}
+  <span class="fa fa-square-o"></span> No Aleph ID set
+    {!! Form::hidden('user', $user->id) !!}
+    {!! Form::hidden('event', 'refresh_aleph_id') !!}
+    {!! Form::submit('Refresh record', ['class' => 'btn btn-primary']) !!}
+  {!! Form::close() !!}
+</p>
                 @else
-                  @include('admin.registration.aleph_record_verified')
+<p class="completed-step"><span class="fa fa-check-square-o"></span> Aleph ID verified</p>
                 @endif
-                <br />
+
                 @if ($user->verified_user)
-                  @include('admin.registration.patron_id_verified')
+<p class="completed-step"><span class="fa fa-check-square-o"></span> Patron ID verified by desk</p>
                 @else
-                  @include ('admin.registration.patron_id_unverified', 
-                    ['user' => $user])
+<p class="pending-step">
+  {!! Form::open(
+      ['action' => 'AdminRegistrationController@postRegistration',
+       'class' => 'form-inline']) !!}
+  <span class="fa fa-square-o"></span> Check patron's ID
+    {!! Form::hidden('user', $user->id) !!}
+    {!! Form::hidden('event', 'verify_id') !!}
+    {!! Form::submit('Confirm verification', ['class' => 'btn btn-primary']) !!}
+  {!! Form::close() !!}
+</p>
                 @endif
-                <br />
-                @include ('admin.registration.delete_registration');
               </td>
             </tr>
             @endforeach

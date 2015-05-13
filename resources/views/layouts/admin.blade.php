@@ -13,7 +13,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="./">
+          <a class="navbar-brand">
             <img alt="Ingalls Library" src="{{ URL::asset('images/ingalls-library-banner.png')}}">
           </a>
 

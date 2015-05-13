@@ -1,5 +1,6 @@
 @import "bootstrap/bootstrap";
 @import "bootstrap/glyphicons";
+@import "font-awesome/font-awesome";
 
 @btn-font-weight: 300;
 @font-family-sans-serif: "Roboto", Helvetica, Arial, sans-serif;
@@ -100,5 +101,17 @@ h2.caption {
 #signature {
   border: 1px dashed rgb(119, 119, 119);
   margin-bottom: 20px /* One standard line height */
+}
+
+/**
+ * Administrative CSS formatting
+ */
+.completed-step {
+  color: @brand-success;
+  font-weight: bold;
+}
+
+.pending-step {
+  color: rgb(0, 0, 0);
 }
 
