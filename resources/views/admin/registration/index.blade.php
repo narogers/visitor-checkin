@@ -38,7 +38,7 @@
   {!! Form::close() !!}
 </p>
               <td>{!! $user->email_address !!}</td>
-              <td>{!! date("F j, Y", strtotime($user->created_at)) !!}</td>
+              <td>{!! $user->formattedCreationDate() !!}</td>
               <td>
                 @if (empty($user->aleph_id))
 <p class="pending-step">

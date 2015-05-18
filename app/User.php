@@ -1,5 +1,7 @@
 <?php namespace App;
 
+use Carbon\Carbon;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 
@@ -29,6 +31,20 @@ class User extends Model {
 		$qry = $query->orWhere('aleph_id', null);
 		$qry = $query->orWhere('verified_user', false);
 
+		return $qry;
+	}
+
+	public function scopeActiveSince($query, $days = null) {
+		$qry = $query->whereHas('checkins', function($q) use ($days) {
+			$q->activeSince($this->$days);
+		});
+		return $qry;
+	}
+
+	public function scopeActiveLastMonth($query) {
+		$qry = $query->whereHas('checkins', function($q) {
+  		$q->previousMonth();			
+		});
 		return $qry;
 	}
 
@@ -160,6 +176,10 @@ class User extends Model {
 			$checkin = new Checkin();
   		$this->checkins()->save($checkin);
 		}
+	}
+
+	public function formattedCreationDate() {
+		return Carbon::parse($this->created_at)->toFormattedDateString();
 	}
 
 	/**
