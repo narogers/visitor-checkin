@@ -31,9 +31,8 @@
                 ['user' => $user]) !!}
                 <p class="pending-step">
   {!! Form::open(
-      ['action' => 'AdminRegistrationController@postRegistration',
+      ['action' => ['AdminRegistrationController@postRegistration', $user],
        'class' => 'form-inline']) !!}
-    {!! Form::hidden('user', $user->id) !!}
     {!! Form::hidden('event', 'hide_registration') !!}
     {!! Form::submit('Hide registration', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
@@ -44,10 +43,9 @@
                 @if (empty($user->aleph_id))
 <p class="pending-step">
   {!! Form::open(
-      ['action' => 'AdminRegistrationController@postRegistration',
+      ['action' => ['AdminRegistrationController@postRegistration', $user],
        'class' => 'form-inline']) !!}
   <span class="fa fa-square-o"></span> No Aleph ID set
-    {!! Form::hidden('user', $user->id) !!}
     {!! Form::hidden('event', 'refresh_aleph_id') !!}
     {!! Form::submit('Refresh record', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
@@ -61,10 +59,9 @@
                 @else
 <p class="pending-step">
   {!! Form::open(
-      ['action' => 'AdminRegistrationController@postRegistration',
+      ['action' => ['AdminRegistrationController@postRegistration', $user],
        'class' => 'form-inline']) !!}
   <span class="fa fa-square-o"></span> Check patron's ID
-    {!! Form::hidden('user', $user->id) !!}
     {!! Form::hidden('event', 'verify_id') !!}
     {!! Form::submit('Confirm verification', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}

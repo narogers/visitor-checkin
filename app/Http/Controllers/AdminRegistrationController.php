@@ -6,6 +6,7 @@ use App\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class AdminRegistrationController extends Controller {
 
@@ -39,15 +40,14 @@ class AdminRegistrationController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function postRegistration(Request $request) {
-		$user = User::find($request->input('user'));
+	public function postRegistration(User $user, Request $request) {
 		$event = $request->input('event');
 
 		Log::info('[ADMIN] Preparing to process command ' . $event);
-
 		switch ($event) {
 			case 'hide_registration':
 				$this->hideRegistration($user);
+				Session::flash('alert', "Record is now archived in the database");
 				break;
 			case 'refresh_aleph_id':
 				$this->updateAlephID($user);
@@ -76,8 +76,11 @@ class AdminRegistrationController extends Controller {
 		Log::info('[ADMIN] Updating Aleph ID for ' . $user->email_address);
 		$user->importPatronDetails();
 		if (null == $user->aleph_id) {
+			Session::flash('error', 'Could not resolve a valid Aleph ID');
 			Log::info('[ADMIN] Unable to resolve an Aleph ID');
 			Log::info('[ADMIN] Check connection to service and email address');
+		} else {
+			Session::put('alert', 'Aleph ID has been resolved');
 		}
 		$user->save();
 	}

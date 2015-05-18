@@ -1,94 +1,145 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
+@extends('layouts.admin')
 
-  <title>Visitor Checkin</title>
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
-  <link href="../css/bootstrap-overrides.css" rel="stylesheet">
-  <link href="../css/admin-overrides.css" rel="stylesheet">
-</head>
-
-<body>
-  <nav class="navbar">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <a class="navbar-brand" href=
-        "http://library.clevelandart.org"><img alt="Ingalls Library home page "
-        src="../images/cma-logo.png"></a>
-      </div><!-- Since there are only three links run them across the top -->
-
-      <ul class="nav navbar-nav">
-        <li>
-          <a href="index.html">Home</a>
-        </li>
-
-        <li class="active">
-          <a href="usage-home.html">Library usage</a>
-        </li>
-
-        <li>
-          <a href="pending-home.html">Pending registrations</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-12">
+@section('content')
         <ol class="breadcrumb">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="pending-home.html">Pending Registrations</a></li>
-          <li class="active">Jane Smith</li>
+          <li><a href="{!! URL::action('AdminController@getIndex') !!}">Home</a></li>
+          <li><a href="{!! URL::action('AdminRegistrationController@getIndex') !!}">Pending Registrations</a></li>
+          <li class="active">{!! $user->name !!}</li>
         </ol>
       </div>
-      <div class="col-lg-12">
-        <h1>Jane Smith (j.smith2@clevelandart.org)</h1>
+      @if(Session::has('alert')) 
+      <div class="col-md-12">
+        <div class="alert alert-success"><span class="glyphicon glypicon-ok"></span> {!! Session::get('alert') !!}</div>
+      </div>
+      @endif
+      @if(Session::has('error')) 
+      <div class="col-md-12">
+        <div class="alert alert-warning"><span class="fa fa-exclamation-circle"></span> {!! Session::get('error') !!}</div>
+      </div>
+      @endif 
+
+      <div class="col-md-12">
+        <h1>{!! $user->name !!} ({!! $user->email_address !!})</h1>
+
       </div>
     </div>
 
     <div class="row">
-      <div class="col-lg-12">
-        <h2><span class="glyphicon glyphicon-picture"></span> Docent</h2>
+      <div class="col-md-12">
+        <h2><span class="glyphicon glyphicon-picture"></span> {!! $user->role->role !!}</h2>
       </div>
     </div>
 
     <div class="row">
-      <div class="col-lg-12">
+      <div class="col-md-12">
         <form class="form-horizontal">
-            <div class="col-lg-2">
+            <div class="col-md-2">
+              <label class="control-label" for="aleph_id">Aleph ID</label>
+            </div>
+
+            <div class="col-md-10">
+              @if($user->aleph_id)
+              <p class="form-control-static" id="aleph_id">
+                {!! $user->aleph_id !!}
+              </p>
+              @else
+                {!! Form::open(
+                  ['action' => ['AdminRegistrationController@postRegistration', 
+                                $user],
+                   'class' => 'form-inline']) !!}
+                {!! Form::hidden('event', 'verify_id') !!}
+                {!! Form::submit('Look up ID', 
+                     ['class' => 'btn btn-primary']) !!}
+                {!! Form::close() !!}
+              @endif
+            </div>
+            @if($user->registration->address_street)
+            <div class="col-md-2">
               <label class="control-label" for="address">Address</label>
             </div>
 
-            <div class="col-lg-10">
+            <div class="col-md-10">
               <p class="form-control-static" id="address">
-                123 Main Street
+                {!! $user->registration->address_street !!}
                 <br />
-                Anytown, OH 44444
+                {!! $user->registration->address_city !!},
+                {!! $user->registration->address_state !!} 
+                {!! $user->registration->address_zipcode !!}
               </p>
             </div>
+            @endif
 
-            <div class="col-lg-2">
+            @if($user->registration->telephone)
+            <div class="col-md-2">
               <label class="control-label" for=
-              "inputPassword3">Telephone</label>
+              "telephone">Telephone</label>
             </div>
 
-            <div class="col-lg-10">
-              <p class="form-control-static">
-                (xxx)xxx-xxxx
+            <div class="col-md-10">
+              <p class="form-control-static" id="telephone">
+                {!! $user->registration->telephone !!}
               </p>
             </div>
-        </form>
-        <hr class="col-lg-12">
+            @endif
 
-         <img class="img-responsive" src="http://placehold.it/600x150">
+            @if($user->registration->department)
+            <div class="col-md-2">
+              <label class="control-label" for="department">Department</label>
+            </div>
+
+            <div class="col-md-10">
+              <p class="form-control-static" id="department">
+                {!! $user->registration->department !!}
+            </div>
+            @endif
+
+            @if($user->registration->job_title)
+            <div class="col-md-2">
+              <label class="control-label" for="title">Title</label>
+            </div>
+
+            <div class="col-md-10">
+              <p class="form-control-static" id="title">
+                {!! $user->registration->job_title !!}
+            </div>
+            @endif
+
+            @if($user->registration->extension)
+            <div class="col-md-2">
+              <label class="control-label" for="extension">Extension</label>
+            </div>
+
+            <div class="col-md-10">
+              <p class="form-control-static" id="extension">
+                x{!! $user->registration->extension !!}
+            </div>
+            @endif
+
+            @if($user->registration->supervisor)
+            <div class="col-md-2">
+              <label class="control-label" for="supervisor">Supervisor</label>
+            </div>
+
+            <div class="col-md-10">
+              <p class="form-control-static" id="supervisor">
+                {!! $user->registration->supervisor !!}
+            </div>
+            @endif
+
+            @if($user->registration->expires_on)
+            <div class="col-md-2">
+              <label class="control-label" for="internship_end_date">Internship End Date</label>
+            </div>
+
+            <div class="col-md-10">
+              <p class="form-control-static" id="internship_end_date">
+                {!! $user->registration->expires_on !!}
+            </div>
+            @endif
+        </form>
+        <hr class="col-md-12">
+        <img class="img-responsive" src="{!! $user->signature !!}" />
+        <hr />
+        <a class="btn btn-primary" href="{!! URL::action('AdminRegistrationController@getIndex') !!}">&laquo; Back to pending registrations</a> 
       </div>
-    </div>
-  </div>
-  <script src="../js/jquery-2.1.3.js"></script> 
-  <script src="../js/bootstrap.js"></script>
-</body>
-</html>
+@stop
