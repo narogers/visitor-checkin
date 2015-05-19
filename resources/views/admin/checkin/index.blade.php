@@ -22,23 +22,25 @@
     </div>
 
    <div class="row">
-      <!-- Begin the main page which just lists all checkins without any sort of pagination. If this
+      <!-- Begin the main page which just lists all checkins without any sort of pagination. If thisS
            gets unwieldly adding pagination should be fairly straightforward -->
       <div class="col-md-10">
-        @foreach ($roles as $role)
+        @if($users->count())
+        @foreach ($users as $user_group)
+          <?php $role = $user_group[0]->role->role; ?>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <a href="#{!! $role->role !!}" data-toggle='collapse' 
-               data-target='#{!! $role->role !!}-table'
+            <a href="#{!! $role !!}" data-toggle='collapse' 
+               data-target='#{!! $role !!}-table'
                aria-expanded='false' 
-               aria-controls="{!! $role->role !!}-table">{!! $role->role !!}
-               <span class="badge">{!! $role->users->count() !!}</span>
+               aria-controls="{!! $role !!}-table">{!! $role !!}
+               <span class="badge">{!! '12' !!}</span>
                <span class="caret pull-right"></span>
             </a>
           </div>
 
           <table class="table table-striped collapse" 
-                 id="{!! $role->role !!}-table">
+                 id="{!! $role !!}-table">
           <thead>
             <tr>
               <th>Name</th>
@@ -47,13 +49,22 @@
             </tr>
           </thead>
           <tbody>
+            @foreach($user_group as $user)
             <tr>
-              <td><a href="usage-visitordetails.html">[NAME]</a></td>
-              <td>[CHECKINS]</td>
-              <td>[LAST CHECKIN]</td>
+              <td>{!! $user->name !!}</td>
+              <td>-</td>
+              <td>{!! $user->lastCheckinDate() !!}</td>
             </tr>
+            @endforeach
           </tbody>
           </table>
-        </div>
         @endforeach
+        @else
+          <div class="jumbotron">
+            <h2>No activity found for this range</h2>
+            <p>No checkins have been recorded during [DATE]</p>
+          </div>
+        @endif
+        </div>
+
 @stop

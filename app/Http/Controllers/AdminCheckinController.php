@@ -2,7 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Role;
+use App\User;
 
 use Illuminate\Http\Request;
 
@@ -17,9 +17,15 @@ class AdminCheckinController extends Controller {
 		/**
 		 * Default to today unless you are given a valid alternative
 		 */
-		$roles = Role::all(); 
+		$cutoff = 240;
+		$users = User::whereHas('checkins', function($q) use ($cutoff) { 
+			$q->activeSince($cutoff);
+		})->orderBy('role_id')
+		  ->get(['id', 'name', 'role_id'])
+		  ->groupBy('role_id');
+	
 		return view('admin.checkin.index')
-		  ->withRoles($roles);
+		  ->withUsers($users);
 	}
 
  /**

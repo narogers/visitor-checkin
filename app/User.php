@@ -36,14 +36,15 @@ class User extends Model {
 
 	public function scopeActiveSince($query, $days = null) {
 		$qry = $query->whereHas('checkins', function($q) use ($days) {
-			$q->activeSince($this->$days);
+			$q->activeSince($days);
 		});
 		return $qry;
 	}
 
-	public function scopeActiveLastMonth($query) {
+	public function scopeActiveDuring($query, $start_date, $end_date) {
 		$qry = $query->whereHas('checkins', function($q) {
-  		$q->previousMonth();			
+  		$q->whereBetween('created_at', Carbon::parse($start), 
+  			Carbon::parse($end));	
 		});
 		return $qry;
 	}
@@ -182,6 +183,19 @@ class User extends Model {
 		return Carbon::parse($this->created_at)->toFormattedDateString();
 	}
 
+	/**
+	 * For this first pass it does not filter out any dates that may be
+	 * beyond the range provided. When supporting the view for the 
+	 * previous month this may be a consideration
+	 */
+	public function lastCheckinDate() {
+		$last_checkin = $this->checkins()->orderBy('created_at', 'DESC')->first();
+		if (null == $last_checkin) {
+			return "Not available";
+		} else {
+			return Carbon::parse($last_checkin->created_at)->toFormattedDateString();
+		}
+	}
 	/**
 	 * Generates a fake email address by hashing the date and time. This is only
 	 * a placeholder for edge cases where the email field is empty and not meant to

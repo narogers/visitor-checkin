@@ -23,5 +23,5 @@ Route::group(['prefix' => 'admin'], function()
 	Route::get('/registration/{user}', 'AdminRegistrationController@getRegistration');
 	Route::post('/registration/{user}', 
 		'AdminRegistrationController@postRegistration');
-	#Route::get('/checkin', 'AdminCheckinController@getIndex');
+	Route::get('/checkin', 'AdminCheckinController@getIndex');
 });
