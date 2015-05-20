@@ -71,12 +71,6 @@ class MigrateOldRegistrations extends Command {
 				array_push($failures, $user->name);
 				continue;
 			}
-			// Halt if the role could not be resolved for some reason
-			if (null == $archivedRegistrations[$patron]['role']) {
-				$this->error('WARNING: Could not find a valid role for ' . $patron);
-				array_push($failures, $user->name);
-				continue;
-			}
 			$user->importPatronDetails($aleph_id);
 
 			# Set the verified flag to true and assume all existing registrations

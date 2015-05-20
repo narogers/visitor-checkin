@@ -27,6 +27,11 @@ class Role extends Model {
 		if (key_exists($type, $this->roles_map)) {
 			$type = $this->roles_map[$type];
 		}
+		// If null then return the special type 'Unknown'
+		if (empty($type)) {
+			$type = "Unknown";
+		}
+		 
 		return $query->whereRole($type);
 	} 
 }

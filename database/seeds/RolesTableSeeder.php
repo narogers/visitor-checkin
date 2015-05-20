@@ -41,6 +41,10 @@ class RolesTableSeeder extends Seeder {
 			'role' => 'Volunteer',
 			'description' => 'CMA Volunteer'
 		]);
+		Role::create([
+			'role' => "Unknown",
+			"description" => "Undefined role"
+		]);
 	}
 }
 ?>
