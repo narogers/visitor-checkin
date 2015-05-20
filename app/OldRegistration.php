@@ -45,7 +45,7 @@ class OldRegistration {
 				}
 				if ((null == $data->fname) or
 					(null == $data->lname)) {
-					Log::warning('WARNING: Record contains no valid data');
+					Log::warning('WARNING: Record does not contain a valid name');
 					continue;
 				}
 

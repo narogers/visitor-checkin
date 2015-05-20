@@ -3,7 +3,7 @@
 use App\OldRegistration;
 use App\Role;
 use App\User;
-use App\Services\Aleph;
+use App\Services\AlephClient;
 
 use Illuminate\Console\Command;
 
@@ -54,11 +54,13 @@ class MigrateOldRegistrations extends Command {
 		// duplicates exist they will update existing records.
 		// That means this migration can be run multiple times
 		// and will just pick up where it left off
-		$aleph_interface = new Aleph();
+		$aleph_interface = new AlephClient();
 		foreach (array_keys($archivedRegistrations) as $patron) {
 			$user = User::firstOrNew(['email_address' =>
 				$archivedRegistrations[$patron]['email']]);
 			$user->name = $patron;
+			
+			$this->info('[Migration] Migrating ' . $patron);
 			
 			// Try to resolve the Aleph ID at this point so that if
 			// you do not save the record can be destroyed. Skip to

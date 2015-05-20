@@ -42,30 +42,29 @@ class ExportOldRegistrations extends Command {
 	 */
 	public function fire()
 	{
-		$oldRegistrations = new OldRegistration;
-
-		$archivedRegistrations = $oldRegistrations->getUsers();
+		$registrations = (new OldRegistration)->getUsers();
+		$total_rows = (new OldRegistration)->count();
 
 		/** 
 		 * Now export to the file. The format will be
 		 *
-	 	 * Name, Email Address, Role, Registrations
-	 	 * "Foo Bar", foo@bar.com, Staff, 4
+	 	 * ID, Name, Email Address, Role, Registrations
+	 	 * 245, "Foo Bar", foo@bar.com, Staff, 4
 	 	 */ 
 		$filename = $this->argument('filename');
 		$fh = fopen($filename, "w");
 		if ($fh) {
 			fputcsv($fh, [
+				"Registration ID",
 				"Name", 
-				"Aleph ID",
 				"Email Address", 
 				"Role", 
 				"Registrations"]
 			);
 			foreach (array_keys($registrations) as $visitor) {
 				fputcsv($fh, [
+					$registrations[$visitor]['id'],
 					$visitor,
-					$registrations[$visitor]['aleph_id'],
 					$registrations[$visitor]['email'],
 					$registrations[$visitor]['role'],
 					$registrations[$visitor]['count']
@@ -80,8 +79,7 @@ class ExportOldRegistrations extends Command {
 		// Summarize what happened
 		$this->info("SUMMARY");
 		$this->info("Report has been exported to " . $filename);
-		$this->info($bad_records . " invalid records skipped");
-		$this->info(sizeof($registrations) . " unique registrations found");
+		$this->info(sizeof($registrations) . " unique registrations migrated");
 		$this->info($total_rows . " total registrations examined");
 	}
 

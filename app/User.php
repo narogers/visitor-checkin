@@ -131,7 +131,7 @@ class User extends Model {
 	public function importPatronDetails($user_key = null) {
 		if (null == $user_key) {
 			$user_key = $this->email_address;
-		} else {
+		} else if (preg_match("/^\d*$/", $user_key)) {
 			$this->barcode = $user_key;
 		}
 		Log::info('[USER] Executing query using key ' . $user_key);
