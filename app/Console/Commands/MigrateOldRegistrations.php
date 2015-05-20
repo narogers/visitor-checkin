@@ -61,7 +61,7 @@ class MigrateOldRegistrations extends Command {
 			$user->name = $patron;
 			
 			$this->info('[Migration] Migrating ' . $patron);
-			
+
 			// Try to resolve the Aleph ID at this point so that if
 			// you do not save the record can be destroyed. Skip to
 			// the next record after emitting a warning
@@ -71,7 +71,14 @@ class MigrateOldRegistrations extends Command {
 				array_push($failures, $user->name);
 				continue;
 			}
+			// Halt if the role could not be resolved for some reason
+			if (null == $archivedRegistrations[$patron]['role']) {
+				$this->error('WARNING: Could not find a valid role for ' . $patron);
+				array_push($failures, $user->name);
+				continue;
+			}
 			$user->importPatronDetails($aleph_id);
+
 			# Set the verified flag to true and assume all existing registrations
 			# have been validated already
 			$user->verified_user = true;
