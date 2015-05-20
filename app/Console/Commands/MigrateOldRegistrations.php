@@ -71,6 +71,9 @@ class MigrateOldRegistrations extends Command {
 				array_push($failures, $user->name);
 				continue;
 			}
+			if (Role::ofType($archivedRegistrations[$patron]['role'])->count() > 0) {
+			  $user->role_id = Role::ofType($archivedRegistrations[$patron]['role'])->first()->id;
+			}
 			$user->importPatronDetails($aleph_id);
 
 			# Set the verified flag to true and assume all existing registrations

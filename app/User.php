@@ -157,7 +157,14 @@ class User extends Model {
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
 			  Log::info('Role => ' . $patron_data['role']);
-			  $this->role_id = Role::ofType($patron_data['role'])->first()->id;
+
+			  // Assume that if the role was preset it should be honored. Otherwise
+			  // populate it from the database
+			  if (empty($this->role_id)) {
+			    $this->role_id = (0 == Role::ofType($patron_data['role'])->count()) ?
+			  	  Role::ofType("Unknown")->first()->id :
+			  	  Role::ofType($patron_data['role'])->first()->id;
+			  	}
 		}
 
 		$this->aleph_id = $patron_data['aleph_id'];
