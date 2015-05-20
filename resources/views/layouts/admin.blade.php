@@ -19,8 +19,8 @@
 
           <ul class="nav navbar-nav">
             <li><a href="{{ URL::action('AdminController@getIndex') }}">Home</a></li>
-            <li><a href="{{ URL::action('AdminController@getIndex') }}">Registrations</a></li>
-            <li><a href="{{ URL::action('AdminController@getIndex') }}">Usage</a></li>
+            <li><a href="{{ URL::action('AdminRegistrationController@getIndex') }}">Registrations</a></li>
+            <li><a href="{{ URL::action('AdminCheckinController@getIndex') }}">Usage</a></li>
          </ul>
        </div>
        </div>
