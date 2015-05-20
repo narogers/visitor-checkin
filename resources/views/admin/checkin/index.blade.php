@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-      <div class="col-md-6">
-        <h1>Library Visits for [DATE]</h1>
+      <div class="col-md-8">
+        <h1>Library Visits for {!! $label !!}</h1>
       </div>   
-      <div class="col-md-6 pull-left">
+      <div class="col-md-4">
         <div class="dropdown">
           <button class="btn btn-default dropdown-toggle" type="button" id="date_range" data-toggle="dropdown" aria-expanded="true">
             Select range
@@ -12,10 +12,10 @@
           </button>
 
           <ul class="dropdown-menu" role="menu" aria-labelledby="date_range">
-            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=daily">Today (DATE)</a></li>
-            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=week">This week (DATE)</a></li>
-            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=month">This month (DATE)</a></li>
-            <li role="presentation"><a role="menuItem" tabindex="-1" href="?range=lastmonth">Previous month (DATE)</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="{!! URL::action('AdminCheckinController@getIndex') !!}/today">Today</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="{!! URL::action('AdminCheckinController@getIndex') !!}/week">This week</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="{!! URL::action('AdminCheckinController@getIndex') !!}/month">This month</a></li>
+            <li role="presentation"><a role="menuItem" tabindex="-1" href="{!! URL::action('AdminCheckinController@getIndex') !!}/lastmonth">Previous month</a></li>
           </ul>
         </div>
       </div>  
@@ -30,16 +30,15 @@
           <?php $role = $user_group[0]->role->role; ?>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <a href="#{!! $role !!}" data-toggle='collapse' 
+            <strong><a href="#{!! $role !!}" data-toggle='collapse' 
                data-target='#{!! $role !!}-table'
-               aria-expanded='false' 
+               aria-expanded='true' 
                aria-controls="{!! $role !!}-table">{!! $role !!}
-               <span class="badge">{!! '12' !!}</span>
                <span class="caret pull-right"></span>
-            </a>
+            </a></strong>
           </div>
 
-          <table class="table table-striped collapse" 
+          <table class="table table-striped collapse in" 
                  id="{!! $role !!}-table">
           <thead>
             <tr>
@@ -51,18 +50,19 @@
           <tbody>
             @foreach($user_group as $user)
             <tr>
-              <td>{!! $user->name !!}</td>
-              <td>-</td>
-              <td>{!! $user->lastCheckinDate() !!}</td>
+              <td><a href="{!! URL::action('AdminCheckinController@getCheckins', [$user, $range]) !!}" alt="Checkin activity for {!! $user->name !!}">{!! $user->name !!}</a></td>
+              <td>{!! $user->checkinCountFor($range) !!}</td>
+              <td>{!! $user->formattedLastCheckin($range) !!}</td>
             </tr>
             @endforeach
           </tbody>
           </table>
+        </div>
         @endforeach
         @else
           <div class="jumbotron">
             <h2>No activity found for this range</h2>
-            <p>No checkins have been recorded during [DATE]</p>
+            <p>No checkins have been recorded during {!! $label !!}</p>
           </div>
         @endif
         </div>

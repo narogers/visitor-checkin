@@ -41,10 +41,11 @@ class User extends Model {
 		return $qry;
 	}
 
-	public function scopeActiveDuring($query, $start_date, $end_date) {
-		$qry = $query->whereHas('checkins', function($q) {
-  		$q->whereBetween('created_at', Carbon::parse($start), 
-  			Carbon::parse($end));	
+	public function scopeActiveDuring($query, $starting, 
+		$ending = null) {
+		$qry = $query->whereHas('checkins', function($q) 
+			use ($starting, $ending) {
+  		$q->during($starting, $ending);	
 		});
 		return $qry;
 	}
@@ -172,7 +173,7 @@ class User extends Model {
 		# Check for existing checkins before you insert a new one. Otherwise just
 		# scroll right past
 		$not_checked_in = (0 == $this->checkins()
-			->where('created_at', '>=', new \DateTime('today'))->count());
+			->where('created_at', '>=', Carbon::now())->count());
 		if ($not_checked_in) {
 			$checkin = new Checkin();
   		$this->checkins()->save($checkin);
@@ -188,14 +189,38 @@ class User extends Model {
 	 * beyond the range provided. When supporting the view for the 
 	 * previous month this may be a consideration
 	 */
-	public function lastCheckinDate() {
-		$last_checkin = $this->checkins()->orderBy('created_at', 'DESC')->first();
+	public function formattedLastCheckin($starting = null, 
+		$ending = null) {
+		$starting = empty($starting) ? Carbon::now() : $starting;
+		
+		$last_checkin = $this->checkins()->during($starting, $ending)->orderBy('created_at', 'DESC')->first();
 		if (null == $last_checkin) {
 			return "Not available";
 		} else {
-			return Carbon::parse($last_checkin->created_at)->toFormattedDateString();
+			return Carbon::parse($last_checkin->created_at)->format('F jS');
 		}
 	}
+
+	/**
+	 * Retrieve a list of checkins from a specific
+	 * range. If passed 'daily', 'weekly', 'monthly',
+	 * or 'lastmonth' then convert to natural dates.
+	 * Otherwise use the dates as provided to scope
+	 * the query
+	 */
+	public function checkinsDuring($starting, $ending = null) {
+		return $this->checkins()->during($starting,
+			$ending)->get();
+	}
+
+	/**
+	 * Utility method that returns only the count of checkins
+	 * over a specific range rather than the actual values
+	 */
+	public function checkinCountFor($range) {
+		return $this->checkinsDuring($range)->count();
+	}
+
 	/**
 	 * Generates a fake email address by hashing the date and time. This is only
 	 * a placeholder for edge cases where the email field is empty and not meant to
@@ -209,5 +234,35 @@ class User extends Model {
 
 		$faux_email = $address . "@" . $host;
 		return $faux_email;
+	}
+
+	/**
+	 * Given a string tries to convert it to a pair of dates. If
+	 * the end date is null or the first date contains a human
+	 * readable string it will be cast to today's date instead
+	 * of parsed
+	 */
+	protected function normalizeDate(&$range) {
+		switch($range[0]) {
+			case "daily":
+				$range[0] = Carbon::now();
+				$range[1] = Carbon::now();
+				break;
+			case "weekly":
+				$range[0] = Carbon::now()->startOfWeek();
+				$range[1] = Carbon::now();
+				break;
+			case "monthly":
+				$range[0] = Carbon::now()->startOfMonth();
+				$range[1] = Carbon::now();
+				break;
+			case "lastmonth":
+				$range[0] = Carbon::now()->startOfMonth()->subMonth(1);
+				$range[1] = Carbon::now()->subMonth(1)->endOfMonth();
+				break;
+      default:
+        $range[0] = Carbon::parse($range[0]);
+        $range[1] = empty($range[1]) ? Carbon::now() : Carbon::parse($range[1]);
+		}
 	}
 }
