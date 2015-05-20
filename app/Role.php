@@ -12,6 +12,7 @@ class Role extends Model {
 		'CWRU Joint Program' => 'Academic',
 		'Other CWRU' => 'Academic',
 		'Museum Staff' => 'Staff',
+		'Researcher' => 'Academic'
 	];
 
 	protected $fillable = [
