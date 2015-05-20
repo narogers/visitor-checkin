@@ -16,10 +16,11 @@ Route::get('/', 'HomeController@index');
 Route::controller('register', 'RegistrationController');
 Route::controller('checkin', 'CheckinController');
 
-Route::group(['prefix' => 'admin'], function()
+# Because of a problem wih Drupal use 'reports' instead
+Route::group(['prefix' => 'reports'], function()
 {
 	Route::get('/', 'AdminController@getIndex');
-	Route::get('/registration', 'AdminRegistrationController@getIndex');
+	Route::get('/registrations', 'AdminRegistrationController@getIndex');
 	Route::get('/registration/{user}', 'AdminRegistrationController@getRegistration');
 	Route::post('/registration/{user}', 
 		'AdminRegistrationController@postRegistration');
