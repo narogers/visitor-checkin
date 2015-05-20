@@ -230,7 +230,7 @@ class User extends Model {
 	 */
 	protected function generateEmailStub() {
 		$host = "null.null";
-		$address = substr(hash('md5', date('Y-m-d H:i:s')), 0, 10);
+		$address = substr(hash('md5', date('Ymd His' . microtime(true))), 0, 16);
 
 		$faux_email = $address . "@" . $host;
 		return $faux_email;
