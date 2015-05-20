@@ -54,7 +54,7 @@
               @endif
             </div>
 
-            @if(!empty($user->registration()->first())) 
+            @if(1 == $user->registration()->count()) 
             @if($user->registration->address_street)
             <div class="col-md-2">
               <label class="control-label" for="address">Address</label>
