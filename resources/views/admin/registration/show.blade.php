@@ -48,11 +48,13 @@
                                 $user],
                    'class' => 'form-inline']) !!}
                 {!! Form::hidden('event', 'verify_id') !!}
-                {!! Form::submit('Look up ID', 
+                {!! Form::submit('Get ID from Aleph', 
                      ['class' => 'btn btn-primary']) !!}
                 {!! Form::close() !!}
               @endif
             </div>
+
+            @if(!empty($user->registration()->first())) 
             @if($user->registration->address_street)
             <div class="col-md-2">
               <label class="control-label" for="address">Address</label>
@@ -135,6 +137,7 @@
               <p class="form-control-static" id="internship_end_date">
                 {!! $user->registration->expires_on !!}
             </div>
+            @endif
             @endif
         </form>
         <hr class="col-md-12">

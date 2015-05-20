@@ -164,7 +164,7 @@ class User extends Model {
 			    $this->role_id = (0 == Role::ofType($patron_data['role'])->count()) ?
 			  	  Role::ofType("Unknown")->first()->id :
 			  	  Role::ofType($patron_data['role'])->first()->id;
-			  	}
+			  }
 		}
 
 		$this->aleph_id = $patron_data['aleph_id'];
