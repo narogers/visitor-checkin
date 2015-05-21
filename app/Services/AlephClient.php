@@ -162,8 +162,9 @@ class AlephClient {
 
   		$normalized_name = $this->normalizeName($address_data->xpath("//z304-address-1")[0]->__toString());
   		$user['name'] = $normalized_name['first'] . " " . $normalized_name['last'];
-  		$user['email'] = $address_data
-  			->xpath("//z304-email-address")[0]->__toString();
+  		// Trim the email to avoid data entry problems
+  		$user['email'] = trim($address_data
+  			->xpath("//z304-email-address")[0]->__toString());
   		$user['role'] = (sizeof($registration_data->xpath("//z305-bor-type")) > 0) ?
   			$registration_data->xpath("//z305-bor-type")[0]->__toString() : null;
   		$user['aleph_id'] = $aleph_id;
