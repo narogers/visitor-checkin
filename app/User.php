@@ -147,8 +147,7 @@ class User extends Model {
 			  }
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
-			  Log::info('Role => ' . $patron_data['role']);
-
+			  
 			  // Assume that if the role was preset it should be honored. Otherwise
 			  // populate it from the database
 			  if (empty($this->role_id)) {

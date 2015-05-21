@@ -40,7 +40,9 @@ class CheckinController extends Controller {
 			$is_active = $user->isActive($barcode);
 			if ($is_active) {
 		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
-			  $this->importPatronDetails($user_key);
+		  	// The Aleph ID is resolved when you query for the active
+		  	// user
+			  $this->importPatronDetails($user->aleph_id);
 			  // If the information is loaded via barcode it exists in 
 			  // Aleph. Assume therefore that the ID has been checked 
 			  // since this is only applicable to members and staff at
