@@ -44,19 +44,19 @@ class Checkin extends Model {
   protected function normalizeDate(&$range) {
     switch($range[0]) {
       case "today":
-        $range[0] = Carbon::now();
+        $range[0] = Carbon::today();
         $range[1] = Carbon::now();
         break;
       case "week":
-        $range[0] = Carbon::now()->startOfWeek();
+        $range[0] = Carbon::today()->startOfWeek();
         $range[1] = Carbon::now();
         break;
       case "month":
-        $range[0] = Carbon::now()->startOfMonth();
+        $range[0] = Carbon::today()->startOfMonth();
         $range[1] = Carbon::now();
         break;
       case "lastmonth":
-        $range[0] = Carbon::now()->startOfMonth()->subMonth(1);
+        $range[0] = Carbon::today()->startOfMonth()->subMonth(1);
         $range[1] = Carbon::now()->subMonth(1)->endOfMonth();
         break;
       default:
