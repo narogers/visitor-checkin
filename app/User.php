@@ -89,33 +89,24 @@ class User extends Model {
 	 * determines if the particular record is current or not.
 	 */
 	public function isActive($user_key = null) {
-		// Default to expired unless proven otherwise
-		$active = false;
 		// If no user_key is provided rely on the current Aleph ID
 		if (null == $user_key) {
 			$user_key = $this->aleph_id;
 		}
 		$aleph_id = $this->getAlephClient()->getPatronID($user_key);
 
-		if (null != $aleph_id) {
-		  $active = $this->getAlephClient()->isActive($user_key);
-		  Log::info('[USER] User key => ' . $user_key);
-		  Log::info('[USER] Response => ' . $active);
-
-		  /**
-		   * If the requested user does not already exist and the user key appears
-		   * to be formatted as a barcode (as all digits) create a shadow account with just the 
-		   * email address, name, and role. Zero out the signature since it is assumed to
-		   * be valid by default if Aleph says so.
-		   */
-		  if (preg_match("/^\d+$/", $user_key)) {
-		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
-			  $this->importPatronDetails($user_key);
-		  }
-		} else {
-			$active = null;
+		/**
+		 * As a side effect set the Aleph ID if it is not already
+		 * present. Assume that it does not change so there is no
+		 * need to do this repeatedly
+		 */
+		if (null == $this->aleph_id) {
+			$this->aleph_id = $aleph_id;
 		}
 
+		$active = (!empty($aleph_id)) ? 
+		  $this->getAlephClient()->isActive($user_key) :
+		  false;
 		return $active;
 	}
 

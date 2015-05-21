@@ -39,8 +39,13 @@ class CheckinController extends Controller {
 			
 			$is_active = $user->isActive($barcode);
 			if ($is_active) {
-				# Need to save in case record is new or
-				# changed
+		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
+			  $this->importPatronDetails($user_key);
+			  // If the information is loaded via barcode it exists in 
+			  // Aleph. Assume therefore that the ID has been checked 
+			  // since this is only applicable to members and staff at
+			  // the moment
+			  $user->verified_user = true;
 				$user->save();
 				$user->addCheckin();
 			}

@@ -92,6 +92,9 @@ class UserTest extends TestCase {
   	$this->assertNull($u->aleph_id);
 
 		$patron_status= $u->isActive('123456');
+		$u->importPatronDetails('123456');
+		$u->save();
+
 		$this->assertTrue($patron_status);
 		$this->assertEquals('John Smith (Local)', $u->name);
 		$this->assertEquals('count@sesame-street.org', $u->email_address);
@@ -103,6 +106,9 @@ class UserTest extends TestCase {
   	$u->setAlephClient($this->aleph);
 
 		$patron_status = $u->isActive('654321');
+		$u->importPatronDetails('654321');
+		$u->save();
+
 		$this->assertFalse($patron_status);
 		$this->assertEquals('John Smith (Expired)', $u->name);
 		$this->assertEquals('count2@sesame-street.org', $u->email_address);
@@ -114,8 +120,7 @@ class UserTest extends TestCase {
   	$u->setAlephClient($this->aleph);
 
   	$patron_status = $u->isActive('no-such-user');
-  	$this->assertNull($patron_status);
-  	$this->assertNull($u->email_address);
+  	$this->assertFalse($patron_status);
   }
 
   public function testOneCheckinPerDay() {
