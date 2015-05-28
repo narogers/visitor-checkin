@@ -122,17 +122,11 @@ class User extends Model {
 	public function importPatronDetails($user_key = null) {
 		if (null == $user_key) {
 			$user_key = $this->email_address;
-		} else if (preg_match("/^\d*$/", $user_key)) {
-			$this->barcode = $user_key;
-		}
+		} 
 		Log::info('[USER] Executing query using key ' . $user_key);
-		
 		$patron_data = $this->getAlephClient()->getPatronDetails($user_key);
 		
-		/**
-		 * Only insert these details if the record is new
-		 */
-		if (empty($this->id)) {
+   	if (empty($this->id)) {
 			  /** 
 			   * Create a new user stub with an empty signature to
 			   * make sure that it passes validation properly.
@@ -155,7 +149,7 @@ class User extends Model {
 			  	  Role::ofType("Unknown")->first()->id :
 			  	  Role::ofType($patron_data['role'])->first()->id;
 			  }
-		}
+		} 
 
 		/**
 		 * If the key is numeric assume it is a barcode. Otherwise

@@ -42,7 +42,7 @@ class CheckinController extends Controller {
 		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
 		  	// The Aleph ID is resolved when you query for the active
 		  	// user
-			  $user->importPatronDetails($user->aleph_id);
+			  $user->importPatronDetails($barcode);
 			  // If the information is loaded via barcode it exists in 
 			  // Aleph. Assume therefore that the ID has been checked 
 			  // since this is only applicable to members and staff at
