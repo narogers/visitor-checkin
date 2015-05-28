@@ -132,7 +132,7 @@ class User extends Model {
 		/**
 		 * Only insert these details if the record is new
 		 */
-		if (!$this->id) {
+		if (empty($this->id)) {
 			  /** 
 			   * Create a new user stub with an empty signature to
 			   * make sure that it passes validation properly.
@@ -157,6 +157,14 @@ class User extends Model {
 			  }
 		}
 
+		/**
+		 * If the key is numeric assume it is a barcode. Otherwise
+		 * don't cache it locally. This may need to be reconsidered
+		 * if any bugs pop up
+		 */
+		if (preg_match("/^\d*$/", $user_key)) {
+		  $this->barcode = $user_key;
+		}
 		$this->aleph_id = $patron_data['aleph_id'];
 	}
 

@@ -14,17 +14,20 @@
 Route::get('/', 'HomeController@index');
 
 Route::controller('register', 'RegistrationController');
-Route::controller('checkin', 'CheckinController');
-
-# Because of a problem wih Drupal use 'reports' instead
-Route::group(['prefix' => 'reports'], function()
+Route::group(['before' => 'fw-allow-wl'], function ()
 {
-	Route::get('/', 'AdminController@getIndex');
-	Route::get('/registrations', 'AdminRegistrationController@getIndex');
-	Route::get('/registration/{user}', 'AdminRegistrationController@getRegistration');
-	Route::post('/registration/{user}', 
+  Route::controller('checkin', 'CheckinController');
+
+  # Because of a problem wih Drupal use 'reports' instead
+  Route::group(['prefix' => 'reports'], function()
+  {
+	  Route::get('/', 'AdminController@getIndex');
+	  Route::get('/registrations', 'AdminRegistrationController@getIndex');
+	  Route::get('/registration/{user}', 'AdminRegistrationController@getRegistration');
+	  Route::post('/registration/{user}', 
 		'AdminRegistrationController@postRegistration');
-	Route::get('/checkins/{range?}', 'AdminCheckinController@getIndex');
-	Route::get('/checkins/{user}/{range?}',
+	  Route::get('/checkins/{range?}', 'AdminCheckinController@getIndex');
+	  Route::get('/checkins/{user}/{range?}',
 		'AdminCheckinController@getCheckins');
+  });
 });

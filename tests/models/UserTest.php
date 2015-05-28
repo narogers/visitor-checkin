@@ -99,6 +99,7 @@ class UserTest extends TestCase {
 		$this->assertEquals('John Smith (Local)', $u->name);
 		$this->assertEquals('count@sesame-street.org', $u->email_address);
 		$this->assertEquals('the_count', $u->aleph_id);
+		$this->assertEquals('123456', $u->barcode);
   }
 
   public function testExpiredBarcode() {
@@ -113,6 +114,7 @@ class UserTest extends TestCase {
 		$this->assertEquals('John Smith (Expired)', $u->name);
 		$this->assertEquals('count2@sesame-street.org', $u->email_address);
 		$this->assertEquals('the_count2', $u->aleph_id);
+		$this->assertEquals('654321', $u->barcode);
   }
 
   public function testMissingRecord() {

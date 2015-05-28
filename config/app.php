@@ -145,6 +145,7 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
+		'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
 
 		/**
 		 * Custom providers
@@ -178,6 +179,7 @@ return [
 		'Eloquent'  => 'Illuminate\Database\Eloquent\Model',
 		'Event'     => 'Illuminate\Support\Facades\Event',
 		'File'      => 'Illuminate\Support\Facades\File',
+		'Firewall'	=> 'PragmaRX\Firewall\Vendor\Laravel\Facade',
 		'Form'	    => 'Illuminate\Html\FormFacade',
 		'Hash'      => 'Illuminate\Support\Facades\Hash',
 		'HTML'	    => 'Illuminate\Html\HtmlFacade',
