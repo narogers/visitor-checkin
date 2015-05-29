@@ -30,24 +30,41 @@ class CheckinController extends Controller {
 		 */
 		if ($request->input('code')) {
 			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
-			$is_registered_user = User::whereBarcode($barcode)->count();
-			if ($is_registered_user) {
-				$user = User::whereBarcode($barcode)->first();
-			} else {
+		  $user = User::whereBarcode($barcode)->first();
+			if (null == $user) {
 				$user = new User;
 			}
 			
 			$is_active = $user->isActive($barcode);
-			if ($is_active) {
+			if (null != $is_active) {
 		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
 		  	// The Aleph ID is resolved when you query for the active
 		  	// user
 			  $user->importPatronDetails($barcode);
+			  /**
+			   * Since it is possible that the email address has already
+			   * been used let's circumvent that possibility before we
+			   * save by doing a query. If the user already exists then
+			   * we just copy over the barcode and aleph_id before
+			   * committing it to the database
+			   */
+			  if (null == $user->created_at) {
+			  	$is_existing_user = (0 < User::whereEmailAddress($user->email_address)->count());
+			  	// TODO: Refactor this into the User model?
+			  	if ($is_existing_user) {
+			  		$aleph_import = $user; 
+			  		$user = User::whereEmailAddress($aleph_import->email_address)->first();
+			  		$user->barcode = $barcode;
+			  		$user->aleph_id = $aleph_import->aleph_id;
+			  	}
+			  }
+
 			  // If the information is loaded via barcode it exists in 
-			  // Aleph. Assume therefore that the ID has been checked 
-			  // since this is only applicable to members and staff at
-			  // the moment
-			  $user->verified_user = true;
+			  // Aleph. Assume if it is active that there is no need to
+			  // check ID. Otherwise leave it alone
+			  if ($is_active) {
+			    $user->verified_user = true;
+			  }
 				$user->save();
 				$user->addCheckin();
 			}

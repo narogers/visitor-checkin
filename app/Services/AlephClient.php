@@ -56,10 +56,10 @@ class AlephClient {
 			 *
 			 * In the first case log the error for troubleshooting down the road
 			 */
-		if (!$aleph_data->{'error'}) {
+		if ($aleph_data->{'error'}) {
 			Log::info("[ALEPH] Could not resolve " . $user_key . " to a canonical ID");
 			Log::info("[ALEPH] " . $response);
-		}
+		} 
 
 		if ($aleph_data->{'internal-id'}) {
 			$canonical_aleph_id = $aleph_data->{'internal-id'}->__toString();

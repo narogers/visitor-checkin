@@ -126,7 +126,7 @@ class User extends Model {
 		Log::info('[USER] Executing query using key ' . $user_key);
 		$patron_data = $this->getAlephClient()->getPatronDetails($user_key);
 		
-   	if (empty($this->id)) {
+   	if (empty($this->created_at)) {
 			  /** 
 			   * Create a new user stub with an empty signature to
 			   * make sure that it passes validation properly.
