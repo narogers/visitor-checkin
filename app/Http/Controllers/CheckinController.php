@@ -36,11 +36,12 @@ class CheckinController extends Controller {
 			}
 			
 			$is_active = $user->isActive($barcode);
-			if (null != $is_active) {
+			if (is_bool($is_active)) {
 		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
 		  	// The Aleph ID is resolved when you query for the active
 		  	// user
 			  $user->importPatronDetails($barcode);
+
 			  /**
 			   * Since it is possible that the email address has already
 			   * been used let's circumvent that possibility before we
@@ -62,7 +63,7 @@ class CheckinController extends Controller {
 			  // If the information is loaded via barcode it exists in 
 			  // Aleph. Assume if it is active that there is no need to
 			  // check ID. Otherwise leave it alone
-			  if ($is_active) {
+			  if (true == $is_active) {
 			    $user->verified_user = true;
 			  }
 				$user->save();
@@ -88,7 +89,6 @@ class CheckinController extends Controller {
 		$query_string = $request->input('query');
     
     Log::info('[CHECKIN] Looking up users that match the string ' . $query_string);		
-
 		$user_matches = User::registeredUsers($query_string);
 
 		switch ($user_matches->count()) {
@@ -162,7 +162,9 @@ class CheckinController extends Controller {
 	 * Uses a registration status to determine which view to return for the
 	 * checkin process (getNew and postNew)
 	 */
-	protected function getView($status) {
+	public function getView($status) {
+		  Log::info('[VIEW] Resolving status ' . $status . '...');
+
 		  $view = '';
 		  $message_key = '';
 

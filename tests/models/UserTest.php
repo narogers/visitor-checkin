@@ -122,7 +122,7 @@ class UserTest extends TestCase {
   	$u->setAlephClient($this->aleph);
 
   	$patron_status = $u->isActive('no-such-user');
-  	$this->assertFalse($patron_status);
+  	$this->assertNull($patron_status);
   }
 
   public function testOneCheckinPerDay() {

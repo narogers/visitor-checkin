@@ -95,6 +95,12 @@ class User extends Model {
 		}
 		$aleph_id = $this->getAlephClient()->getPatronID($user_key);
 
+		// Give ourselves an out for "Not found" rather than relying on
+		// simply false later on
+		if (null == $aleph_id) {
+			return null;
+		}
+
 		/**
 		 * As a side effect set the Aleph ID if it is not already
 		 * present. Assume that it does not change so there is no

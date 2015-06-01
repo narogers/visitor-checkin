@@ -119,10 +119,11 @@ class AlephClient {
 	 */
 	public function isActive($patron_id) {
 		$canonical_aleph_id = $this->getPatronID($patron_id);
+		
 		// The only case we care about is a NULL result. Eventually this could be redone with
 		// exceptions but that would slow down development another week or two
 		if (null == $canonical_aleph_id) {
-			return false;
+			return null;
 		}
 		
 		// Assume the best - handle any other edge cases in the above method
@@ -199,6 +200,13 @@ class AlephClient {
 		return ($expiry > time());
 
 	}
+
+	/**
+	 * Generate potential Aleph IDs to help resolve an ID. The algorithm
+	 * does need to be discussed with Matthew Gengler to make sure that
+	 * its assumptions agree with current name practices used by the
+	 * Ingalls Library staff
+	 */
 	protected function parseName($name) {
 		// It is assumed that the first and second values are the important
 		// ones. Code to handle edge cases lie hyphenation can be added down
@@ -237,7 +245,7 @@ class AlephClient {
 	 */
 	protected function normalizeName($input) {
 		// Start by stripping out anything in parens
-		$input = preg_replace("/\(.*\)/", "", $input);
+		$input = preg_replace("/\(.*\)/", "", $input); 
 		// Now split on the first whitespace (, or space)
 		
 		$name_parts = preg_split("/,?\s+/", $input);
