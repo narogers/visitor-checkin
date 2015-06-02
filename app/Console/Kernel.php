@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel {
 		'App\Console\Commands\Inspire',
 		'App\Console\Commands\ExportOldCheckins',
 		'App\Console\Commands\ExportOldRegistrations',
-		'App\Console\Commands\MigrateOldRegistrations'
+		'App\Console\Commands\ImportAlephRecords',
+		'App\Console\Commands\MigrateOldRegistrations',
 	];
 
 	/**

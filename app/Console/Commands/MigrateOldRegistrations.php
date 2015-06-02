@@ -76,6 +76,17 @@ class MigrateOldRegistrations extends Command {
 			}
 			$user->importPatronDetails($aleph_id);
 
+			/**
+			 * This is a kludge to deal with situations where the
+			 * registration table uses one email address but the
+			 * Aleph response has another
+			 */
+			if (0 < User::where(["email_address" => $user->email_address])
+				->count()) {
+				$this->info('[Migration] Import into existing user record');
+				$this->replaceUser($user);
+			}
+
 			# Set the verified flag to true and assume all existing registrations
 			# have been validated already
 			$user->verified_user = true;
@@ -95,6 +106,26 @@ class MigrateOldRegistrations extends Command {
 		}
 
 		$this->generateReport($successes, $failures);
+	}
+
+	/**
+	 * Given a reference to a temporary user's details locates the
+	 * existing record by email address and copies over the name,
+	 * barcode, and Aleph ID.
+	 *
+	 * Returns the existing user object with updated information
+	 */
+	public function replaceUser(&$new_user) {
+		$existing_user = User::where('email_address', $new_user->email_address)->first();
+		$existing_user->name = $new_user->name;
+		$existing_user->aleph_id = $new_user->aleph_id;
+
+		# Now swap out the old stub for the existing record so that
+		# going forward it references the one already in the database
+		#
+		# No need to return because we are using a reference to directly
+		# manipulate the object
+		$new_user = $existing_user;
 	}
 
 	/**

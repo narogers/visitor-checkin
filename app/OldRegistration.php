@@ -41,6 +41,8 @@ class OldRegistration {
 				$data = json_decode($p->regJSON);
 				if (null == $data) {
 					Log::warning('WARNING: Registration ' . $p->regID . " is invalid");
+					Log::warning('Data dump');
+					Log::warning($p->regJSON);
 					continue;
 				}
 				if ((null == $data->fname) or
@@ -49,6 +51,8 @@ class OldRegistration {
 					continue;
 				}
 
+				$data->fname = ucwords(trim($data->fname));
+				$data->lname = ucwords(trim($data->lname));
 				$data->name = $data->fname . " " . $data->lname;
 
 				if (array_key_exists($data->name, $registrations)) {
@@ -83,7 +87,7 @@ class OldRegistration {
 
 		$registration = json_decode($record->regJSON);
 		if (null == $registration) {
-			Log::warning('WARNING: Registration details for ' . $p->regID . " are invalid");
+			Log::warning('WARNING: Registration details for ' . $id . " are invalid");
 			return null;
 		}
 		$registration->signature = $registration->{'image/png;base64'};

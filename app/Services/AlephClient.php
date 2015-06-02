@@ -75,7 +75,7 @@ class AlephClient {
 	 * getPatronID()
 	 */
 	public function validatePatronID(User $user) {
-		$aleph_ids = $this->parseName($user->name);
+		$aleph_ids = $user->getAlephKeys();
 		Log::info('[ALEPH] Attempting to resolve IDs');
 		
 		foreach ($aleph_ids as $aleph_id) {
@@ -168,7 +168,9 @@ class AlephClient {
   			->xpath("//z304-email-address")[0]->__toString());
   		$user['role'] = (sizeof($registration_data->xpath("//z305-bor-type")) > 0) ?
   			$registration_data->xpath("//z305-bor-type")[0]->__toString() : null;
+  		Log::info("Preparing to save the Aleph ID");
   		$user['aleph_id'] = $aleph_id;
+  		Log::info("Aleph ID => " . $aleph_id);
   	}
  	
   	return $user;
@@ -199,29 +201,6 @@ class AlephClient {
 		$expiry = strtotime($timestamp);
 		return ($expiry > time());
 
-	}
-
-	/**
-	 * Generate potential Aleph IDs to help resolve an ID. The algorithm
-	 * does need to be discussed with Matthew Gengler to make sure that
-	 * its assumptions agree with current name practices used by the
-	 * Ingalls Library staff
-	 */
-	protected function parseName($name) {
-		// It is assumed that the first and second values are the important
-		// ones. Code to handle edge cases lie hyphenation can be added down
-		// the road
-		$name = $this->normalizeName($name);
-
-		// We will be returning two versions - one without a . and one
-		// with it. For example
-		//
-		// jsmith
-		// j.smith
-		$username[0] = substr($name['first'], 0, 1) . $name['last'];
-		$username[1] = substr_replace($username[0], ".", 1, 0);
-
-		return $username;
 	}
 
 	protected function compareNames($local, $aleph) {
@@ -256,8 +235,8 @@ class AlephClient {
 			$first_name = $name_parts[0];
 			$last_name = $name_parts[1];
 		}
-		return ['first' => strtolower($first_name), 
-				'last' => strtolower($last_name)];
+		return ['first' => ucwords($first_name), 
+				'last' => ucwords($last_name)];
 	}
 }
 ?>

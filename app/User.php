@@ -85,13 +85,83 @@ class User extends Model {
 	}
 
 	/**
+	 * Construct a list of potential keys to use when
+	 * resolving calls to Aleph. If the ID and barcode are
+	 * set they will be used. Otherwise it will try to
+	 * generate options based on the name
+	 */
+	public function getAlephKeys() {
+		$keys = [];
+		if (!empty($this->aleph_id)) {
+			array_push($keys, $this->aleph_id);
+		}
+		if (!empty($this->barcode)) {
+			array_push($keys, $this->barcode);
+		}
+
+		# If it is still empty then generate keys
+		if (empty($keys)) {
+			$this->generateAlephKeys($keys);
+		}
+		return $keys;
+	}
+
+	/**
+	 * Return the primary Aleph key as calculated by
+	 * the other helper method(s)
+	 */
+  public function getAlephKey() {
+  	$aleph_keys = $this->getAlephKeys();
+  	return array_shift($aleph_keys);
+  }
+
+  /**
+   * Uses the name to algorithmicly create possible
+   * matches based on the standard Ingalls library 
+   * practice of <first initial>.<last name> truncated
+   * to a total length of 12 characters
+   *
+   * ie
+   * James Joyce -> j.joyce
+   * Leopold Bloom -> l.bloom
+   * HC Earwigger -> h.earwigger
+   */
+  public function generateAlephKeys(&$keys) {
+  	# First normalize the names to accept only the first
+  	# and last strings. If a comma is present then invert
+  	# them
+  	$pieces = [];
+  	preg_match("/^(\w+)\s?.*\s([-a-zA-Z]+)$/", $this->name, 
+  		$pieces);
+
+  	$name['initial'] = '';
+  	$name['last'] = '';
+
+  	if (preg_match("/,/", $this->name)) {
+  		$name['initial'] = $pieces[2];
+  		$name['last'] = $pieces[1];
+  	} else {
+  		$name['initial'] = $pieces[1];
+  		$name['last'] = $pieces[2];
+  	}
+  	$name['initial'] = strtoupper(substr($name['initial'], 
+  		0, 1));
+  	$name['last'] = preg_replace("/\W+/", "", $name['last']);
+  	$name['last'] = strtoupper(substr($name['last'], 
+  		0, 10));
+  	
+  	$keys[0] = $name['initial'] . "." . $name['last'];
+  	$keys[1] = $name['initial'] . $name['last'];
+  }
+
+	/**
 	 * Makes a call to the Aleph service based on the key and
 	 * determines if the particular record is current or not.
 	 */
 	public function isActive($user_key = null) {
 		// If no user_key is provided rely on the current Aleph ID
 		if (null == $user_key) {
-			$user_key = $this->aleph_id;
+			$user_key = $this->getAlephKey();
 		}
 		$aleph_id = $this->getAlephClient()->getPatronID($user_key);
 
@@ -106,18 +176,21 @@ class User extends Model {
 		 * present. Assume that it does not change so there is no
 		 * need to do this repeatedly
 		 */
-		if (null == $this->aleph_id) {
-			$this->aleph_id = $aleph_id;
-		}
+		$this->aleph_id = $aleph_id;
 
-		$active = (!empty($aleph_id)) ? 
+		$active = ($aleph_id) ? 
 		  $this->getAlephClient()->isActive($user_key) :
 		  false;
 		return $active;
 	}
 
 	public function isExpired($user_key = null) {
-		return !$this->isActive($user_key);
+		if (null == $user_key) {
+			$aleph_id = $this->getAlephKey();
+		} else {
+			$aleph_id = $user_key;
+		}
+		return !$this->isActive($aleph_id);
 	}
 
 	/**
@@ -127,10 +200,13 @@ class User extends Model {
 	 */
 	public function importPatronDetails($user_key = null) {
 		if (null == $user_key) {
-			$user_key = $this->email_address;
+			$aleph_id = $this->getAlephKey();
+    } else {
+			$aleph_id = $user_key;
 		} 
-		Log::info('[USER] Executing query using key ' . $user_key);
-		$patron_data = $this->getAlephClient()->getPatronDetails($user_key);
+
+		Log::info('[USER] Executing query using key ' . $aleph_id);
+		$patron_data = $this->getAlephClient()->getPatronDetails($aleph_id);
 		
    	if (empty($this->created_at)) {
 			  /** 
@@ -143,8 +219,11 @@ class User extends Model {
 			  if (!empty($patron_data['email'])) {
 			  	$this->email_address = $patron_data['email'];
 			  } else {
+			  	Log::warning("[IMPORT USER] No valid email address found. Generating a placeholder for " . $aleph_id);
 			  	$this->email_address = $this->generateEmailStub();
 			  }
+			  // TODO : Ensure the name is normalized coming out of
+			  //        Aleph
 			  $this->name = $patron_data['name'];
 			  $this->signature = '';
 			  
@@ -165,7 +244,7 @@ class User extends Model {
 		if (preg_match("/^\d*$/", $user_key)) {
 		  $this->barcode = $user_key;
 		}
-		$this->aleph_id = $patron_data['aleph_id'];
+    $this->aleph_id = $patron_data['aleph_id'];
 	}
 
 	/**
