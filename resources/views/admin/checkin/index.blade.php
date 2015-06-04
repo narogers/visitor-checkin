@@ -26,16 +26,20 @@
            gets unwieldly adding pagination should be fairly straightforward -->
       <div class="col-md-10">
         @if($users->count())
-        @foreach ($users as $user_group)
-          <?php $role = $user_group[0]->role->role; ?>
+        @foreach ($users as $group)
+          <?php $role = $group[0]->role; ?>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <strong><a href="#{!! $role !!}" data-toggle='collapse' 
-               data-target='#{!! $role !!}-table'
+            <strong>
+              <a href="#{!! $role->role !!}" data-toggle='collapse' 
+               data-target='#{!! $role->role !!}-table'
                aria-expanded='true' 
-               aria-controls="{!! $role !!}-table">{!! $role !!}
-               <span class="caret pull-right"></span>
-            </a></strong>
+               aria-controls="{!! $role->role !!}-table">
+               <span class="caret"></span>
+               {!! $role->role !!}
+               <span class="badge">{!! $role->checkinCountFor($range) !!}</span>
+              </a>
+            </strong>
           </div>
 
           <table class="table table-striped collapse in" 
@@ -48,7 +52,7 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($user_group as $user)
+            @foreach($group as $user)
             <tr>
               <td><a href="{!! URL::action('AdminCheckinController@getCheckins', [$user, $range]) !!}" alt="Checkin activity for {!! $user->name !!}">{!! $user->name !!}</a></td>
               <td>{!! $user->checkinCountFor($range) !!}</td>

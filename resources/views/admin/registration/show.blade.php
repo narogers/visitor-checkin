@@ -54,7 +54,7 @@
               @endif
             </div>
 
-            @if(1 == $user->registration()->count()) 
+            @if (1 == $user->registration()->count()) 
             @if($user->registration->address_street)
             <div class="col-md-2">
               <label class="control-label" for="address">Address</label>
@@ -66,7 +66,7 @@
                 <br />
                 {!! $user->registration->address_city !!},
                 {!! $user->registration->address_state !!} 
-                {!! $user->registration->address_zipcode !!}
+                {!! $user->registration->address_zip !!}
               </p>
             </div>
             @endif

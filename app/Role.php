@@ -34,4 +34,25 @@ class Role extends Model {
 		 
 		return $query->whereRole($type);
 	} 
+
+	/**
+	 * A janky way of presenting a total over a provided range since when
+	 * you do a count Eloquent conveinantly forgets and will gladly spew
+	 * ALL the records rather than the filtered subset
+	 *
+	 * Eventually a more efficient method can be developed if this
+	 * becomes a performance issue
+	 */
+	public function checkinCountFor($range) {
+		$users = User::whereHas('checkins', function($q) use ($range) { 
+			$q->during($range);
+		})->where('role_id', $this->id)
+		  ->get(['id', 'name', 'role_id']);
+		$total = 0;
+		foreach ($users as $user) {
+			$total = $total + $user->checkinCountFor($range);
+		}
+
+		return $total;
+	}
 }

@@ -80,7 +80,7 @@ class AdminRegistrationController extends Controller {
 			Log::info('[ADMIN] Unable to resolve an Aleph ID');
 			Log::info('[ADMIN] Check connection to service and email address');
 		} else {
-			Session::put('alert', 'Aleph ID has been resolved');
+			Session::put('alert', 'The Aleph ID has been resolved to ' . $user->aleph_id);
 		}
 		$user->save();
 	}
@@ -90,6 +90,7 @@ class AdminRegistrationController extends Controller {
 	 */
 	protected function setVerifiedStatus(User $user) {
 		Log::info('[ADMIN] Setting verified status to true for ' . $user->email_address);
+		Session::flash('alert', "The visitor has now been marked as verified. If this is a renewal check Aleph to make sure that the expiration date has been updated.");
 		$user->verified_user = true;
 		$user->save();
 	}
