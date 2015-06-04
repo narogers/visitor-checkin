@@ -239,9 +239,12 @@ class User extends Model {
 		/**
 		 * If the key is numeric assume it is a barcode. Otherwise
 		 * don't cache it locally. This may need to be reconsidered
-		 * if any bugs pop up
+		 * if any bugs pop up such as the length being more than
+		 * a standard member bar code (in which case just ignore
+		 * the field)
 		 */
-		if (preg_match("/^\d*$/", $user_key)) {
+		if (preg_match("/^\d*$/", $user_key) && 
+                    (8 > strlen($user_key))) {
 		  $this->barcode = $user_key;
 		}
     $this->aleph_id = $patron_data['aleph_id'];
