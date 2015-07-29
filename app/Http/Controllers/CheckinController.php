@@ -107,6 +107,8 @@ class CheckinController extends Controller {
 			  }
 				break;
 			case 2:
+            case 3:
+            case 4:
 				Log::info("[CHECKIN] Two matches found");
 				$message_key = "checkin.multiplefound";
 				$view = "checkin.retry";
