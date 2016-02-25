@@ -13,12 +13,12 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/patron-checkin">
+          <a class="navbar-brand" href="./">
             <img alt="Ingalls Library" src="images/cma-logo.png">
           </a>
        </div>
           <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right"><a href="/patron-checkin">Home</a></span>
+          <span class="btn btn-primary pull-right"><a href="./">Reset</a></span>
        </div>
     </nav>
     <div class="container-fluid">
@@ -32,11 +32,41 @@
             <h2>Multiple users found</h2>
             <p>Multiple records were found for <strong>John Smith</strong>. Confirm your check in by choosing the email address that matches your account.</p>
 
-            <ul class="list-group">
-              <li class="list-group-item"><a href="returning-welcome.html">jsmith@clevelandart.org</a></li>
-              <li class="list-group-item"><a href="returning-welcome.html">j.smith@gmail.com</a></li>
-              <li class="list-group-item"><a href="new-visitor.html">I need to register</a></li>
-            </ul>
+            <ul class="list-unstyled list-padded">
+              <li class="row">
+                <div class="col-sm-1">
+                  <span class="glyphicon glyphicon-user"></span>
+                </div>
+                <div class="col-sm-8 ">
+                  <a href="returning-welcome.html">John Smith (jsmith@c***g)</a>
+                </div>
+              </li>
+              <li class="row">
+                <div class="col-sm-1 clearfix">
+                  <span class="glyphicon glyphicon-user"></span>
+                </div>
+                <div class="col-sm-8">
+                  <a href="returning-welcome.html">John Smith (j.smith@g***m)</a>
+                </div>
+              </li>
+              <li class="row">
+                <div class="col-sm-1">
+                  <span class="glyphicon glyphicon-user"></span>
+                </div>
+                <div class="col-sm-8 ">
+                  <a href="returning-welcome.html">John Smith (jsmith@a***t)</a>
+                </div>
+              </li>
+              <li class="row">
+                <form action="returning-notfound.html" class="form-inline" method="GET">
+                  <div class="form-group">
+                    <label for="identifier" class="sr-only">Name</label>
+                    <input type="text" id="identifier" value="John Smith" />
+                    <input type="submit" value="Search again" class="btn btn-primary"` />
+                  </div>
+                </form>
+              </li>
+             </ul>
          </div>
         </div>
      </div>

@@ -13,12 +13,12 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="/patron-checkin">
+          <a class="navbar-brand" href="./">
             <img alt="Ingalls Library" src="images/cma-logo.png">
           </a>
        </div>
           <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right"><a href="/patron-checkin">Home</a></span>
+          <span class="btn btn-primary pull-right"><a href="./">Reset</a></span>
        </div>
     </nav>
     <div class="container-fluid">
@@ -31,14 +31,18 @@
         <div class="col-sm-6">
           <h2>New Visitor Registration</h2>
           <form action="new-member.html" method="GET">
+            <div class="form-group">
             <label for="identifier">Name</label>
             <input type="text" class="form-control" id="identifier" placeholder="Name">
-
+            </div>
+            <div class="form-group">
             <label for="email">Email address</label>
-            <input type="text" class="form-control" id="email">
-
-            <label for="patron_type">Visitor type</label>
-            <select class="form-control" id="patron-type">
+            <input type="text" class="form-control" id="email" placeholder="user@domain.com">
+            </div>
+ 
+            <div class="form-group">
+            <label for="visitor_type">Visitor type</label>
+            <select class="form-control" id="visitor_type">
             <optgroup label="Visitor type">
               <option disabled selected>Select one</option>
               <option>Academic</option>
@@ -51,6 +55,7 @@
               <option>Volunteer</option>
             </optgroup>
           </select>
+          </div>
           <input type="submit" class="btn btn-primary" value="Continue">
         </form>
       </div>
