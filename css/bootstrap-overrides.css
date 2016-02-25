@@ -62,12 +62,31 @@ a:focus {
 /**
  * Creates a caption overlay while still maintaining accessibility
  */
-h2.caption {
+.caption {
   position: absolute;
   margin: 0;
   padding: 0.5em;
+  left: 2.5%;
   bottom: 0;
   color: #FFF;
   background: rgba(0, 0, 0, 0.7);
   width: 95%;
+  overflow: hidden;
+}
+
+.caption form input[type="text"] {
+  width: 35em;
+  max-width: 63%;
+}
+
+.list-padded li {
+  padding: 0.5em 0;
+}
+/**
+ * Wrap the signature panel in a grey box so that it stands apart from the
+ * rest of the page and its borders are visible
+ */
+#signature {
+  border: 1px dashed rgb(119, 119, 119);
+  margin-bottom: 20px /* One standard line height */
 }
