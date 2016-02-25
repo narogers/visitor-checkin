@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width="device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>Visitor Checkin</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -18,7 +18,7 @@
           </a>
        </div>
           <h1>Ingalls Library</h1>
-          <span class="btn btn-primary pull-right"><a href="./">Reset</a></span>
+          <span class="btn btn-primary pull-right"><a href="index.html">Reset</a></span>
        </div>
     </nav>
     <div class="container-fluid">
@@ -41,6 +41,7 @@
               <figure>
                 <img src="images/1942.638.png" alt="Check in manually" class="img-responsive">
               </figure>
+<<<<<<< HEAD
               <h2 class="caption">
                 <form action="returning-notfound.html" method="GET" class="form-inline">
                   <div class="form-group">
@@ -50,12 +51,26 @@
                   </div>
                 </form>
               </h2>
+=======
+              <h2 class="caption">Type your name</h2>
+            </div>
+            <div class="col-sm-12">
+              <form action="returning-notfound.html" method="GET">
+                <div class="form-group">
+                <label for="identifier" class="sr-only">Name or Member ID</label>
+                <input type="text" class="form-control" id="identifier" placeholder="Name or Member ID">
+               </div>
+               <div class="form-group">
+                 <input type="submit" class="btn btn-primary" value="Check in">
+               </div>
+              </form>
+>>>>>>> b04d80db7f863e88ac11f635bd77e5c8e37fd32d
             </div>
           </div>
         </div>
       </div>
     </div>
   </body>
-  <script src="js/jquery-2.1.3.js" type="text/js"></script>
+  <script src="js/jquery-2.1.3.js"></script>
   <script src="js/bootstrap.js"></script>
 </html>

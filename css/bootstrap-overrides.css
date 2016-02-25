@@ -82,6 +82,7 @@ a:focus {
 .list-padded li {
   padding: 0.5em 0;
 }
+
 /**
  * Wrap the signature panel in a grey box so that it stands apart from the
  * rest of the page and its borders are visible
