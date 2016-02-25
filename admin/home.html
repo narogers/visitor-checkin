@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Visitor Checkin</title>
+
+     <link href="../css/bootstrap.min.css" rel="stylesheet">
+     <link href="../css/bootstrap-overrides.css" rel="stylesheet">
+     <link href="../css/admin-overrides.css" rel="stylesheet">
+  </head>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="http://library.clevelandart.org">
+            <img alt="Ingalls Library home page" src="../images/cma-logo.png">
+          </a>
+       </div>
+       <!-- Since there are only three links run them across the top -->
+       <ul class="nav navbar-nav">
+         <li class="active"><a href="home.html">Home</a></li>
+         <li class="dropdown">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Registrations <span class="caret"></a>
+           <ul class="dropdown-menu">
+             <li><a href="registrations-archived.html">Archived</a></li>
+             <li><a href="registrations-pending.html">Pending</a></li>
+             <li><a href="registrations-all.html">View all</a></li>
+           </ul>
+         </li>
+         <li><a href="statistics-home.html">Statistics</a></li>
+       </ul>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <h1>Visitor Checkin Administration</h1>
+        <hr />
+ 
+          <h2><span class="glyphicon glyphicon-user"></span>&nbsp;<a href="registrations-index.html">Registrations</a></h2>
+          <ul class="list-unstyled col-sm-offset-1">
+            <li>
+              <span class="glyphicon glyphicon-folder-open"></span>&nbsp;<a href="registration-archived.html">Completed</a>
+              <p>Registrations which have been successfully completed with a valid Aleph ID and signature</p>
+            </li>
+            <li>
+              <span class="glyphicon glyphicon-inbox"></span>&nbsp;<a href="registration-pending.html">Pending</a>
+              <p>Registrations which need to be verified and entered into Aleph</p>
+            </li>
+          </ul>
+          
+          <h2>
+            <span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;<a href="usage-home.html">Statistics</a>
+          </h2>
+          <p>See visitor counts for today, this week, and the last two months. Records are retained for the last 45 days before being archived.</p>
+      </div>
+    </div>
+  </div>
+ </body>
+  <script src="../js/jquery-2.1.3.js" type="text/js"></script>
+  <script src="../js/bootstrap.js" type="text/js"></script>
+</html>
