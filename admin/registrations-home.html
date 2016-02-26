@@ -135,7 +135,8 @@
 
           html = html.replace("{{confirmed}}", getStatusIcon(value.confirmed));
           html = html.replace("{{in_aleph}}", getStatusIcon(value.linked_to_aleph));
-
+          template = (value.confirmed && value.linked_to_aleph) ? "patron-complete" : "patron-details";
+          html = html.replace("{{template}}", template);
           destination.append(html); 
         });
       } else {
@@ -218,7 +219,7 @@
 
   <script id="registrant_template" type="text/template">
     <tr>
-      <td data-field="name"><a href="patron-details.html">{{name}}</a></td>
+      <td data-field="name"><a href="{{template}}.html">{{name}}</a></td>
       <td data-field="role">{{role}}</td>
       <td data-field="registration_date">{{registration_date}}</td>
       <td data-field="confirmed">{{confirmed}}</td>
