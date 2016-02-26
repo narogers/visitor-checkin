@@ -9,6 +9,7 @@
     <script src="../js/jquery-2.1.3.js" type="text/javascript"></script>
     <script src="../js/bootstrap.min.js" type="text/javascript"></script>
  
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
      <link href="../css/bootstrap.min.css" rel="stylesheet">
      <link href="../css/bootstrap-overrides.css" rel="stylesheet">
      <link href="../css/admin-overrides.css" rel="stylesheet">
@@ -27,11 +28,12 @@
          <li class="dropdown">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Registrations <span class="caret"></span></a>
            <ul class="dropdown-menu">
-             <li><a href="registrations-archived.html">Archived</a></li>
-             <li><a href="registrations-pending.html">Pending</a></li>
-             <li><a href="registrations-all.html">View all</a></li>
+             <li><a href="registrations-home.html?status=completed">Archived</a></li>
+             <li><a href="registrations-home.html?status=pending">Pending</a></li>
+             <li><a href="registrations-home.html">View all</a></li>
            </ul>
          </li>
+         <li><a href="usage-home.html">Statistics</a></li>
        </ul>
     </div>
   </nav>
@@ -40,7 +42,7 @@
       <div class="col-md-12">
         <h1>Registrations</h1>
         <form class="form-inline" id="user-filters">
-          <div class="form-group">
+          <div class="form-group col-sm-3">
             <label for="status">Status</label>
             <select class="form-control" data-filterfor="status">
                 <option value="">All</option>
@@ -49,7 +51,7 @@
             </select>
           </div>
 
-          <div class="form-group">
+          <div class="form-group col-sm-3">
             <label for="role">Role</label>
             <select class="form-control" data-filterfor="role">
               <option value="">All</option>
@@ -69,7 +71,7 @@
             <input type="text" class="form-control" name="text_filter" data-filterfor="name"></input> 
           </div>
         </form>
-  
+        <p></p>
         <table class="table table-striped" id="registered_users">
           <thead>
             <th class="col-md-3">Name <span class="caret"></span></th>
@@ -123,17 +125,23 @@
       destination = $("table#registered_users tbody");
       destination.html(null);
       applyFilters();
-      $.each(visible_users, function(index, value) {
-        html = $('#registrant_template').html();
-        html = html.replace("{{name}}", value.name);
-        html = html.replace("{{role}}", value.role);
-        html = html.replace("{{registration_date}}", value.registered);
 
-        html = html.replace("{{confirmed}}", getStatusIcon(value.confirmed));
-        html = html.replace("{{in_aleph}}", getStatusIcon(value.linked_to_aleph));
+      if (0 < visible_users.length) {
+        $.each(visible_users, function(index, value) {
+          html = $('#registrant_template').html();
+          html = html.replace("{{name}}", value.name);
+          html = html.replace("{{role}}", value.role);
+          html = html.replace("{{registration_date}}", value.registered);
 
-        destination.append(html); 
-      });
+          html = html.replace("{{confirmed}}", getStatusIcon(value.confirmed));
+          html = html.replace("{{in_aleph}}", getStatusIcon(value.linked_to_aleph));
+
+          destination.append(html); 
+        });
+      } else {
+        html = $("#no_results_template").html();
+        destination.append(html);
+      }
     }
 
     function applyFilters() {
@@ -178,10 +186,10 @@
 
     function applyNameFilter() {
       filter = $("#user-filters *[data-filterfor=name]")[0];
-      filter = filter.value;
+      filter = filter.value.toLowerCase();
 
       if ("" != filter) {
-        visible_users = visible_users.filter(function(u) { return (u.name.indexOf(filter) >= 0); });
+        visible_users = visible_users.filter(function(u) { return (u.name.toLowerCase().indexOf(filter) >= 0); });
       }
 
       return visible_users;      
@@ -189,9 +197,9 @@
 
     function getStatusIcon(flag) {
       if (flag) {
-        return "<span class=\"glyphicon glyphicon-ok\"></span>"
+        return "<span class=\"fa fa-check-square-o\"></span>"
       } else {
-        return "<span>&nbsp;</span>"
+        return "<span class=\"fa fa-square-o\"></span>"
       }
     }
 
@@ -210,11 +218,17 @@
 
   <script id="registrant_template" type="text/template">
     <tr>
-      <td data-field="name">{{name}}</td>
+      <td data-field="name"><a href="patron-details.html">{{name}}</a></td>
       <td data-field="role">{{role}}</td>
       <td data-field="registration_date">{{registration_date}}</td>
       <td data-field="confirmed">{{confirmed}}</td>
       <td data-field="in_aleph">{{in_aleph}}</td>
+    </tr>
+  </script>
+  
+  <script id="no_results_template" type="text/template">
+    <tr>
+      <td><strong>No registrations found</strong></td>
     </tr>
   </script>
 </body>

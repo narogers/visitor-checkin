@@ -11,7 +11,7 @@
      <link href="../css/admin-overrides.css" rel="stylesheet">
   </head>
   <body>
-    <nav class="navbar">
+    <nav class="navbar navbar-default">
       <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" href="http://library.clevelandart.org">
@@ -19,10 +19,17 @@
           </a>
        </div>
        <!-- Since there are only three links run them across the top -->
-       <ul class="nav navbar-nav">
-         <li><a href="index.html">Home</a></li>
-         <li class="active"><a href="usage-home.html">Library usage</a></li>
-         <li><a href="pending-home.html">Pending registrations</a></li>
+        <ul class="nav navbar-nav">
+         <li class="active"><a href="home.html">Home</a></li>
+         <li class="dropdown">
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Registrations <span class="caret"></span></a>
+           <ul class="dropdown-menu">
+             <li><a href="registrations-home.html?status=completed">Archived</a></li>
+             <li><a href="registrations-home.html?status=pending">Pending</a></li>
+             <li><a href="registrations-home.html">View all</a></li>
+           </ul>
+         </li>
+         <li><a href="usage-home.html">Statistics</a></li>
        </ul>
   </nav>
   <div class="container">
@@ -34,12 +41,6 @@
     </div>
     <div class="row">
       <!-- Search bar and other tools -->
-      <div class="col-md-4">
-        <div class="input-group">
-          <input type="text" class="form-control" placeholder="Filter by">
-          <span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
-        </div>
-      </div>  
       <div class="col-md-4">
         <div class="dropdown">
           <button class="btn btn-default dropdown-toggle" type="button" id="date_range" data-toggle="dropdown" aria-expanded="true">
@@ -57,6 +58,7 @@
         </div>
       </div>
    </div>
+   <p></p>
    <div class="row">
 
       <!-- Begin the main page which just lists all checkins without any sort of pagination. If this

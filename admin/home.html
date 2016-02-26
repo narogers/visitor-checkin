@@ -27,11 +27,12 @@
          <li class="dropdown">
            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Registrations <span class="caret"></span></a>
            <ul class="dropdown-menu">
-             <li><a href="registrations-archived.html">Archived</a></li>
-             <li><a href="registrations-pending.html">Pending</a></li>
-             <li><a href="registrations-all.html">View all</a></li>
+             <li><a href="registrations-home.html?status=completed">Archived</a></li>
+             <li><a href="registrations-home.html?status=pending">Pending</a></li>
+             <li><a href="registrations-home.html">View all</a></li>
            </ul>
          </li>
+         <li><a href="usage-home.html">Statistics</a></li>
        </ul>
     </div>
   </nav>
@@ -41,14 +42,14 @@
         <h1>Visitor Checkin Administration</h1>
         <hr />
  
-          <h2><span class="glyphicon glyphicon-user"></span>&nbsp;<a href="registrations-index.html">Registrations</a></h2>
+          <h2><span class="glyphicon glyphicon-user"></span>&nbsp;<a href="registrations-home.html">Registrations</a></h2>
           <ul class="list-unstyled col-sm-offset-1">
             <li>
-              <span class="glyphicon glyphicon-folder-open"></span>&nbsp;<a href="registration-archived.html">Completed</a>
+              <span class="glyphicon glyphicon-folder-open"></span>&nbsp;<a href="registration-home.html?status=completed">Completed</a>
               <p>Registrations which have been successfully completed with a valid Aleph ID and signature</p>
             </li>
             <li>
-              <span class="glyphicon glyphicon-inbox"></span>&nbsp;<a href="registration-pending.html">Pending</a>
+              <span class="glyphicon glyphicon-inbox"></span>&nbsp;<a href="registration-home.html?status=pending">Pending</a>
               <p>Registrations which need to be verified and entered into Aleph</p>
             </li>
           </ul>
