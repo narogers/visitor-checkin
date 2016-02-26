@@ -1,0 +1,826 @@
+[
+  {
+    "name": "Jordan Frye",
+    "email": "jordanfrye@zanity.com",
+    "registered": "2015-09-20T03:22:35 +04:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Peters Reilly",
+    "email": "petersreilly@zanity.com",
+    "registered": "2014-12-10T10:41:10 +05:00",
+    "role": "Intern",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Lina Wilder",
+    "email": "linawilder@zanity.com",
+    "registered": "2014-12-23T08:28:34 +05:00",
+    "role": "Intern",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Gross Yates",
+    "email": "grossyates@zanity.com",
+    "registered": "2015-09-08T02:06:44 +04:00",
+    "role": "Member",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Concepcion Massey",
+    "email": "concepcionmassey@zanity.com",
+    "registered": "2014-04-22T10:31:05 +04:00",
+    "role": "Public",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Rollins Graham",
+    "email": "rollinsgraham@zanity.com",
+    "registered": "2014-10-02T12:55:09 +04:00",
+    "role": "Intern",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Coleen Oneill",
+    "email": "coleenoneill@zanity.com",
+    "registered": "2014-03-07T09:46:33 +05:00",
+    "role": "Docent",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Bradshaw Byers",
+    "email": "bradshawbyers@zanity.com",
+    "registered": "2014-02-28T09:38:19 +05:00",
+    "role": "Volunteer",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Diann Wright",
+    "email": "diannwright@zanity.com",
+    "registered": "2015-06-24T12:34:22 +04:00",
+    "role": "Public",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Sharron Richards",
+    "email": "sharronrichards@zanity.com",
+    "registered": "2016-02-16T05:31:38 +05:00",
+    "role": "Docent",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Christi Tran",
+    "email": "christitran@zanity.com",
+    "registered": "2015-09-11T07:50:00 +04:00",
+    "role": "Intern",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Hensley Dillon",
+    "email": "hensleydillon@zanity.com",
+    "registered": "2014-01-08T05:31:43 +05:00",
+    "role": "Volunteer",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Acosta Moss",
+    "email": "acostamoss@zanity.com",
+    "registered": "2015-06-07T01:42:04 +04:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Paula Daniel",
+    "email": "pauladaniel@zanity.com",
+    "registered": "2014-07-06T09:58:52 +04:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Kathie Christian",
+    "email": "kathiechristian@zanity.com",
+    "registered": "2014-04-01T09:48:19 +04:00",
+    "role": "Fellow",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Hobbs Reyes",
+    "email": "hobbsreyes@zanity.com",
+    "registered": "2014-09-26T10:30:10 +04:00",
+    "role": "Staff",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Amalia Walls",
+    "email": "amaliawalls@zanity.com",
+    "registered": "2014-04-15T02:24:48 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Mcmahon Spears",
+    "email": "mcmahonspears@zanity.com",
+    "registered": "2015-12-31T07:40:53 +05:00",
+    "role": "Staff",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Virginia Levine",
+    "email": "virginialevine@zanity.com",
+    "registered": "2014-04-22T07:24:27 +04:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Gallagher Mendez",
+    "email": "gallaghermendez@zanity.com",
+    "registered": "2014-01-18T01:53:21 +05:00",
+    "role": "Volunteer",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Ina Burns",
+    "email": "inaburns@zanity.com",
+    "registered": "2016-03-01T07:28:09 +05:00",
+    "role": "Staff",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Brooke Henderson",
+    "email": "brookehenderson@zanity.com",
+    "registered": "2015-08-10T05:04:48 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Terri Gonzalez",
+    "email": "terrigonzalez@zanity.com",
+    "registered": "2014-05-09T06:58:27 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Gould Shaw",
+    "email": "gouldshaw@zanity.com",
+    "registered": "2015-06-19T04:30:07 +04:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Clements Nielsen",
+    "email": "clementsnielsen@zanity.com",
+    "registered": "2015-12-13T02:25:47 +05:00",
+    "role": "Fellow",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Sophie Walters",
+    "email": "sophiewalters@zanity.com",
+    "registered": "2015-06-23T02:01:19 +04:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Carmela Slater",
+    "email": "carmelaslater@zanity.com",
+    "registered": "2016-01-25T12:50:30 +05:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Jodie Salinas",
+    "email": "jodiesalinas@zanity.com",
+    "registered": "2014-05-20T05:39:21 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Cantu Carter",
+    "email": "cantucarter@zanity.com",
+    "registered": "2014-03-31T04:31:18 +04:00",
+    "role": "Member",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Young Thornton",
+    "email": "youngthornton@zanity.com",
+    "registered": "2015-09-08T06:38:00 +04:00",
+    "role": "Fellow",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Rios Kline",
+    "email": "rioskline@zanity.com",
+    "registered": "2014-10-27T11:50:06 +04:00",
+    "role": "Academic",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Madeline Rhodes",
+    "email": "madelinerhodes@zanity.com",
+    "registered": "2015-06-20T06:37:14 +04:00",
+    "role": "Docent",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Bolton Mckee",
+    "email": "boltonmckee@zanity.com",
+    "registered": "2014-02-19T09:49:19 +05:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Warner Scott",
+    "email": "warnerscott@zanity.com",
+    "registered": "2015-08-24T09:11:32 +04:00",
+    "role": "Public",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Jo Galloway",
+    "email": "jogalloway@zanity.com",
+    "registered": "2015-03-14T06:31:14 +04:00",
+    "role": "Intern",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Leticia Valencia",
+    "email": "leticiavalencia@zanity.com",
+    "registered": "2015-04-01T04:50:22 +04:00",
+    "role": "Intern",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Cecile Haley",
+    "email": "cecilehaley@zanity.com",
+    "registered": "2014-05-07T07:55:27 +04:00",
+    "role": "Public",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Bowman Holt",
+    "email": "bowmanholt@zanity.com",
+    "registered": "2014-03-17T10:11:33 +04:00",
+    "role": "Docent",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Chapman Baird",
+    "email": "chapmanbaird@zanity.com",
+    "registered": "2014-01-25T06:36:39 +05:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Donaldson Melton",
+    "email": "donaldsonmelton@zanity.com",
+    "registered": "2014-12-09T11:01:15 +05:00",
+    "role": "Volunteer",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Elaine Cain",
+    "email": "elainecain@zanity.com",
+    "registered": "2014-01-26T07:36:28 +05:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Patel Sweeney",
+    "email": "patelsweeney@zanity.com",
+    "registered": "2014-02-03T10:02:47 +05:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Kirby Ochoa",
+    "email": "kirbyochoa@zanity.com",
+    "registered": "2015-04-01T03:35:19 +04:00",
+    "role": "Docent",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Montgomery Mclaughlin",
+    "email": "montgomerymclaughlin@zanity.com",
+    "registered": "2015-08-23T07:13:25 +04:00",
+    "role": "Member",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Woodard Schmidt",
+    "email": "woodardschmidt@zanity.com",
+    "registered": "2015-11-03T02:50:35 +05:00",
+    "role": "Intern",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Noemi Cameron",
+    "email": "noemicameron@zanity.com",
+    "registered": "2014-08-13T06:59:43 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Walton Perry",
+    "email": "waltonperry@zanity.com",
+    "registered": "2014-03-17T06:23:36 +04:00",
+    "role": "Member",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Benson Bass",
+    "email": "bensonbass@zanity.com",
+    "registered": "2014-03-07T09:05:21 +05:00",
+    "role": "Academic",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Thompson Curtis",
+    "email": "thompsoncurtis@zanity.com",
+    "registered": "2015-04-18T02:22:02 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Clark Caldwell",
+    "email": "clarkcaldwell@zanity.com",
+    "registered": "2014-02-16T10:36:55 +05:00",
+    "role": "Member",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Liza Alvarez",
+    "email": "lizaalvarez@zanity.com",
+    "registered": "2015-04-25T04:56:07 +04:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Ollie Kerr",
+    "email": "olliekerr@zanity.com",
+    "registered": "2014-07-02T01:42:38 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Benita Warren",
+    "email": "benitawarren@zanity.com",
+    "registered": "2014-04-01T07:34:50 +04:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Bates Dawson",
+    "email": "batesdawson@zanity.com",
+    "registered": "2014-06-04T08:01:29 +04:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Dillon Hewitt",
+    "email": "dillonhewitt@zanity.com",
+    "registered": "2014-03-20T11:42:29 +04:00",
+    "role": "Member",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Valencia Rowland",
+    "email": "valenciarowland@zanity.com",
+    "registered": "2014-08-31T05:09:14 +04:00",
+    "role": "Docent",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Cross Terrell",
+    "email": "crossterrell@zanity.com",
+    "registered": "2015-12-09T06:44:13 +05:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Fuller Mcleod",
+    "email": "fullermcleod@zanity.com",
+    "registered": "2016-02-06T12:15:19 +05:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Ingram Haney",
+    "email": "ingramhaney@zanity.com",
+    "registered": "2014-10-15T04:19:36 +04:00",
+    "role": "Docent",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Lily Barnes",
+    "email": "lilybarnes@zanity.com",
+    "registered": "2014-06-23T01:18:39 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Massey Stevens",
+    "email": "masseystevens@zanity.com",
+    "registered": "2014-05-10T05:26:12 +04:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Baker Knapp",
+    "email": "bakerknapp@zanity.com",
+    "registered": "2015-11-16T06:46:37 +05:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Ila Castaneda",
+    "email": "ilacastaneda@zanity.com",
+    "registered": "2014-04-22T12:05:44 +04:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Oliver Carrillo",
+    "email": "olivercarrillo@zanity.com",
+    "registered": "2015-03-05T10:51:05 +05:00",
+    "role": "Docent",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Dodson Herman",
+    "email": "dodsonherman@zanity.com",
+    "registered": "2015-04-08T06:28:07 +04:00",
+    "role": "Docent",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Angelique Harris",
+    "email": "angeliqueharris@zanity.com",
+    "registered": "2015-07-24T06:36:57 +04:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Leach Carpenter",
+    "email": "leachcarpenter@zanity.com",
+    "registered": "2014-04-23T12:08:29 +04:00",
+    "role": "Member",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Hines Wheeler",
+    "email": "hineswheeler@zanity.com",
+    "registered": "2014-02-05T08:37:25 +05:00",
+    "role": "Fellow",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Hilary Day",
+    "email": "hilaryday@zanity.com",
+    "registered": "2015-10-29T06:25:23 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Jacqueline Watson",
+    "email": "jacquelinewatson@zanity.com",
+    "registered": "2015-12-17T01:43:28 +05:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Holly Howell",
+    "email": "hollyhowell@zanity.com",
+    "registered": "2014-11-19T01:49:54 +05:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Pollard Hays",
+    "email": "pollardhays@zanity.com",
+    "registered": "2015-06-13T08:09:32 +04:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Brittney Cooke",
+    "email": "brittneycooke@zanity.com",
+    "registered": "2015-09-09T01:49:29 +04:00",
+    "role": "Academic",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Rene Farmer",
+    "email": "renefarmer@zanity.com",
+    "registered": "2015-04-28T05:24:53 +04:00",
+    "role": "Public",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Corrine Weaver",
+    "email": "corrineweaver@zanity.com",
+    "registered": "2014-01-08T12:41:41 +05:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Holland Spencer",
+    "email": "hollandspencer@zanity.com",
+    "registered": "2014-09-24T04:02:09 +04:00",
+    "role": "Member",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Marva Burton",
+    "email": "marvaburton@zanity.com",
+    "registered": "2014-07-26T04:37:16 +04:00",
+    "role": "Docent",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Orr Baker",
+    "email": "orrbaker@zanity.com",
+    "registered": "2014-06-12T09:56:19 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Heath Weeks",
+    "email": "heathweeks@zanity.com",
+    "registered": "2015-08-24T11:35:50 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Gardner Camacho",
+    "email": "gardnercamacho@zanity.com",
+    "registered": "2015-10-21T01:11:29 +04:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Ramsey Frederick",
+    "email": "ramseyfrederick@zanity.com",
+    "registered": "2014-05-25T04:41:18 +04:00",
+    "role": "Public",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Vasquez Price",
+    "email": "vasquezprice@zanity.com",
+    "registered": "2014-07-30T05:37:03 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Hardin Weber",
+    "email": "hardinweber@zanity.com",
+    "registered": "2015-10-07T04:15:22 +04:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Johanna Jackson",
+    "email": "johannajackson@zanity.com",
+    "registered": "2014-05-01T08:54:08 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Potter Dickerson",
+    "email": "potterdickerson@zanity.com",
+    "registered": "2014-08-23T05:39:42 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Griffith Burgess",
+    "email": "griffithburgess@zanity.com",
+    "registered": "2014-02-25T01:29:26 +05:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Lilian Carlson",
+    "email": "liliancarlson@zanity.com",
+    "registered": "2015-10-05T07:21:17 +04:00",
+    "role": "Fellow",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Yolanda Powell",
+    "email": "yolandapowell@zanity.com",
+    "registered": "2015-02-07T07:05:12 +05:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Schwartz Zamora",
+    "email": "schwartzzamora@zanity.com",
+    "registered": "2015-10-24T07:12:38 +04:00",
+    "role": "Member",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Josefina Maxwell",
+    "email": "josefinamaxwell@zanity.com",
+    "registered": "2015-08-10T03:48:55 +04:00",
+    "role": "Public",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Holden Lester",
+    "email": "holdenlester@zanity.com",
+    "registered": "2015-02-14T07:49:57 +05:00",
+    "role": "Academic",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Randi Carr",
+    "email": "randicarr@zanity.com",
+    "registered": "2014-02-05T04:55:01 +05:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Larsen Leblanc",
+    "email": "larsenleblanc@zanity.com",
+    "registered": "2016-02-06T08:03:49 +05:00",
+    "role": "Academic",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Noel Guerra",
+    "email": "noelguerra@zanity.com",
+    "registered": "2015-10-06T11:34:21 +04:00",
+    "role": "Docent",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Reynolds Butler",
+    "email": "reynoldsbutler@zanity.com",
+    "registered": "2015-02-23T08:30:32 +05:00",
+    "role": "Member",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Erika Shelton",
+    "email": "erikashelton@zanity.com",
+    "registered": "2014-09-03T04:44:10 +04:00",
+    "role": "Fellow",
+    "confirmed_id": false,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "Savannah Wade",
+    "email": "savannahwade@zanity.com",
+    "registered": "2015-04-06T06:51:27 +04:00",
+    "role": "Volunteer",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Acevedo Villarreal",
+    "email": "acevedovillarreal@zanity.com",
+    "registered": "2014-01-14T05:09:20 +05:00",
+    "role": "Fellow",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Kim Pacheco",
+    "email": "kimpacheco@zanity.com",
+    "registered": "2014-02-12T10:34:44 +05:00",
+    "role": "Staff",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  },
+  {
+    "name": "English Jarvis",
+    "email": "englishjarvis@zanity.com",
+    "registered": "2015-12-14T03:31:54 +05:00",
+    "role": "Member",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Best Torres",
+    "email": "besttorres@zanity.com",
+    "registered": "2015-10-30T01:11:27 +04:00",
+    "role": "Academic",
+    "confirmed_id": true,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Myra Gutierrez",
+    "email": "myragutierrez@zanity.com",
+    "registered": "2015-03-15T03:14:28 +04:00",
+    "role": "Academic",
+    "confirmed_id": false,
+    "linked_to_aleph": true
+  },
+  {
+    "name": "Coffey Gilbert",
+    "email": "coffeygilbert@zanity.com",
+    "registered": "2014-11-05T05:48:43 +05:00",
+    "role": "Docent",
+    "confirmed_id": true,
+    "linked_to_aleph": false
+  }
+]
