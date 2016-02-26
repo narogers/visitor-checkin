@@ -39,11 +39,11 @@
     <div class="row">
       <div class="col-md-12">
         <h1>Registrations</h1>
-        <form class="form-inline">
+        <form class="form-inline" id="user-filters">
           <div class="form-group">
             <label for="status">Status</label>
-            <select class="form-control">
-                <option>All</option>
+            <select class="form-control" data-filterfor="status">
+                <option value="">All</option>
                 <option>Completed</option>
                 <option>Pending</option>
             </select>
@@ -51,8 +51,8 @@
 
           <div class="form-group">
             <label for="role">Role</label>
-            <select class="form-control">
-              <option>All</option>
+            <select class="form-control" data-filterfor="role">
+              <option value="">All</option>
               <option>Academic</option>
               <option>Docent</option>
               <option>Fellow</option>
@@ -66,7 +66,7 @@
 
           <div class="form-group pull-right">
             <label for="text_filter">Filter by</label>
-            <input type="text" class="form-control" name="text_filter"></input> 
+            <input type="text" class="form-control" name="text_filter" data-filterfor="name"></input> 
           </div>
         </form>
   
@@ -87,17 +87,22 @@
   
   <script type="text/javascript">
     $(document).ready(function() {
+       registerFormListeners("#user-filters");
        loadRegistrants();
     });
 
-    var json = null;
+    /**
+     * Since there are so few users just load them all even if you only
+     * want to view a subset
+     */
+    var users = null;
+    var visible_users = users;
 
     function loadRegistrants() {
       $.ajax({
         url: "../js/registrants.json",
-        success: function(json) { renderRegistrants(json) },
+        success: function(json) { saveAndRenderRegistrants(json) },
         error: function(xhr, status, errorThrown) {
-          alert("Whoops! Check your console for more information");
           console.log("Error : " + errorThrown);
           console.log("Status : " + status);
           console.dir(xhr);
@@ -105,39 +110,111 @@
       });
     }
 
-    function renderRegistrants(source) {
-      json = source;
+    function saveAndRenderRegistrants(source) {
+      saveRegistrants(source);
+      renderRegistrants(); 
+    }
 
+    function saveRegistrants(source) {
+      users = source;
+    }
+
+    function renderRegistrants() {
       destination = $("table#registered_users tbody");
-      $.each(source, function(index, value) {
+      destination.html(null);
+      applyFilters();
+      $.each(visible_users, function(index, value) {
         html = $('#registrant_template').html();
         html = html.replace("{{name}}", value.name);
         html = html.replace("{{role}}", value.role);
         html = html.replace("{{registration_date}}", value.registered);
 
-        html = html.replace("{{confirmed}}", icon_for(value.confirmed_id));
-        html = html.replace("{{in_aleph}}", icon_for(value.linked_to_aleph));
+        html = html.replace("{{confirmed}}", getStatusIcon(value.confirmed));
+        html = html.replace("{{in_aleph}}", getStatusIcon(value.linked_to_aleph));
 
         destination.append(html); 
       });
     }
 
-    function icon_for(flag) {
+    function applyFilters() {
+      visible_users = users;
+      applyStatusFilter();
+      applyRoleFilter();
+      applyNameFilter(); 
+    }
+
+    function applyStatusFilter() {
+      dropdown_state = $("#user-filters *[data-filterfor=status]")[0];
+      switch (dropdown_state.value) {
+        case "Completed":
+          visible_users = visible_users.filter(function(u) { return (u.confirmed && u.linked_to_aleph) });
+          break;
+        case "Pending":
+          visible_users = visible_users.filter(function(u) {
+            /* Simulate an NAND operation */
+            console.log("Confirmed : " + u.confirmed);
+            console.log("Linked to Aleph : " + u.linked_in_aleph);
+            console.log("NAND Result : " + !(u.confirmed && u.linked_to_aleph));
+            return !(u.confirmed && u.linked_to_aleph); 
+          });
+          break;
+        default:
+          /* No OP */
+      }
+     
+      return visible_users; 
+    }
+
+    function applyRoleFilter() {
+      dropdown_state = $("#user-filters *[data-filterfor=role]")[0];
+      if ("" != dropdown_state.value) {
+        visible_users = visible_users.filter(function(u) { return u.role == dropdown_state.value });
+      } else {
+        /* No OP */
+      }
+
+      return visible_users;
+    }
+
+    function applyNameFilter() {
+      filter = $("#user-filters *[data-filterfor=name]")[0];
+      filter = filter.value;
+
+      if ("" != filter) {
+        visible_users = visible_users.filter(function(u) { return (u.name.indexOf(filter) >= 0); });
+      }
+
+      return visible_users;      
+    }
+
+    function getStatusIcon(flag) {
       if (flag) {
         return "<span class=\"glyphicon glyphicon-ok\"></span>"
       } else {
         return "<span>&nbsp;</span>"
       }
     }
+
+    function registerFormListeners(element) {
+      form = $(element);
+      form.find("select").change(function() {
+        applyFilters();
+        renderRegistrants();
+      });
+      form.find("input[type='text']").keyup(function() {
+        applyFilters();
+        renderRegistrants();
+      });
+    }
   </script>
 
   <script id="registrant_template" type="text/template">
     <tr>
-      <td>{{name}}</td>
-      <td>{{role}}</td>
-      <td>{{registration_date}}</td>
-      <td>{{confirmed}}</td>
-      <td>{{in_aleph}}</td>
+      <td data-field="name">{{name}}</td>
+      <td data-field="role">{{role}}</td>
+      <td data-field="registration_date">{{registration_date}}</td>
+      <td data-field="confirmed">{{confirmed}}</td>
+      <td data-field="in_aleph">{{in_aleph}}</td>
     </tr>
   </script>
 </body>
