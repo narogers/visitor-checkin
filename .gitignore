@@ -4,10 +4,10 @@
 
 # Project management
 composer.phar
-composer.lock
 
 # Laravel specific exclusions
 /bootstrap/compiled.php
+/bootstrap/cache
 /vendor
 /node_modules
 .env
