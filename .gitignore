@@ -4,11 +4,13 @@
 
 # Project management
 composer.phar
+.bowerrc
 
 # Laravel specific exclusions
 /bootstrap/compiled.php
 /bootstrap/cache
 /vendor
+/resources/assets/vendor
 /node_modules
 .env
 .htaccess
