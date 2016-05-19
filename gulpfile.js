@@ -21,5 +21,5 @@ elixir(function(mix) {
       .scripts([
         paths.jquery + "dist/jquery.js",
         paths.bootstrap + "javascripts/bootstrap.js"
-      ], "./", "public/js/app.js");
+      ], "public/js", "public/js/app.js");
 });
