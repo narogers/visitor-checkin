@@ -1,0 +1,14 @@
+/**
+ * Global overrides for default Bootstrap displays
+ */
+@import "variables";
+
+/**
+ * Hide underlining for anchor tag across all states
+ */
+a,
+a:hover,
+a:visited,
+a:focus {
+  text-decoration: none;
+}
