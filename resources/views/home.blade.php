@@ -5,16 +5,16 @@
               <a href="{{ URL::action('CheckinController@getIndex') }}">
                 <figure>
                   <img src="images/1991.163.jpg" alt="Returning visitors" class="img-responsive">
+                  <figcaption class="h2 caption">Returning visitors</figcaption>
                 </figure>
-                <h2 class="caption">Returning visitors</h2>
               </a>
             </div>
         <div class="col-sm-6">
  	      <a href="{{ action('RegistrationController@getIndex') }}">
               <figure>
                 <img src="images/1915.534.jpg" alt="New visitors" class="img-responsive">
+                <figcaption class="h2 caption">New visitors</figcaption>
               </figure>
               </a>
-              <h2 class="caption"><a href="{{ action('RegistrationController@getIndex') }}">New visitors</a></h2>
             </div>
 @stop
