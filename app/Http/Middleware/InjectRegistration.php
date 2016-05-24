@@ -23,7 +23,7 @@ class InjectRegistration {
 			$registration = new Registration;
 		}
 		
-		return $next($request)->withRegistration($registration);
+		return $next($request);
 	}
 
 }
