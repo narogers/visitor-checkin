@@ -12,3 +12,11 @@ a:visited,
 a:focus {
   text-decoration: none;
 }
+
+/**
+ * Emphasize signature panel
+ */
+#signature {
+  border: 1px dashed $gray;
+  margin-bottom: $line-height-computed
+}

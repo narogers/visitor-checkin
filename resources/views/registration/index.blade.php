@@ -24,8 +24,7 @@
           </div>
           @endif
 
-          {!! Form::model($registration,
-                ["action" => "RegistrationController@postNew"]) !!}
+          {!! Form::open(["action" => "RegistrationController@postNew"]) !!}
             <div class="form-group">
               {!! Form::label('name') !!}
               {!! Form::text('name', null, ['class' => 'form-control']) !!}

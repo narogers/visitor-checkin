@@ -26,7 +26,6 @@
     </div>
   </body>
   
-  {!! HTML::script('js/jquery-2.1.3.js') !!}
-  {!! HTML::script('js/bootstrap.min.js') !!}
+  {!! HTML::script('js/application.js') !!}
   @yield('scripts')
 </html>

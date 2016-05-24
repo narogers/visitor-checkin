@@ -11,11 +11,6 @@
                 ['id' => 'signature_data']) !!}
           <div class="row">
             <div class="col-sm-4">
-              {!! Form::submit('&laquo; Go back', 
-                ['class' => 'btn btn-primary btn-lg pull-left',
-                 'name' => 'previous_step']) !!}
-            </div>
-            <div class="col-sm-1 col-sm-offset-1">
                {!! Form::button('Clear',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'reset_signature',
@@ -34,7 +29,7 @@
   <!-- Fire up the signature panel and inject it into the page. We don't
        need to rely on FlashCanvas because we do not care about browsers
       such as Internet Explorer 7 and 8 for this use case -->
-  {!! HTML::script('js/jSignature.min.js') !!}
+  {!! HTML::script('js/signature.js') !!}
   <script>
     $(function() {
       $('#signature').jSignature();

@@ -12,14 +12,19 @@ var elixir = require('laravel-elixir');
  */
 var paths = {
   'bootstrap': './resources/assets/vendor/bootstrap-sass/assets/',
-  'jquery': './resources/assets/vendor/jquery/'
+  'jquery': './resources/assets/vendor/jquery/',
+  'jSignature': './resources/assets/vendor/jSignature/libs/'
 }
 
 elixir(function(mix) {
-    mix.sass('app.scss', 'public/css/', {includePaths: [paths.bootstrap + 'stylesheets/']})
+    mix.sass("app.scss")
       .copy(paths.bootstrap + 'fonts/bootstrap/**', 'public/fonts')
       .scripts([
         paths.jquery + "dist/jquery.js",
         paths.bootstrap + "javascripts/bootstrap.js"
-      ], "public/js", "public/js/app.js");
+      ], "public/js/application.js")
+      .scripts([
+        paths.jSignature + "modernizr.js",
+        paths.jSignature + "jSignature.min.js"
+      ], "public/js/signature.js");
 });

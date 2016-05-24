@@ -50,6 +50,18 @@ class User extends Model {
 		return $qry;
 	}
 
+    /**
+     * Masks the email address for privacy when listing multiple values
+     *
+     * eg foo@bar.com would become f**@b**m
+     */
+   public function masked_email() {
+     $email_components = split("@", $this->email_address);
+     // 0: account
+     // 1: domain
+     // Pick up here
+   }
+
   /**
    * Create an Aleph instance that can be shared across the model rather than
    * having to instantiate it every time. May need to add some checks that throw

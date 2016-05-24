@@ -19,12 +19,6 @@ class RegistrationController extends Controller {
 	 * Instantiate a new RegistrationController
 	 */
 	public function __construct() {
-		$this->middleware('navigation.back',
-			['except' => '']);
-		$this->middleware('session.registration',
-			['except' => '']);
-		// Eventually make an exception for the confirmation page at
-		// the end of the workflow
 	}
 
 	/**

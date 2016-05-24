@@ -5,7 +5,7 @@
     ['class' => 'form-inline']) !!}
 	    <span class="glyphicon glyphicon-user"></span>
 	    {{ $user->name }}
-	    (<em>{{ $user->email_address }} </em>)
+	    (<em>{{ $user->masked_email }} </em>)
 
       {!! Form::hidden('query', $user->name) !!}
       {!! Form::submit('Check in now',

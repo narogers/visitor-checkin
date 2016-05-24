@@ -1,4 +1,5 @@
-@import "resources/assets/vendor/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../vendor/bootstrap-sass/assets/stylesheets/bootstrap";
 
-@import "resources/assets/sass/variables";
-@import "resources/assets/sass/headers";
+@import "variables";
+@import "overrides";
+@import "headers";
