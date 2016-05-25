@@ -6,7 +6,7 @@
 	    {{ $user->name }}
 	    (<em>{{ $user->masked_email() }} </em>)
 
-      {!! Form::hidden('query', $user->name) !!}
+      {!! Form::hidden('query', $user->email_address) !!}
     </div>
     <div class="col-sm-1 double-padded">
       {!! Form::submit('Check in',

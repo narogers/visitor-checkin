@@ -7915,6 +7915,10 @@ a:visited,
 a:focus {
   text-decoration: none; }
 
+.btn:hover {
+  background: #8cb8df;
+  color: white; }
+
 .double-padded {
   margin-top: 10px;
   margin-bottom: 10px; }

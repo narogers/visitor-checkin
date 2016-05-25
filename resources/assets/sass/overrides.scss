@@ -13,6 +13,11 @@ a:focus {
   text-decoration: none;
 }
 
+.btn:hover {
+  background: lighten($brand-primary, 25%);
+  color: rgb(255, 255, 255);
+}
+
 .double-padded {
   margin-top: ($line-height-computed / 2);
   margin-bottom: ($line-height-computed / 2);

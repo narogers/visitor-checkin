@@ -7,16 +7,11 @@
           </figure>
         </div>
         <div class="col-sm-8">
-          <h2>New Visitor Registration</h2>
+          <h2>Registration Complete</h2>
 
           <p>Your registration has been saved. Please have identification ready when
               you visit Ingalls Library.</p>
-          <span class="btn btn-primary">
-            <a href="{{ URL::action('HomeController@index') }}">Reset application</a>
-          </span>
-
-          <hr>
-          <dl>
+         <dl class="dl-horizontal">
             <dt>Name</dt>
             <dd>{{ $user->name }}</dd>
           
@@ -26,6 +21,9 @@
             <dt>Visitor Type</dt>
             <dd>{{ $user->role->role }}</dd>
           </dl>
+         <span class="btn btn-default btn-lg">
+            <a href="{{ URL::action('HomeController@index') }}">Return to home</a>
+          </span>
 @stop
 
 @section('scripts')

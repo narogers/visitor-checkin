@@ -21,7 +21,7 @@
                   {!! Form::text('query', null, ['class' => 'form-control col-sm-6', 'placeholder' => 'Name or email address']) !!}
               </div>
               <div class="form-group col-sm-1 double-padded">
-                  <input type="submit" class="btn btn-primary" value="Retry check in">
+                  <input type="submit" class="btn btn-primary" value="Check in">
               </div>
               {!! Form::close() !!}
           </div>
