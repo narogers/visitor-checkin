@@ -13,8 +13,9 @@ a:focus {
   text-decoration: none;
 }
 
-.list-padded {
-  padding-bottom: $line-height-computed;
+.double-padded {
+  margin-top: ($line-height-computed / 2);
+  margin-bottom: ($line-height-computed / 2);
 }
 
 /**
@@ -22,7 +23,6 @@ a:focus {
  */
 #signature {
   border: 1px dashed $gray;
-  margin-bottom: $line-height-computed
 }
 
 /**
@@ -35,4 +35,11 @@ a:focus {
 
 .completed-step {
   color: $brand-success;
+}
+
+/**
+ * Add a modular class to strip away borders
+ */
+.noborder {
+  border: 0;
 }

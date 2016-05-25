@@ -1,16 +1,16 @@
-<ul class="list-unstyled">
 @foreach ($users as $user)
-  <li class="list-padded">
   {!! Form::open(['action' => 'CheckinController@postNew'],
     ['class' => 'form-inline']) !!}
+    <div class="col-sm-6 double-padded">
 	    <span class="fa fa-user"></span>
 	    {{ $user->name }}
 	    (<em>{{ $user->masked_email() }} </em>)
 
       {!! Form::hidden('query', $user->name) !!}
-      {!! Form::submit('Check in now',
+    </div>
+    <div class="col-sm-1 double-padded">
+      {!! Form::submit('Check in',
     	  ['class' => 'btn btn-small']) !!}
   {!! Form::close() !!}
-  </li>  
+    </div>
 @endforeach
-</ul>

@@ -7915,15 +7915,15 @@ a:visited,
 a:focus {
   text-decoration: none; }
 
-.list-padded {
-  padding-bottom: 20px; }
+.double-padded {
+  margin-top: 10px;
+  margin-bottom: 10px; }
 
 /**
  * Emphasize signature panel
  */
 #signature {
-  border: 1px dashed #555555;
-  margin-bottom: 20px; }
+  border: 1px dashed #555555; }
 
 /**
  * Highlight steps which are completed by marking them green. Use red for
@@ -7934,6 +7934,12 @@ a:focus {
 
 .completed-step {
   color: #5cb85c; }
+
+/**
+ * Add a modular class to strip away borders
+ */
+.noborder {
+  border: 0; }
 
 body {
   padding-top: 80px; }

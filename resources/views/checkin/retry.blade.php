@@ -16,11 +16,11 @@
             @endif
 
               {!! Form::open(['action' => 'CheckinController@postNew']) !!}
-              <div class="form-group col-sm-6">
+              <div class="form-group col-sm-6 double-padded">
                   {!! Form::label('query', null, ['class' => 'sr-only']) !!}
-                  {!! Form::text('query', null, ['class' => 'form-control col-md-6', 'placeholder' => 'Name or email address']) !!}
+                  {!! Form::text('query', null, ['class' => 'form-control col-sm-6', 'placeholder' => 'Name or email address']) !!}
               </div>
-              <div class="form-group">
+              <div class="form-group col-sm-1 double-padded">
                   <input type="submit" class="btn btn-primary" value="Retry check in">
               </div>
               {!! Form::close() !!}

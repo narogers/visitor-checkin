@@ -12,6 +12,6 @@ return[
 
 	// These messages are used when there are exactly two matches
 	'multiplefound.title' => 'Multiple registrations found',
-	'multiplefound.message' => 'More than one registration was found. Pick one to continue or scan your badge to compete checkin.'
+	'multiplefound.message' => 'Select your registration below. If you do not see yourself ask the circulation desk for assistance.'
 ];
 ?>
