@@ -1,4 +1,5 @@
 GEM
+  remote: https://rubygems.org/
   specs:
     capistrano (3.4.0)
       i18n
@@ -32,3 +33,6 @@ DEPENDENCIES
   capistrano-composer
   capistrano-laravel
   highline
+
+BUNDLED WITH
+   1.11.2

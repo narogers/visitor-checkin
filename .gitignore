@@ -5,6 +5,7 @@
 # Project management
 composer.phar
 .bowerrc
+.bundle/
 
 # Laravel specific exclusions
 /bootstrap/compiled.php
