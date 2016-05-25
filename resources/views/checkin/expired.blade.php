@@ -34,7 +34,7 @@
   <!-- Fire up the signature panel and inject it into the page. We don't
        need to rely on FlashCanvas because we do not care about browsers
       such as Internet Explorer 7 and 8 for this use case -->
-  {!! HTML::script('js/jSignature.min.js') !!}
+  {!! HTML::script('js/signature.js') !!}
   <script>
     $(function() {
       $('#signature').jSignature();

@@ -20,7 +20,7 @@
 
           @if (Session::has('notice')) 
           <div class="alert alert-danger">
-          <span class="glyphicn glyphicon-info-sign"></span> {{ Session::get('notice') }}
+          <span class="fa fa-exclamation-circle"></span> {{ Session::get('notice') }}
           </div>
           @endif
 

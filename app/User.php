@@ -53,13 +53,16 @@ class User extends Model {
     /**
      * Masks the email address for privacy when listing multiple values
      *
-     * eg foo@bar.com would become f**@b**m
+     * eg foo@bar.com would become f*****@cl*****.org
      */
    public function masked_email() {
-     $email_components = split("@", $this->email_address);
-     // 0: account
-     // 1: domain
-     // Pick up here
+     list($account, $domain) = explode("@", $this->email_address);
+     $account_mask = substr($account, 0, 2) . str_repeat("*", 5);
+     $domain_components = explode(".", $domain);
+     $domain_mask = substr($domain_components[0], 0, 2) . str_repeat("*", 5);
+     $tld = array_pop($domain_components);
+
+     return "${account_mask}@${domain_mask}.${tld}";
    }
 
   /**

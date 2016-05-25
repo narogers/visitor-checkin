@@ -29,14 +29,6 @@
               <td>{!! link_to_action('AdminRegistrationController@getRegistration',
                 $user->name, 
                 ['user' => $user]) !!}
-                <p class="pending-step">
-  {!! Form::open(
-      ['action' => ['AdminRegistrationController@postRegistration', $user],
-       'class' => 'form-inline']) !!}
-    {!! Form::hidden('event', 'hide_registration') !!}
-    {!! Form::submit('Hide registration', ['class' => 'btn btn-primary']) !!}
-  {!! Form::close() !!}
-</p>
               <td>{!! $user->email_address !!}</td>
               <td>{!! $user->formattedCreationDate() !!}</td>
               <td>

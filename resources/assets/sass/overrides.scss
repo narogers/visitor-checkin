@@ -13,10 +13,26 @@ a:focus {
   text-decoration: none;
 }
 
+.list-padded {
+  padding-bottom: $line-height-computed;
+}
+
 /**
  * Emphasize signature panel
  */
 #signature {
   border: 1px dashed $gray;
   margin-bottom: $line-height-computed
+}
+
+/**
+ * Highlight steps which are completed by marking them green. Use red for
+ * pending workflow steps
+ */
+.pending-step {
+  color: $btn-danger-color;
+}
+
+.completed-step {
+  color: $btn-success-color;
 }

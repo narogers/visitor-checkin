@@ -202,4 +202,13 @@ return [
 
 	],
 
+    /**
+     * Customizations for Visitor Checkin specifically
+     */
+
+   /**
+    * Number of matches to display before you consider a search too generic
+    * and return "Too many results found"
+    */
+  "match_threshold" => 5
 ];

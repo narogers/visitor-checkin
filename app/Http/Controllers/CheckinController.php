@@ -88,40 +88,31 @@ class CheckinController extends Controller {
 		$user = null;
 		$query_string = $request->input('query');
     
-    Log::info('[CHECKIN] Looking up users that match the string ' . $query_string);		
+        Log::info("[CHECKIN] Looking up users for query ${query_string}");		
 		$user_matches = User::registeredUsers($query_string);
+        Log::info("[CHECKIN] " . $user_matches->count() . " matches found");
 
-		switch ($user_matches->count()) {
-			case 0:
-				Log::info("[CHECKIN] No results found");
-				$message_key = "checkin.notfound";
-				$view = "checkin.retry";
-				break;
-			case 1:
-				Log::info("[CHECKIN] Exact match found");
-			  $user = $user_matches->first();			  
-			  $is_active = $user->isActive();
-			  list($view, $message_key) = $this->getView($is_active);
-			  if ($is_active) {
-				  $user->addCheckin();
-			  }
-				break;
-			case 2:
-            case 3:
-            case 4:
-				Log::info("[CHECKIN] Two matches found");
-				$message_key = "checkin.multiplefound";
-				$view = "checkin.retry";
-				$user = $user_matches->get();
-				break;
-			default:
-				Log::info("[CHECKIN] Too many matches found");
-				$message_key = "checkin.notfound";
-				$view = "checkin.retry";
+        /**
+         * Default to Not Found then try to determine if any other cases
+         * apply
+         */
+        $message_key = 'checkin.notfound';
+        $view = 'checkin.retry';
+
+        if (1 == $user_matches->count()) {
+          $user = $user_matches->first();
+          $is_active = $user->isActive();
+           list($view, $message_key) = $this->getView($is_active);
+          if ($is_active) {
+            $user->addCheckin();
+          }         
+        } elseif (0 == $user_matches->count()) {
+          $message_key = "checkin.notfound";
+        } elseif ($user_matches->count() < Config('app.match_threshold')) {
+		  $message_key = "checkin.multiplefound";
+		  $user = $user_matches->get();
 		}
-		// TODO: Come up with a way to only set the user if the view was
-		//  		 a success. Otherwise omit the parameter instead of 
-		//			 setting a null placeholder
+
 		return view($view)
 			->withMessageKey($message_key)
 			->withUser($user);
