@@ -1,0 +1,12 @@
+{
+  "name": "ingalls-checkin",
+  "description": "Check in system for visitors to Ingalls Library and Archives",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass": "~3.3.6",
+    "bootstrap-select": "~1.10.0",
+    "font-awesome": "~4.6.3",
+    "jSignature": "~2.0.0"
+  }
+}

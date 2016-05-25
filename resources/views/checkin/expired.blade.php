@@ -5,7 +5,7 @@
         @include('shared/_terms_of_use')
 
         {!! Form::open(['action' => 'RegistrationController@postWelcome']) !!}
-          <div id="signature"></div>
+          <div id="signature" class="double-padded"></div>
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
@@ -34,7 +34,7 @@
   <!-- Fire up the signature panel and inject it into the page. We don't
        need to rely on FlashCanvas because we do not care about browsers
       such as Internet Explorer 7 and 8 for this use case -->
-  {!! HTML::script('js/jSignature.min.js') !!}
+  {!! HTML::script('js/signature.js') !!}
   <script>
     $(function() {
       $('#signature').jSignature();

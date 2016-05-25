@@ -10,7 +10,7 @@
       </div>
       <div class="col-lg-12">
         <h2>{!! $user->name !!} ({!! $user->email_address !!})</h2>
-        <h3><span class="glyphicon glyphicon-picture"> {!! $user->role->role !!}</span></h3>
+        <h3><span class="fa fa-user"> {!! $user->role->role !!}</span></h3>
         
       @if (0 < $user->checkinCountFor($range))
         <ul class="list-group col-lg-4"> 

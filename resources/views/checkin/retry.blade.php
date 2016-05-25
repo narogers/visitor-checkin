@@ -11,20 +11,19 @@
             <h2>{!! Lang::get($message_key . '.title') !!}</h2>
             <p>{!! Lang::get($message_key . '.message') !!}</p>
 
-            @if ($user && (2 == $user->count()))
+            @if (isset($user) && ($user->count() > 1))
               @include('checkin.matches', ['users' => $user])
             @endif
 
               {!! Form::open(['action' => 'CheckinController@postNew']) !!}
-              <div class="form-group">
+              <div class="form-group col-sm-6 double-padded">
                   {!! Form::label('query', null, ['class' => 'sr-only']) !!}
-                  {!! Form::text('query', null, ['class' => 'form-control', 'placeholder' => 'Name or email address']) !!}
+                  {!! Form::text('query', null, ['class' => 'form-control col-sm-6', 'placeholder' => 'Name or email address']) !!}
               </div>
-              <div class="form-group">
-                  <input type="submit" class="btn btn-primary" value="Retry check in">
-                  <span class="span-4 btn btn-primary"><a href="p2spro://scan?formats=CODABAR,CODE39&amp;callback={{ URL::action('CheckinController@getNew') }}%3Fcode%3DCODE%26type%3DFORMAT">Scan badge</span>
+              <div class="form-group col-sm-1 double-padded">
+                  <input type="submit" class="btn btn-primary" value="Check in">
               </div>
-            </form>
+              {!! Form::close() !!}
           </div>
         </div>
      </div>

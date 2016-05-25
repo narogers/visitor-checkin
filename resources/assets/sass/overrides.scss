@@ -1,0 +1,50 @@
+/**
+ * Global overrides for default Bootstrap displays
+ */
+@import "variables";
+
+/**
+ * Hide underlining for anchor tag across all states
+ */
+a,
+a:hover,
+a:visited,
+a:focus {
+  text-decoration: none;
+}
+
+.btn:hover {
+  background: lighten($brand-primary, 25%);
+  color: rgb(255, 255, 255);
+}
+
+.double-padded {
+  margin-top: ($line-height-computed / 2);
+  margin-bottom: ($line-height-computed / 2);
+}
+
+/**
+ * Emphasize signature panel
+ */
+#signature {
+  border: 1px dashed $gray;
+}
+
+/**
+ * Highlight steps which are completed by marking them green. Use red for
+ * pending workflow steps
+ */
+.pending-step {
+  color: $brand-danger;
+}
+
+.completed-step {
+  color: $brand-success;
+}
+
+/**
+ * Add a modular class to strip away borders
+ */
+.noborder {
+  border: 0;
+}

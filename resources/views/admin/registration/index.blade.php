@@ -29,27 +29,17 @@
               <td>{!! link_to_action('AdminRegistrationController@getRegistration',
                 $user->name, 
                 ['user' => $user]) !!}
-                <p class="pending-step">
-  {!! Form::open(
-      ['action' => ['AdminRegistrationController@postRegistration', $user],
-       'class' => 'form-inline']) !!}
-    {!! Form::hidden('event', 'hide_registration') !!}
-    {!! Form::submit('Hide registration', ['class' => 'btn btn-primary']) !!}
-  {!! Form::close() !!}
-</p>
               <td>{!! $user->email_address !!}</td>
               <td>{!! $user->formattedCreationDate() !!}</td>
               <td>
                 @if (empty($user->aleph_id))
-<p class="pending-step">
   {!! Form::open(
       ['action' => ['AdminRegistrationController@postRegistration', $user],
-       'class' => 'form-inline']) !!}
-  <span class="fa fa-square-o"></span> No Aleph ID set
+       'class' => 'form-inline pending-step']) !!}
+  <span class="fa fa-square-o"></span> No Aleph ID set 
     {!! Form::hidden('event', 'refresh_aleph_id') !!}
     {!! Form::submit('Refresh record', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
-</p>
                 @else
 <p class="completed-step"><span class="fa fa-check-square-o"></span> Aleph ID verified</p>
                 @endif

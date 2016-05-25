@@ -1,0 +1,31 @@
+@import "variables";
+
+body {
+  padding-top: 80px;
+}
+
+.navbar-inverse {
+  background: $cmaBlue;
+}
+
+.navbar-brand {
+  padding: 0;
+}
+
+/**
+ * Styles to control the appearance of embedded captions so that they nest
+ * within the containing figure
+ */
+.caption {
+  position: absolute;
+  margin: 0;
+  padding: 0.5em;
+  left: 15px;
+  right: 15px;
+  bottom: 0;
+
+  color: $cmaWhite;
+  background: rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+

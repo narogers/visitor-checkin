@@ -1,15 +1,16 @@
-<hr />
-
 @foreach ($users as $user)
   {!! Form::open(['action' => 'CheckinController@postNew'],
     ['class' => 'form-inline']) !!}
-	    <span class="glyphicon glyphicon-user"></span>
+    <div class="col-sm-6 double-padded">
+	    <span class="fa fa-user"></span>
 	    {{ $user->name }}
-	    (<em>{{ $user->email_address }} </em>)
+	    (<em>{{ $user->masked_email() }} </em>)
 
-      {!! Form::hidden('query', $user->name) !!}
-      {!! Form::submit('Check in now',
-    	  ['class' => 'btn btn-primary']) !!}
+      {!! Form::hidden('query', $user->email_address) !!}
+    </div>
+    <div class="col-sm-1 double-padded">
+      {!! Form::submit('Check in',
+    	  ['class' => 'btn btn-small']) !!}
   {!! Form::close() !!}
+    </div>
 @endforeach
-<hr />

@@ -20,12 +20,11 @@
 
           @if (Session::has('notice')) 
           <div class="alert alert-danger">
-          <span class="glyphicn glyphicon-info-sign"></span> {{ Session::get('notice') }}
+          <span class="fa fa-exclamation-circle"></span> {{ Session::get('notice') }}
           </div>
           @endif
 
-          {!! Form::model($registration,
-                ["action" => "RegistrationController@postNew"]) !!}
+          {!! Form::open(["action" => "RegistrationController@postNew"]) !!}
             <div class="form-group">
               {!! Form::label('name') !!}
               {!! Form::text('name', null, ['class' => 'form-control']) !!}

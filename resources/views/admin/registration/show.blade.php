@@ -9,7 +9,7 @@
       </div>
       @if(Session::has('alert')) 
       <div class="col-md-12">
-        <div class="alert alert-success"><span class="glyphicon glypicon-ok"></span> {!! Session::get('alert') !!}</div>
+        <div class="alert alert-success"><span class="fa fa-check-circle-o"></span> {!! Session::get('alert') !!}</div>
       </div>
       @endif
       @if(Session::has('error')) 
@@ -26,7 +26,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        <h2><span class="glyphicon glyphicon-picture"></span> {!! $user->role->role !!}</h2>
+        <h2><span class="fa fa-user"></span> {!! $user->role->role !!}</h2>
       </div>
     </div>
 

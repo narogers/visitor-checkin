@@ -20,15 +20,12 @@
           </div>
           @endif
           
-          {!! Form::model($registration, 
+          {!! Form::model('App\Registration',
                 ['action' => 'RegistrationController@postTermsOfUse']) !!}
             @include($registration_form)
 
-            {!! Form::submit('&laquo; Go back', 
-                  ['class' => 'btn btn-primary btn-lg pull-left',
-                   'name' => 'previous_step']) !!}
             {!! Form::submit('Continue &raquo;',
-                  ['class' => 'btn btn-primary btn-lg pull-right',
+                  ['class' => 'btn btn-primary btn-lg',
                    'name' => 'next_step']) !!}
           {!! Form::close() !!}
         </div>

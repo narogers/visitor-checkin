@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "71c7d3dfbb51440f908312e6c99d7514",
-    "content-hash": "79042d7791d37c9cc9dc1c25041616e4",
+    "hash": "d9d319b49a10d2b3f1d8504687f3e9c1",
+    "content-hash": "9b90e6aee28da07b588213f3dc974b6b",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -884,6 +884,60 @@
             "time": "2016-05-17 13:24:40"
         },
         {
+            "name": "laravelcollective/html",
+            "version": "v5.2.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LaravelCollective/html.git",
+                "reference": "3a312d39ffe37da0f57b602618b61fd07c1fcec5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/3a312d39ffe37da0f57b602618b61fd07c1fcec5",
+                "reference": "3a312d39ffe37da0f57b602618b61fd07c1fcec5",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/http": "5.2.*",
+                "illuminate/routing": "5.2.*",
+                "illuminate/session": "5.2.*",
+                "illuminate/support": "5.2.*",
+                "illuminate/view": "5.2.*",
+                "php": ">=5.5.9"
+            },
+            "require-dev": {
+                "illuminate/database": "5.2.*",
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Collective\\Html\\": "src/"
+                },
+                "files": [
+                    "src/helpers.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Taylor Otwell",
+                    "email": "taylorotwell@gmail.com"
+                },
+                {
+                    "name": "Adam Engebretson",
+                    "email": "adam@laravelcollective.com"
+                }
+            ],
+            "description": "HTML and Form Builders for the Laravel Framework",
+            "homepage": "http://laravelcollective.com",
+            "time": "2016-01-27 22:29:54"
+        },
+        {
             "name": "league/flysystem",
             "version": "1.0.22",
             "source": {
@@ -1236,16 +1290,16 @@
         },
         {
             "name": "pragmarx/firewall",
-            "version": "v0.5.4",
+            "version": "v1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/antonioribeiro/firewall.git",
-                "reference": "870307274c0f07c5b76631f58606a6809efdf1ef"
+                "reference": "0d19bc330388595ee766bc7c3e49573a0c09e2e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/antonioribeiro/firewall/zipball/870307274c0f07c5b76631f58606a6809efdf1ef",
-                "reference": "870307274c0f07c5b76631f58606a6809efdf1ef",
+                "url": "https://api.github.com/repos/antonioribeiro/firewall/zipball/0d19bc330388595ee766bc7c3e49573a0c09e2e2",
+                "reference": "0d19bc330388595ee766bc7c3e49573a0c09e2e2",
                 "shasum": ""
             },
             "require": {
@@ -1253,7 +1307,7 @@
                 "illuminate/filesystem": "~4|~5",
                 "illuminate/support": "~4|~5",
                 "php": ">=5.3.7",
-                "pragmarx/support": "~0.5"
+                "pragmarx/support": "~0.6.6"
             },
             "suggest": {
                 "geoip/geoip": "~1.14",
@@ -1288,7 +1342,7 @@
                 "laravel",
                 "whitelist"
             ],
-            "time": "2015-12-24 21:56:31"
+            "time": "2016-05-14 19:08:58"
         },
         {
             "name": "pragmarx/support",

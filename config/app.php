@@ -79,7 +79,7 @@ return [
 
 	'key' => env('APP_KEY', 'SomeRandomString'),
 
-	'cipher' => MCRYPT_RIJNDAEL_128,
+	'cipher' => 'AES-256-CBC',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -114,7 +114,7 @@ return [
 		 */
 		'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Broadcasting\BroadcastServiceProvider',
-		'Illuminate\Bus\BusServiceProvider',
+		//'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
@@ -123,7 +123,7 @@ return [
 		'Illuminate\Filesystem\FilesystemServiceProvider',
 		'Illuminate\Foundation\Providers\FoundationServiceProvider',
 		'Illuminate\Hashing\HashServiceProvider',
-		'Illuminate\Html\HtmlServiceProvider',
+		'Collective\Html\HtmlServiceProvider',
 		'Illuminate\Mail\MailServiceProvider',
 		'Illuminate\Pagination\PaginationServiceProvider',
 		'Illuminate\Pipeline\PipelineServiceProvider',
@@ -139,8 +139,8 @@ return [
 		 * Application Service Providers...
 		 */
 		'App\Providers\AppServiceProvider',
-		'App\Providers\BusServiceProvider',
-		'App\Providers\ConfigServiceProvider',
+		//'App\Providers\BusServiceProvider',
+		//'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
@@ -178,9 +178,9 @@ return [
 		'Event'     => 'Illuminate\Support\Facades\Event',
 		'File'      => 'Illuminate\Support\Facades\File',
 		'Firewall'	=> 'PragmaRX\Firewall\Vendor\Laravel\Facade',
-		'Form'	    => 'Illuminate\Html\FormFacade',
+		'Form'	    => 'Collective\Html\FormFacade',
 		'Hash'      => 'Illuminate\Support\Facades\Hash',
-		'HTML'	    => 'Illuminate\Html\HtmlFacade',
+		'HTML'	    => 'Collective\Html\HtmlFacade',
 		'Input'     => 'Illuminate\Support\Facades\Input',
 		'Inspiring' => 'Illuminate\Foundation\Inspiring',
 		'Lang'      => 'Illuminate\Support\Facades\Lang',
@@ -202,4 +202,13 @@ return [
 
 	],
 
+    /**
+     * Customizations for Visitor Checkin specifically
+     */
+
+   /**
+    * Number of matches to display before you consider a search too generic
+    * and return "Too many results found"
+    */
+  "match_threshold" => 5
 ];

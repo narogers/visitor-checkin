@@ -5,28 +5,23 @@
         @include('shared/_terms_of_use')
 
         {!! Form::open(['action' => 'RegistrationController@postWelcome']) !!}
-          <div id="signature"></div>
+          <div id="signature" class="double-padded"></div>
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
           <div class="row">
-            <div class="col-sm-4">
-              {!! Form::submit('&laquo; Go back', 
-                ['class' => 'btn btn-primary btn-lg pull-left',
-                 'name' => 'previous_step']) !!}
+            <div class="col-sm-1">
+               {!! Form::submit('Register &raquo;',
+                ['class' => 'btn btn-primary btn-lg',
+                 'name' => 'next_step']) !!}
             </div>
-            <div class="col-sm-1 col-sm-offset-1">
-               {!! Form::button('Clear',
+             <div class="col-sm-1 col-sm-offset-1">
+               {!! Form::button('<span class="fa fa-eraser"></span> Clear',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'reset_signature',
                  'id' => 'reset']) !!}
             </div>
-            <div class="col-sm-4 col-sm-offset-2">
-               {!! Form::submit('Register &raquo;',
-                ['class' => 'btn btn-primary btn-lg pull-right',
-                 'name' => 'next_step']) !!}
-            </div>
-          </div>
+         </div>
         {!! Form::close() !!}
 @stop
 
@@ -34,7 +29,7 @@
   <!-- Fire up the signature panel and inject it into the page. We don't
        need to rely on FlashCanvas because we do not care about browsers
       such as Internet Explorer 7 and 8 for this use case -->
-  {!! HTML::script('js/jSignature.min.js') !!}
+  {!! HTML::script('js/signature.js') !!}
   <script>
     $(function() {
       $('#signature').jSignature();

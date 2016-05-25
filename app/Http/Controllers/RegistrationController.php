@@ -19,12 +19,6 @@ class RegistrationController extends Controller {
 	 * Instantiate a new RegistrationController
 	 */
 	public function __construct() {
-		$this->middleware('navigation.back',
-			['except' => '']);
-		$this->middleware('session.registration',
-			['except' => '']);
-		// Eventually make an exception for the confirmation page at
-		// the end of the workflow
 	}
 
 	/**
@@ -59,6 +53,7 @@ class RegistrationController extends Controller {
 
  		return view('registration.new')
  		  ->withLabel($properties['label'])
+          ->withRegistration(new Registration)
 		  ->withRegistrationForm($properties['view']);
  	}
 
@@ -97,7 +92,7 @@ class RegistrationController extends Controller {
  		// We do it this way to avoid having to save an incomplete
  		// version of the User record prematurely
  		$role = Role::where('role', '=', $request->input('role'))->first();
- 		$user->role_id = $role->id;
+ 		$user->role()->associate($role);
  		
  		Session::put('user', $user);
 

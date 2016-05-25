@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\Log;
 class AlephClient {
 	// These are the URLs for the specific services that will be appended 
 	// following the patron ID
-	protected $AlephHost = "http://lib-aleph-01.clevelandart.org";
-
 	protected $AlephWebService;
 	protected $AlephXService;
 
@@ -28,8 +26,8 @@ class AlephClient {
 	protected $user;
 
 	public function __construct() {
-		$this->AlephWebService = $this->AlephHost . ":1891/rest-dlf/patron/";
-		$this->AlephXService = $this->AlephHost . "/X?";
+		$this->AlephWebService = "http://" . config('aleph.host') . ":1891/rest-dlf/patron/";
+		$this->AlephXService = "http://" . config('aleph.host') . "/X?";
 
 		Log::info('[ALEPH] Client has been initialized and is ready for use');
 	}
