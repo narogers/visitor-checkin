@@ -30,9 +30,9 @@ a:focus {
  * pending workflow steps
  */
 .pending-step {
-  color: $btn-danger-color;
+  color: $brand-danger;
 }
 
 .completed-step {
-  color: $btn-success-color;
+  color: $brand-success;
 }

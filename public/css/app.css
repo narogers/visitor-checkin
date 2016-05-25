@@ -7930,10 +7930,10 @@ a:focus {
  * pending workflow steps
  */
 .pending-step {
-  color: #fff; }
+  color: #d9534f; }
 
 .completed-step {
-  color: #fff; }
+  color: #5cb85c; }
 
 body {
   padding-top: 80px; }
