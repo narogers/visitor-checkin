@@ -1,30 +1,25 @@
 @extends('layouts/master')
 
 @section('content')
-
         @include('shared/_terms_of_use')
 
-        {!! Form::open(['action' => 'RegistrationController@postWelcome']) !!}
+        {!! Form::open(['action' => 'CheckinController@postExpired']) !!}
           <div id="signature" class="double-padded"></div>
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
+          {!! Form::hidden('uid', $user->id,
+                ['id' => 'uid']) !!}
           <div class="row">
-            <div class="col-sm-4">
-              {!! Form::submit('&laquo; Go back', 
-                ['class' => 'btn btn-primary btn-lg pull-left',
-                 'name' => 'previous_step']) !!}
+            <div class="col-sm-1">
+               {!! Form::submit('Check In',
+                ['class' => 'btn btn-primary btn-lg']) !!}
             </div>
             <div class="col-sm-1 col-sm-offset-1">
                {!! Form::button('Clear',
-                ['class' => 'btn btn-primary btn-lg',
+                ['class' => 'btn btn-default btn-lg',
                  'name' => 'reset_signature',
                  'id' => 'reset']) !!}
-            </div>
-            <div class="col-sm-4 col-sm-offset-2">
-               {!! Form::submit('Register &raquo;',
-                ['class' => 'btn btn-primary btn-lg pull-right',
-                 'name' => 'next_step']) !!}
             </div>
           </div>
         {!! Form::close() !!}

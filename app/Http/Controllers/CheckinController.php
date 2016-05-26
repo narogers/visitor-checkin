@@ -69,7 +69,7 @@ class CheckinController extends Controller {
 				$user->save();
 				$user->addCheckin();
 			}
-			list($view, $message_key) = $this->getView($is_active);
+			list($view, $message_key) = $this->viewFor($is_active);
 
 			return view($view)
 				->withMessageKey($message_key)
@@ -102,7 +102,7 @@ class CheckinController extends Controller {
         if (1 == $user_matches->count()) {
           $user = $user_matches->first();
           $is_active = $user->isActive();
-           list($view, $message_key) = $this->getView($is_active);
+           list($view, $message_key) = $this->viewFor($is_active);
           if ($is_active) {
             $user->addCheckin();
           }         
@@ -127,24 +127,22 @@ class CheckinController extends Controller {
 	 * this scenario
 	 */
 	public function postExpired(Request $request) {
-		$user_count = User::where('email_address', $request->input['email']);
+        Log::info("[RENEWAL] Looking for user with id " . $request->input('uid'));
+		$user = User::find($request->input('uid'));
 		$view = '';
 		$message_key = '';
-		$user = null;
 
-		switch ($user_count->count()) {
-			case 1:
-				$user = $user->first();
-				$user->signature = $request->input['signature'];
-				$user->addCheckin();
-				$user->save();
+		if (null == $user) {
+          $view = 'checkin.retry';
+          $message_key = 'checkin.notfound';
+        } else {
+		  $user->signature = $request->input['signature'];
+		  $user->addCheckin();
+		  $user->save();
 
-				$view = 'checkin.welcome';
-				$message_key = 'checkin.success';
-			default:
-				$view = 'checkin.retry';
-				$message_key = 'checkin.notfound';
-		}
+		  $view = 'checkin.welcome';
+		  $message_key = 'checkin.success';
+	    }
 
 		return view($view)
 			->withMessageKey($message_key)
@@ -155,7 +153,7 @@ class CheckinController extends Controller {
 	 * Uses a registration status to determine which view to return for the
 	 * checkin process (getNew and postNew)
 	 */
-	public function getView($status) {
+	public function viewFor($status) {
 		  Log::info('[VIEW] Resolving status ' . $status . '...');
 
 		  $view = '';

@@ -1,5 +1,7 @@
 set :stage, :production
-set :branch, :master
+# Peg to a previous commit until the server is ready for PHP 7
+#set :branch, :master
+set :branch, ENV.fetch('REVISION', 'master')
 
 set :laravel_server_user, "apache"
 set :laravel_artisan_flags, "--env=production"
