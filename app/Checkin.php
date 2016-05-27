@@ -4,42 +4,25 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 class Checkin extends Model {
-	protected $fillable = [
-		'role',
-		'description'
-	];
+  protected $fillable = [
+	'role',
+	'description'
+  ];
 
-  /**
-   * Retrieve a list of checkins from a specific
-   * range. If passed 'daily', 'weekly', 'monthly',
-   * or 'lastmonth' then convert to natural dates.
-   * Otherwise use the dates as provided to scope
-   * the query
-   */
-  public function scopeDuring($query, $starting, 
-    $ending = 0) {
-    // First normalize the dates
-    $date_range = [$starting, $ending];
-    $this->normalizeDate($date_range);
-    
-    // Next make a query against the checkins that limits them
-    // to the specific range
-    return $query->whereBetween('created_at', $date_range);
+  public function user() {
+	return $this->belongsTo('App\User');
   }
 
-	public function user() {
-		return $this->belongsTo('App\User');
-	}
-
+  /**
+   * WIP: Refactor into a presenter and out of the model
+   */
   public function formattedCheckinDate() {
     return Carbon::parse($this->created_at)->format('F jS');
   }
   
   /**
-   * Given a string tries to convert it to a pair of dates. If
-   * the end date is null or the first date contains a human
-   * readable string it will be cast to today's date instead
-   * of parsed
+   * WIP: Move into a helper class that assists the CheckinService 
+   *      instead of heving this be present here    
    */
   protected function normalizeDate(&$range) {
     switch($range[0]) {

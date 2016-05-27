@@ -4,7 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Role;
 use App\User;
-use App\Services\Aleph;
+use ILSService;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -35,8 +35,8 @@ class CheckinController extends Controller {
 				$user = new User;
 			}
 			
-			$is_active = $user->isActive($barcode);
-			if (is_bool($is_active)) {
+			$is_active = ILSService::isActive($user->aleph_id);
+			if (is_bool($is_active) && $is_active) {
 		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
 		  	// The Aleph ID is resolved when you query for the active
 		  	// user
@@ -101,7 +101,7 @@ class CheckinController extends Controller {
 
         if (1 == $user_matches->count()) {
           $user = $user_matches->first();
-          $is_active = $user->isActive();
+          $is_active = ILSService::isActive($user->aleph_id);
            list($view, $message_key) = $this->viewFor($is_active);
           if ($is_active) {
             $user->addCheckin();

@@ -9,7 +9,7 @@ interface PatronInterface {
   /**
    * Retrieve user by ID
    *
-   * @var ID
+   * @param ID
    * @return User
    */
   public function getUser(integer $uid);
@@ -17,7 +17,7 @@ interface PatronInterface {
   /**
    * Retrieve user by name
    *
-   * @var Name
+   * @param Name
    * @return User
    */
   public function getUserByName(string $name);
@@ -25,7 +25,7 @@ interface PatronInterface {
   /**
    * Retrieve user by barcode
    *
-   * @var Barcode
+   * @param Barcode
    * @return User
    */
   public function getUserByBarcode(integer $barcode);
@@ -33,72 +33,52 @@ interface PatronInterface {
   /**
    * Retrieves all Users from the backing data store
    *
-   * @return array of Users
+   * @return collection
    */
-  public function all();
+  public function getUsers(array $filters);
 
   /**
    * Assign a role to a patron
    *
-   * @var Role
+   * @param Role
    * @return boolean
    */
   public function setRole(User $user, Role $role);
 
   /**
-   * Add a registration to an existing user
+   * Add or update registration to an existing user
    *
-   * @var User
-   * @var hash
+   * @param User
+   * @param hash
    * @return boolean
    */
-  public function addRegistration(string $user, array $registration);
-
-  /**
-   * Update an existing registration
-   *
-   * @var User
-   * @var array
-   * @return boolean
-   */
-  public function updateRegistration(string $user, array $registration);
+  public function setRegistration(string $user, array $registration);
 
   /**
    * Set a registration as verified or unverified
    *
-   * @var User
-   * @var boolean
+   * @param User
+   * @param boolean
    * @return boolean
    */
-  public function markPatronVerified(string $user);
+  public function update(string $user, array $properties);
 
   /**
    * Check in a patron for a given date
    *
-   * @var User
-   * @var Date (optional)
+   * @param User
+   * @param Date (optional)
    * @return boolean
    */
-  public function checkIn(string $user, Date $date = null);
+  public function checkin(string $user, Date $date = null);
 
   /**
    * Retrieve checkins for a given patron
    * 
-   * @var User
-   * @var Starting date
-   * @var Ending date
-   * @return array
+   * @param array
+   * @return collection
    */
-  public function checkinsInFor(string $user, Date $since = null, Date $until = null);
-
-  /**
-   * Retrieve a list of all users who have checked in during a given window
-   *
-   * @var Starting date
-   * @var Ending date
-   * @return array
-   */
-  public function checkInsBetween(Date $since = null, Date $until = null);
+  public function getCheckins(array $filters);
 
   /**
    * Return a canonical list of available roles
