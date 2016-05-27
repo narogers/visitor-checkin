@@ -2,6 +2,11 @@
 
 namespace App\Repositories;
 
+use App\Models\Checkin as Checkin;
+use App\Models\Registration as Registration;
+use App\Models\Role as Role;
+use App\Models\User as User;
+
 class PatronRepository implements PatronInterface {
   /**
    * User model that acts as an information hub
@@ -24,7 +29,7 @@ class PatronRepository implements PatronInterface {
    * @param integer
    * @return User
    */
-  public function getUser(integer $uid) {
+  public function getUser($uid) {
     return $user = $this->patronModel->find($uid);
   }
 
@@ -85,7 +90,7 @@ class PatronRepository implements PatronInterface {
    * @param string 
    * @return boolean
    */
-  public function setRole(integer $uid, string $role) {
+  public function setRole($uid, $role) {
     $user = $this->patronModel->find($uid);
     $role = Role::where('role', $role)->get();
 
@@ -100,7 +105,7 @@ class PatronRepository implements PatronInterface {
    * @param array
    * @return boolean
    */
-  public function setRegistration(integer $uid, array $registration) {
+  public function setRegistration($uid, array $registration) {
       $user = $this->patronModel->find($uid);
       $user->registration()->updateOrCreate($reg);
 
@@ -114,9 +119,26 @@ class PatronRepository implements PatronInterface {
    * @param array
    * @return boolean
    */
-  public function update(integer $uid, array $properties) {
+  public function update($uid, array $properties) {
     $user = $this->patronModel->find($uid);
     return $user->update($properties);
+  }
+
+  /**
+   * Register a check in at the current time
+   *
+   * @param integer
+   * @return boolean
+   */
+  public function checkin($uid, Date $timestamp = null) {
+    $user = $this->patronModel->find($uid);
+    if (null == $timestamp) {
+      $timestamp = time();
+    }
+    $user->checkins()->create(['created_at' => $timestamp]);
+
+    // The only way for this to fail is to throw an exception
+    return true;
   }
 
   /**

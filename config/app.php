@@ -145,7 +145,8 @@ return [
 		/**
 		 * Custom providers
 		 */
-		'App\ILS\ILSServiceProvider'
+        'App\Repositories\PatronRepositoryServiceProvider',
+		'App\Services\RegistrationServiceServiceProvider',
 	],
 
 	/*

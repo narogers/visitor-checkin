@@ -2,7 +2,7 @@
 
 namespace App\Repositories;
 
-use App\User;
+use App\Models\User as User;
 use Illuminate\Support\ServiceProvider; 
 
 class PatronRepositoryServiceProvider extends ServiceProvider {

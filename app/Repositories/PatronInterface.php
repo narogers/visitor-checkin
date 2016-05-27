@@ -12,7 +12,7 @@ interface PatronInterface {
    * @param ID
    * @return User
    */
-  public function getUser(integer $uid);
+  public function getUser($uid);
 
   /**
    * Retrieve user by name
@@ -20,7 +20,7 @@ interface PatronInterface {
    * @param Name
    * @return User
    */
-  public function getUserByName(string $name);
+  public function getUserByName(\string $name);
 
   /**
    * Retrieve user by barcode
@@ -28,7 +28,7 @@ interface PatronInterface {
    * @param Barcode
    * @return User
    */
-  public function getUserByBarcode(integer $barcode);
+  public function getUserByBarcode(\string $barcode);
 
   /**
    * Retrieves all Users from the backing data store
@@ -43,7 +43,7 @@ interface PatronInterface {
    * @param Role
    * @return boolean
    */
-  public function setRole(User $user, Role $role);
+  public function setRole($uid, $role);
 
   /**
    * Add or update registration to an existing user
@@ -52,7 +52,7 @@ interface PatronInterface {
    * @param hash
    * @return boolean
    */
-  public function setRegistration(string $user, array $registration);
+  public function setRegistration($uid, array $registration);
 
   /**
    * Set a registration as verified or unverified
@@ -61,7 +61,7 @@ interface PatronInterface {
    * @param boolean
    * @return boolean
    */
-  public function update(string $user, array $properties);
+  public function update($uid, array $properties);
 
   /**
    * Check in a patron for a given date
@@ -70,7 +70,7 @@ interface PatronInterface {
    * @param Date (optional)
    * @return boolean
    */
-  public function checkin(string $user, Date $date = null);
+  public function checkin($uid, Date $timestamp = null);
 
   /**
    * Retrieve checkins for a given patron
