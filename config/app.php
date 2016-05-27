@@ -114,7 +114,6 @@ return [
 		 */
 		'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Broadcasting\BroadcastServiceProvider',
-		//'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
@@ -139,8 +138,6 @@ return [
 		 * Application Service Providers...
 		 */
 		'App\Providers\AppServiceProvider',
-		//'App\Providers\BusServiceProvider',
-		//'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
@@ -148,7 +145,7 @@ return [
 		/**
 		 * Custom providers
 		 */
-		'App\Providers\AlephServiceProvider',
+		'App\ILS\ILSServiceProvider'
 	],
 
 	/*
@@ -181,6 +178,7 @@ return [
 		'Form'	    => 'Collective\Html\FormFacade',
 		'Hash'      => 'Illuminate\Support\Facades\Hash',
 		'HTML'	    => 'Collective\Html\HtmlFacade',
+        'ILS'       => 'App\ILS\ILSFacade',
 		'Input'     => 'Illuminate\Support\Facades\Input',
 		'Inspiring' => 'Illuminate\Foundation\Inspiring',
 		'Lang'      => 'Illuminate\Support\Facades\Lang',
