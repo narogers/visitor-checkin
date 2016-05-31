@@ -7,6 +7,14 @@ namespace App\Repositories;
  */
 interface PatronInterface {
   /**
+   * Create or find user with provided attributes
+   *
+   * @param array
+   * @return User
+   */
+  public function createOrFindUser(array $properties);
+
+  /**
    * Retrieve user by ID
    *
    * @param ID
@@ -86,4 +94,14 @@ interface PatronInterface {
    * @return array
    */
   public function getRoles();
+
+  /**
+   * Verify a role exists in the database
+   *
+   * @param string
+   * @return boolean
+   */
+  public function hasRole($role);
 }
+
+

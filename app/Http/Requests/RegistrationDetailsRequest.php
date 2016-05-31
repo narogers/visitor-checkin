@@ -18,16 +18,13 @@ class RegistrationDetailsRequest extends Request {
 	}
 
 	/**
-	 * Despite the fact that there are eight types of registration we can condense 
-	 * them all into one Request validation with some clever use of mutual exclusion
-	 * across types. This might not be the best approach but should suffice for a
-	 * first cut
-	 *
+	 * Validate each type of input based on its unique composition of fields
+     *
 	 * @return array
 	 */
 	public function rules()
 	{
-		$role = Session::get('user')->role->role;
+        $role = Session::get('role');
 		$rules = $this->rules;
 
 		/**
@@ -35,12 +32,12 @@ class RegistrationDetailsRequest extends Request {
 		 * determine if they should apply or not. Note that everything is prefixed
 		 * with 'sometimes' because no field is required for every case
 		 */
-		if (!in_array($role, ['Fellow', 'Staff'])) {
+		if (!in_array($role, ['fellow', 'staff'])) {
 			$rules['address_street'] = 'required';
 			$rules['address_city'] = 'required';
 			$rules['address_zip'] = 'required|regex:/\d{5}/';
 		}
-		if (!in_array($role, ['Fellow', 'Staff', 'Intern'])) {
+		if (!in_array($role, ['fellow', 'staff', 'intern'])) {
 			$rules['telephone'] = 'required|alpha_dash|min:7|max:13';
 		}
 
@@ -48,27 +45,27 @@ class RegistrationDetailsRequest extends Request {
 		 * But the similar field member's number is only used in a
 		 * single case
 		 */
-		if ('Member' == $role) {
+		if ('member' == $role) {
 			$rules['badge_number'] = 'required|integer';
 		}
 
 		/**
 		 * Department is only used by people affiliated with CMA
 		 */
-		if (in_array($role, ['Fellow', 'Intern', 'Staff'])) {
+		if (in_array($role, ['fellow', 'intern', 'staff'])) {
 			$rules['department'] = 'required';
 		}
 		/**
 		 * But the other two are not for temporary interns
 		 */
-		if (in_array($role, ['Fellow', 'Staff'])) {
+		if (in_array($role, ['fellow', 'staff'])) {
 			$rules['job_title'] = 'required';
 			$rules['extension'] = 'required|integer';
 		}
 		/**
 		 * which get their own special fields
 		 */
-		if ('Intern' == $role) {
+		if ('intern' == $role) {
 			$rules['supervisor'] = 'required';
 			$rules['expires_on'] = 'required|date';
 		}

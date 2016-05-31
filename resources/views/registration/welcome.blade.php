@@ -18,11 +18,11 @@
             <dt>Email address</dt>
             <dd>{{ $user->email_address }}</dd>
 
-            <dt>Visitor Type</dt>
-            <dd>{{ $user->role->role }}</dd>
+            <dt>Registration Type</dt>
+            <dd>{{ $user->role()->role }}</dd>
           </dl>
          <span class="btn btn-default btn-lg">
-            <a href="{{ URL::action('HomeController@index') }}">Return to home</a>
+            <a href="{{ URL::action('HomeController@index') }}">Reset</a>
           </span>
 @stop
 

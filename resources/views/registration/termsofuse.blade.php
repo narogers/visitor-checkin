@@ -1,10 +1,9 @@
 @extends('layouts/master')
 
 @section('content')
-
         @include('shared/_terms_of_use')
 
-        {!! Form::open(['action' => 'RegistrationController@postWelcome']) !!}
+        {!! Form::open(['action' => 'RegistrationController@postTermsOfUse']) !!}
           <div id="signature" class="double-padded"></div>
 
           {!! Form::hidden('signature_data', '',

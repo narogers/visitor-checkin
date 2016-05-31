@@ -76,6 +76,24 @@ class User extends Model {
 		return $this->hasMany('App\Checkin');
 	}
 
+    /**
+     * Confirm if a user's registration is complete or incomplete
+     *
+     * @return boolean
+     */
+    public function isComplete() {
+      return (1 == $this->verified_user);
+    }
+
+    /**
+     * @see isComplete()
+     *
+     * @return boolean
+     */
+    public function isIncomplete() {
+      return (0 == $this->verified_user);
+    }
+
 	/**
 	 * Construct a list of potential keys to use when
 	 * resolving calls to Aleph. If the ID and barcode are

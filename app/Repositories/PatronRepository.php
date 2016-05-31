@@ -24,6 +24,29 @@ class PatronRepository implements PatronInterface {
   }
 
   /**
+   * Create a new user and return it for processing downstream
+   *
+   * @param array
+   * @return User
+   */
+  public function createOrFindUser(array $properties) {
+    if (!array_key_exists('email_address', $properties)) {
+      return null;
+    }
+
+    $qry = $this->patronModel->where('email_address', $properties['email_address']);
+    if (0 == $qry->count()) {
+      $user = $this->patronModel->create($properties);
+      return $user;
+    }
+
+    /**
+     * Otherwise return the user
+     */
+    return $qry->get()->first();
+  }
+
+  /**
    * Retrieve a user by unique identifier
    *
    * @param integer
@@ -107,7 +130,7 @@ class PatronRepository implements PatronInterface {
    */
   public function setRegistration($uid, array $registration) {
       $user = $this->patronModel->find($uid);
-      $user->registration()->updateOrCreate($reg);
+      $user->registration()->updateOrCreate([], $registration);
 
       return (null == $user->registration());
   }
@@ -174,4 +197,16 @@ class PatronRepository implements PatronInterface {
   public function getRoles() {
     Role::all();
   }
+
+
+  /**
+   * Verify if a role exists in the database
+   *
+   * @param string
+   * @return boolean
+   */
+  public function hasRole($role) {
+    return (1 == Role::where('role', $role)->count());
+  }
+  
 }

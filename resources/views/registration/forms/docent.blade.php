@@ -1,3 +1,8 @@
+@extends('layouts.role')
+
+@section('title', 'Docent')
+
+@section('form')
             <div class="form-group">
               {!! Form::label('address_street', 'Address') !!}
               {!! Form::text('address_street', null, 
@@ -25,3 +30,4 @@
                      'placeholder' => 'xxx-xxx-xxxx']
                      ) !!}
           </div>
+@endsection
