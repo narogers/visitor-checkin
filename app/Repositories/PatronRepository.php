@@ -144,7 +144,14 @@ class PatronRepository implements PatronInterface {
    */
   public function update($uid, array $properties) {
     $user = $this->patronModel->find($uid);
-    return $user->update($properties);
+    $fields = ["aleph_id", "barcode", "name", "signature", "verified_user"];
+    foreach ($properties as $field => $value) {
+      if (in_array($field, $fields)) {
+        $user[$field] = $value;
+      }
+    }
+    
+    return $user->save();
   }
 
   /**

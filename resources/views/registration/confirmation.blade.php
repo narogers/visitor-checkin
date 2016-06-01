@@ -19,7 +19,7 @@
             <dd>{{ $user->email_address }}</dd>
 
             <dt>Registration Type</dt>
-            <dd>{{ $user->role()->role }}</dd>
+            <dd>{{ $user->role->role }}</dd>
           </dl>
          <span class="btn btn-default btn-lg">
             <a href="{{ URL::action('HomeController@index') }}">Reset</a>
@@ -33,10 +33,8 @@
      * add a timer that refreshes the page automatically after 10 seconds. Otherwise
      * this script shell will be empty.
      */
-     @if ($internal_ip) {
-        setTimeout(10000, function() {
-          window.location = "{!! link_to('/') !!}";
-        }) 
-     @endif
+     setTimeout(15000, function() {
+        window.location = "{!! link_to('/') !!}";
+     }) 
   </script>
 @stop

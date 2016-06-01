@@ -106,11 +106,12 @@ class RegistrationController extends Controller {
    * @param TermsOfUseAgreementRequest $request
    * @return Response
    */
-  public function postTermsOfUse() {
-    // WIP: Pick up here
-    Log::info(Session::get('uid', 'OOPS!'));
-    
-    return redirect()->action("RegistrationController@getWelcome"); 
+  public function postTermsOfUse(TermsOfUseAgreementRequest $request) {
+    $uid = Session::get("uid");
+    $signature =  $request->get('signature_data');
+    $this->patrons->update($uid, ["signature" => $signature]);
+
+    return redirect()->action("RegistrationController@getConfirmation"); 
   }
 
   /**
@@ -118,11 +119,11 @@ class RegistrationController extends Controller {
    *
    * @return Response
    */
-  public function getWelcome() {
+  public function getConfirmation() {
     $uid = Session::get('uid');
     $user = $this->patrons->getUser($uid);
 
-    return view('registration.welcome')
+    return view('registration.confirmation')
       ->withUser($user);
   }
 }

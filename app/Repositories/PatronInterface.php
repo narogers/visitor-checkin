@@ -63,10 +63,10 @@ interface PatronInterface {
   public function setRegistration($uid, array $registration);
 
   /**
-   * Set a registration as verified or unverified
+   * Update a user's details 
    *
-   * @param User
-   * @param boolean
+   * @param integer
+   * @param array
    * @return boolean
    */
   public function update($uid, array $properties);
