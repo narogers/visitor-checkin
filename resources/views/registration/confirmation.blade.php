@@ -28,13 +28,8 @@
 
 @section('scripts')
   <script>
-    /**
-     * When the page loads check to see if you are internal or external. If internal
-     * add a timer that refreshes the page automatically after 10 seconds. Otherwise
-     * this script shell will be empty.
-     */
-     setTimeout(15000, function() {
-        window.location = "{!! link_to('/') !!}";
-     }) 
+     setTimeout(function() {
+        window.location = "{!! url('/') !!}";
+     }, 15000); 
   </script>
 @stop
