@@ -9,11 +9,9 @@
          </a>
         </div>
         <div class="col-sm-6">
-          <h2>{{ Lang::get($message_key . '.title') }}</h2>
-          <p>{{ Lang::get($message_key . '.message') }}</p>
+          <h2>Welcome back, {{ $user["name"] }}</h2>
+          <p>You have successfully checked in.</p>
           <hr />
-          <h3>Name</h3>
-          <p>{{ $user->name }}</p>
       
           <h3>Visitor type</h3>
           <p>{{ $user->role->role }}</p>

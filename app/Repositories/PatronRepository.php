@@ -7,6 +7,8 @@ use App\Models\Registration as Registration;
 use App\Models\Role as Role;
 use App\Models\User as User;
 
+use Illuminate\Support\Facades\Log;
+
 class PatronRepository implements PatronInterface {
   /**
    * User model that acts as an information hub
@@ -107,6 +109,28 @@ class PatronRepository implements PatronInterface {
   } 
 
   /**
+   * Retrieve all registered users, or a subset if a filter is provided
+   *
+   * @param string 
+   * @return array
+   */
+  public function getRegisteredUsers($limit = null) {
+    $query = $this->patronModel->select();
+    $query->whereNotNull('aleph_id')
+      ->where('verified_user', true);
+    
+    /**
+     * Now filter further if the limit is set
+     */
+    if ($limit) {
+      $query->where('name', 'LIKE', "%${limit}")
+        ->orWhere('barcode', $limit);
+    }
+   
+    return $query->get()->toArray();
+  }
+
+  /**
    * Assign a role to a user
    *
    * @param integer
@@ -114,10 +138,10 @@ class PatronRepository implements PatronInterface {
    * @return boolean
    */
   public function setRole($uid, $role) {
-    $user = $this->patronModel->find($uid);
-    $role = Role::where('role', $role)->get();
-
+    $user = $this->patronModel->findOrFail($uid);
+    $role = Role::where('role', $role)->firstOrFail();
     $user->role()->associate($role);
+
     return $user->save();
   }
 

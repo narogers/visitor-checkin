@@ -146,7 +146,7 @@ return [
 		 * Custom providers
 		 */
         'App\Repositories\PatronRepositoryServiceProvider',
-		'App\Services\RegistrationServiceServiceProvider',
+        'App\ILS\ILSServiceServiceProvider'
 	],
 
 	/*
@@ -179,7 +179,6 @@ return [
 		'Form'	    => 'Collective\Html\FormFacade',
 		'Hash'      => 'Illuminate\Support\Facades\Hash',
 		'HTML'	    => 'Collective\Html\HtmlFacade',
-        'ILS'       => 'App\ILS\ILSFacade',
 		'Input'     => 'Illuminate\Support\Facades\Input',
 		'Inspiring' => 'Illuminate\Foundation\Inspiring',
 		'Lang'      => 'Illuminate\Support\Facades\Lang',

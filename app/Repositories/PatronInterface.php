@@ -44,7 +44,15 @@ interface PatronInterface {
    * @return collection
    */
   public function getUsers(array $filters);
-
+  
+  /**
+   * Retrieves all registered users with or without a filter
+   *
+   * @param string (optional)
+   * @return array
+   */
+  public function getRegisteredUsers($limit = null);
+  
   /**
    * Assign a role to a patron
    *

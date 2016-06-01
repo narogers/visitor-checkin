@@ -17,38 +17,6 @@ class User extends Model {
 	 */
 	protected $fillable = ['name', 'email_address'];
 
-	public function scopeRegisteredUsers($query, $string) {
-		$qry = $query->where('name', 'LIKE', '%' . $string);
-		$qry->orWhere('aleph_id', $string);
-		$qry->orWhere('email_address', $string);
-
-		return $qry;
-	} 
-
-	public function scopePendingRegistrations($query) {
-		$qry = $query->where('aleph_id', '');
-		$qry = $query->orWhere('aleph_id', null);
-		$qry = $query->orWhere('verified_user', false);
-
-		return $qry;
-	}
-
-	public function scopeActiveSince($query, $days = null) {
-		$qry = $query->whereHas('checkins', function($q) use ($days) {
-			$q->activeSince($days);
-		});
-		return $qry;
-	}
-
-	public function scopeActiveDuring($query, $starting, 
-		$ending = null) {
-		$qry = $query->whereHas('checkins', function($q) 
-			use ($starting, $ending) {
-  		$q->during($starting, $ending);	
-		});
-		return $qry;
-	}
-
     /**
      * Masks the email address for privacy when listing multiple values
      *

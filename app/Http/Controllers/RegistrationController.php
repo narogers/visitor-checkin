@@ -7,10 +7,6 @@ use App\Http\Requests;
 use App\Http\Requests\RegistrationDetailsRequest;
 use App\Http\Requests\RegistrationTypeRequest;
 use App\Http\Requests\TermsOfUseAgreementRequest;
-use App\Registration;
-use App\Role;
-use App\User;
-
 use App\Repositories\PatronInterface;
 
 use Illuminate\Http\Request;
@@ -26,7 +22,6 @@ class RegistrationController extends Controller {
      * @param PatronInterface $patrons
 	 */
 	public function __construct(PatronInterface $patrons) {
-      Log::info("w00t w00t");
       $this->patrons = $patrons;
 	}
 
