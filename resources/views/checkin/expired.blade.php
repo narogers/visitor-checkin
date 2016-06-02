@@ -1,6 +1,10 @@
 @extends('layouts/master')
 
 @section('content')
+   <div class="aler alert-info" role="alert">
+     <span class="fa fa-exclamation-circle"></span> Sign the terms of use to complete the check in process.
+   </div>
+
         @include('shared/_terms_of_use')
 
         {!! Form::open(['action' => 'CheckinController@postExpired']) !!}
@@ -8,11 +12,9 @@
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
-          {!! Form::hidden('uid', $user->id,
-                ['id' => 'uid']) !!}
           <div class="row">
             <div class="col-sm-1">
-               {!! Form::submit('Check In',
+               {!! Form::submit('Check In <span class="fa fa-pencil-square-o"></span>',
                 ['class' => 'btn btn-primary btn-lg']) !!}
             </div>
             <div class="col-sm-1 col-sm-offset-1">

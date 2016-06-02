@@ -10,12 +10,12 @@
                 ['id' => 'signature_data']) !!}
           <div class="row">
             <div class="col-sm-1">
-               {!! Form::submit('Register &raquo;',
+               {!! Form::submit('Register <span class="fa fa-pencil-square-o"></span>',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'next_step']) !!}
             </div>
              <div class="col-sm-1 col-sm-offset-1">
-               {!! Form::button('<span class="fa fa-eraser"></span> Clear',
+               {!! Form::button('Clear <span class="fa fa-eraser"></span> ',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'reset_signature',
                  'id' => 'reset']) !!}

@@ -24,7 +24,7 @@
                    {!! Form::label('name', 'Name', ['class' => 'sr-only']) !!}
                    {!! Form::text('name', null, ['class' => 'form-control', 'placeholder' => 'Name']) !!}
                      <span class="input-group-btn">
-                       <input type="submit" class="btn btn-primary">Check in</button>
+                       <input type="submit" class="btn btn-primary">Check in <span class="fa fa-sign-in"></span></input>
                      </span>
                    </div>
                  {!! Form::close() !!}

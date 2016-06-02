@@ -59,34 +59,19 @@ class PatronRepository implements PatronInterface {
   }
 
   /**
-   * Retrieve a user by last name. In case of multiple matches it will
-   * return only the first
+   * Retrieve a user based on a set of properties
    *
-   * @param name
+   * @param array
    * @return User
    */
-  public function getUserByName(string $name) {
-    $user = $this->patronModel->where("name", "LIKE", "%${name}");
-    if ($user) {
-      return $user->first();
+  public function getUserWhere(array $properties) {
+    $results = getUsers($properties);
+    
+    if (0 < count($results)) {
+      $results->first();
+    } else {
+      return null;
     }
-
-    return null;
-  }
-
-  /**
-   * Retrieve a user by barcode or membership ID
-   *
-   * @param string
-   * @return User
-   */
-  public function getUserByBarcode(string $barcode) {
-    $user = $this->patronModel->where("barcode", $barcode);
-    if ($user) {
-      return $user->first();
-    }
-   
-    return null;
   }
 
   /**
@@ -95,13 +80,21 @@ class PatronRepository implements PatronInterface {
    * @param array [optional]
    * @return collection
    */
-  public function getUsers(array $filters = []) {
+  public function getUsers(array $properties = []) {
     $results = [];
 
     $query = $this->patronModel->select();     
     if (count($filters) > 0) {
       foreach (array_keys($filters) as $filter => $value) {
-        $query->where($filter, $value);
+        /**
+         * For names allow loose matches. For all other fields exact matches
+         * only are needed to get a list of users
+         */
+        if ($filter == "name") {
+          $query->where($filter, "LIKE", "%${value}");
+        } else {
+          $query->where($filter, $value);
+        }
       }
     }
 
@@ -124,6 +117,7 @@ class PatronRepository implements PatronInterface {
      */
     if ($limit) {
       $query->where('name', 'LIKE', "%${limit}")
+        ->orWhere('aleph_id', $limit)
         ->orWhere('barcode', $limit);
     }
    

@@ -23,24 +23,17 @@ interface PatronInterface {
   public function getUser($uid);
 
   /**
-   * Retrieve user by name
+   * Retrieve first user that matches a set of criteria
    *
-   * @param Name
+   * @param array $properties
    * @return User
    */
-  public function getUserByName(\string $name);
+  public function getUserWhere(array $properties);
 
   /**
-   * Retrieve user by barcode
+   * Retrieves all patrons with an optional filter to limit results
    *
-   * @param Barcode
-   * @return User
-   */
-  public function getUserByBarcode(\string $barcode);
-
-  /**
-   * Retrieves all Users from the backing data store
-   *
+   * @param array $filters (optional)
    * @return collection
    */
   public function getUsers(array $filters);

@@ -18,7 +18,8 @@ class AlephService implements ILSInterface {
       ":1891/rest-dlf";
     $this->alephXService = "http://" . Config('ils.host', 'localhost') .
       "/X?";
-    Log::info("[ILS Client] Initialized and ready for use");  
+    Log::info("[ILSClient] Aleph connection initialized and ready for use");
+    Log::info("[ILSClient] Using " . $this->alephWebService . " for requests");  
   }
 
   /**

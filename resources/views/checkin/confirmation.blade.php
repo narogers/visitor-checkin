@@ -9,15 +9,11 @@
          </a>
         </div>
         <div class="col-sm-6">
-          <h2>Welcome back, {{ $user["name"] }}</h2>
-          <p>You have successfully checked in.</p>
-          <hr />
+          <h2><span class="fa fa-book"></span> Welcome back, {{ $user["name"] }}</h2>
       
-          <h3>Visitor type</h3>
-          <p>{{ $user->role->role }}</p>
-          <span class="btn btn-primary">
-            <a href="{{ URL::action('HomeController@index') }}">Reset application</a>
-          </span>               
+          <a href="{{ URL::action('HomeController@index') }}">
+            <span class="btn btn-primary btn-lg"><span class="fa fa-refresh"></span> Reset</span>
+          </a>
         </div>
       </div>
 @stop
@@ -26,8 +22,8 @@
   <script>
     var delay = 10000; /* Delay in milliseconds before refreshing */
     var refresh_target = '{{ URL::action('HomeController@index') }}' /* Where the page should reload */
-    setTimeout(function() {
-      window.location = refresh_target;
-    }, delay)
+    //setTimeout(function() {
+    //  window.location = refresh_target;
+    //}, delay)
   </script>
 @stop

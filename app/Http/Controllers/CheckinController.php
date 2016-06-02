@@ -2,11 +2,15 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+// Models used to pass information to views
+use App\Models\User;
+// Interfaces with backend services
 use App\ILS\ILSInterface;
 use App\Repositories\PatronInterface;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class CheckinController extends Controller {
     /**
@@ -50,13 +54,12 @@ class CheckinController extends Controller {
        * Exactly one match found
        */
       if (1 == $total) {
+        Session::put("uid", $users[0]["id"]);
         $this->patrons->checkin($users[0]["id"]);
         if ($this->ils->isActive($users[0]["aleph_id"])) {
-          return redirect()->action("CheckinController@getConfirmation")
-            ->withUser($users[0]);
+          return redirect()->action("CheckinController@getConfirmation");
         } else {
-          return redirect()->action("CheckinController@getTermsOfUse")
-            ->withUser($users[0]);
+          return redirect()->action("CheckinController@getTermsOfUse");
         }
       } 
 
@@ -64,7 +67,7 @@ class CheckinController extends Controller {
        * Exit point #2
        * No results or too many results found
        */
-      if ((0 == $total) || ($total > Config('app.select_threshold'))) {
+      if ((0 == $total) || ($total > config('app.select_threshold', 5))) {
         return redirect()->action("CheckinController@getNotFound");
       }
 
@@ -73,8 +76,8 @@ class CheckinController extends Controller {
        * Need to provide a list of users to help select the correct
        * person
        */
-      return redirect()->action("CheckinController@getSelect")
-        ->withUsers($users);      
+      Session::put("users", $users);
+      return redirect()->action("CheckinController@getSelect");
 	}
 
     public function getCheckin(Request $request) {
@@ -82,9 +85,28 @@ class CheckinController extends Controller {
         return redirect()->action("CheckinController@postCheckin");
       }
       
-      return view('checkin.index');
+      return redirect()->action("CheckinController@getCheckin");
 	}
 
+    /**
+     * Permit patrons to select from a list of available options to check
+     * in to the library
+     *
+     * @return Response
+     */
+    public function getSelect() {
+      $users = Session::pull('users', []);
+      return view("checkin.select")->withUsers($users);
+    }
+
+    /**
+     * Allow for expired guests to resign the terms of use
+     *
+     * @return Response
+     */
+    public function getExpired() {
+      return view("checkin.expired");
+    }
 
 	/**
 	 * API call that updates the signature data for a user and
@@ -95,26 +117,11 @@ class CheckinController extends Controller {
 	 * this scenario
 	 */
 	public function postExpired(Request $request) {
-        Log::info("[RENEWAL] Looking for user with id " . $request->input('uid'));
-		$user = User::find($request->input('uid'));
-		$view = '';
-		$message_key = '';
-
-		if (null == $user) {
-          $view = 'checkin.retry';
-          $message_key = 'checkin.notfound';
-        } else {
-		  $user->signature = $request->input['signature'];
-		  $user->addCheckin();
-		  $user->save();
-
-		  $view = 'checkin.welcome';
-		  $message_key = 'checkin.success';
-	    }
-
-		return view($view)
-			->withMessageKey($message_key)
-			->withUser($user);
+        $uid = Session::get("uid");
+		$signature = $request->get("signature_data");
+        $this->patrons->update($uid, ["signature" => $signature]);
+        // TODO: Send a reminder email to the circulation staff?
+        return redirect()->action("CheckinController@getConfirmation");
 	}
 
     /**
@@ -122,31 +129,21 @@ class CheckinController extends Controller {
      *
      * @return Response
      */
-    public function getConfirmation(Request $request) {
-      return view("checkin.confirmation");
+    public function getConfirmation() {
+      $uid = Session::pull("uid");
+      $user = $this->patrons->getUser($uid);
+    
+      return view("checkin.confirmation")
+        ->withUser($user);
     }
 
-	/**
-	 * Uses a registration status to determine which view to return for the
-	 * checkin process (getNew and postNew)
-	 */
-	public function viewFor($status) {
-		  Log::info('[VIEW] Resolving status ' . $status . '...');
-
-		  $view = '';
-		  $message_key = '';
-
-			if ($status) {
-			  $view = 'checkin.welcome';
-			  $message_key = 'checkin.success';
-		  } elseif (is_null($status)) {
-			  $view = 'checkin.retry';
-			  $message_key = 'checkin.notfound';
-		  } else {
-			  $view = 'checkin.expired';
-			  $message_key = 'checkin.expired';
-			}
-
-			return [$view, $message_key];
-	}
+    /**
+     * Report no results found and offer an opportunity to reenter a
+     * search parameter 
+     *
+     * @return Response
+     */
+    public function getNotFound() {
+      return view("checkin.notfound");
+    }
 }
