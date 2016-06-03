@@ -1,6 +1,6 @@
 <?php namespace App\Providers;
 
-use App\Registration;
+use App\Models\Registration;
 use App\Services\ZipCodeResolver;
 
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;

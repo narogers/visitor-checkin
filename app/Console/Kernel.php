@@ -12,10 +12,7 @@ class Kernel extends ConsoleKernel {
 	 */
 	protected $commands = [
 		'App\Console\Commands\Inspire',
-		'App\Console\Commands\ExportOldCheckins',
-		'App\Console\Commands\ExportOldRegistrations',
 		'App\Console\Commands\ImportAlephRecords',
-		'App\Console\Commands\MigrateOldRegistrations',
 	];
 
 	/**
