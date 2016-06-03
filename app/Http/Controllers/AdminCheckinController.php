@@ -2,38 +2,41 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Repositories\PatronInterface;
 
 use Illuminate\Http\Request;
 
-use Carbon\Carbon;
-
 class AdminCheckinController extends Controller {
-  /**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function getIndex($range = 'today')
-	{
-		/**
-		 * Default to today unless you are given a valid alternative
-		 * from the approved list
-		 */
-		$approved_ranges = ['today', 'week', 'month', 'lastmonth'];
-		$range = in_array($range, $approved_ranges) ? $range : 'today';
-		$label = $this->formatDateLabel($range);
+  protected $patrons;
+  protected $ranges = ['today', 'week', 'month', 'lastmonth'];
 
-		$users = User::whereHas('checkins', function($q) use ($range) { 
-			$q->during($range);
-		})->orderBy('role_id')
-		  ->get(['id', 'name', 'role_id'])
-		  ->groupBy('role_id');
-	
-		return view('admin.checkin.index')
-		  ->withUsers($users)
-		  ->withLabel($label)
-		  ->withRange($range);
+  /**
+   * Build a new instance of the controller
+   *
+   * @param PatronInterface $patron
+   * @return AdminCheckinController
+   */
+  public function __construct(PatronInterface $patrons) {
+    $this->patrons = $patrons;
+  }
+
+  /**
+   * Display a listing of the resource.
+   *
+   * @return Response
+   */
+  public function getIndex($range = 'today')
+	{
+	  $range = in_array($range, $this->ranges) ? $range : 'today';
+      $dates = DateHelper::rangeFor($range);
+      $checkins = $this->patronModel
+        ->getCheckins(["starting_date" => $range[0], "ending_date" => $range[1]])
+        ->groupBy("user.role_id")
+        ->orderBy("user.name");
+       
+	  return view('admin.checkin.index')
+	    ->withUsers($users)
+		->withRange($range);
 	}
 
  /**

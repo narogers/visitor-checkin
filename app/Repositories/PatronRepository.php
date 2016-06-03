@@ -14,15 +14,23 @@ class PatronRepository implements PatronInterface {
    * User model that acts as an information hub
    */
   protected $patronModel;
+  protected $registrationModel;
+  protected $checkinModel;
 
   /**
-   * Set the internal patron model to our injected version
+   * Provide access to internal models to use when interfacing with the
+   * data store
    *
    * @param User $patron
+   * @param Registration $registration
+   * @param Checkin $checkin
    * @return PatronRepository
    */
-  public function __construct(User $patron) {
+  public function __construct(User $patron, Registration $registration, 
+    Checkin $checkin) {
     $this->patronModel = $patron;
+    $this->registrationModel = $registration;
+    $this->checkinModel = $checkin;
   }
 
   /**
@@ -200,16 +208,18 @@ class PatronRepository implements PatronInterface {
    * @return collection
    */
   public function getCheckins(array $filters = []) {
-    $query = Checkin::select();
-    if (key_exists('uid', $filters)) {
-      $query = $query->where('user_id', $filters['uid']);
-    }
+    $query = $this->checkinModel->select();
+    
     if (key_exists('starting_date', $filters)) {
-      $query = $query->where('updated_at', '=>', $filters['starting_date']);
+      $query = $query->where('created_at', '>=', $filters['starting_date']);
     }
     if (key_exists('ending_date', $filters)) {
-      $query = $query->where('updated_at', '<=',  $filters['ending_date']);
+      $query = $query->where('created_at', '<=', $filters['ending_date']);
     }
+    if (key_exists("uid", $filters)) {
+      $query = $query->where("user_id", $filters["uid"]);
+    }
+    $query = $query->with("user.role");
 
     return $query->get();
   }
