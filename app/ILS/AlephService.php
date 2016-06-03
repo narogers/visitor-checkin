@@ -149,7 +149,7 @@ class AlephService implements ILSInterface {
      * Otherwise press on and extract the relevant details from both feeds
      */
     $details = [];
-    $details["name"] = $this->getFirstValueFor($patron_details, "//z304-address-1");
+    $details["name"] = $this->normalizeName($this->getFirstValueFor($patron_details, "//z304-address-1"));
     $details["email"] = trim($this->getFirstValueFor($patron_details, "//z304-email-address"));
     $details["role"] = $this->getFirstValueFor($patron_status, "//z305-bor-type");
     $details["id"] = $identifier;
@@ -201,5 +201,31 @@ class AlephService implements ILSInterface {
     } else {
       return $values[0]->__toString();
     }
+  }
+
+  /**
+   * Given a string representation of a name attempts to normalize it as
+   * First Last.
+   *
+   * @param string $raw_name
+   * @return string $normalized_name
+   */
+  protected function normalizeName($raw_name) {
+    $raw_name = preg_replace("/\(.*\)/", "", $raw_name);
+    $raw_name = preg_replace("/\s?(Dr|Jr)\.?/", "", $raw_name);
+    $parts = preg_split("/,?\s+/", $raw_name);
+
+    if (preg_match("/,/", $raw_name)) {
+      $first_name = end($parts);
+      $last_name = $parts[0];
+    } else {
+      $first_name = $parts[0];
+      $last_name = end($parts);
+    }
+
+    $first_name = ucwords(strtolower($first_name));
+    $last_name = ucwords(strtolower($last_name));
+
+    return "${first_name} ${last_name}";
   }
 }
