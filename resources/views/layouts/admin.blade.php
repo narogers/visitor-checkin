@@ -7,7 +7,8 @@
     <title>Visitor Checkin Administration</title>
 
     {!! HTML::style('css/app.css') !!}
-  </head>
+    {!! HTML::script('js/application.js') !!}
+  </head
 
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">

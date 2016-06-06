@@ -1,28 +1,37 @@
 @extends('layouts.admin')
 
 @section('content')
-      <div class="col-lg-12">
+      <div class="col-sm-12">
         <ol class="breadcrumb">
           <li><a href="{!! URL::action('AdminController@getIndex') !!}">Home</a></li>
-          <li><a href="{!! URL::action('AdminCheckinController@getIndex') !!}/{!! $range !!}">Library Usage</a></li>
+          <li><a href="{!! URL::action('AdminCheckinController@getIndex', ["range" => $range]) !!}">Library Usage</a></li>
           <li class="active">{!! $user->name !!}</li>
         </ol>
       </div>
-      <div class="col-lg-12">
-        <h2>{!! $user->name !!} ({!! $user->email_address !!})</h2>
-        <h3><span class="fa fa-user"> {!! $user->role->role !!}</span></h3>
-        
-      @if (0 < $user->checkinCountFor($range))
-        <ul class="list-group col-lg-4"> 
-          <li class="list-group-item disabled"><strong>Checkin Activity <span class="badge">{!! $user->checkinCountFor($range) !!}</span></li>
-            @foreach($user->checkinsDuring($range) as $checkin)
-              <li class="list-group-item">{!! $checkin->formattedCheckinDate() !!}</li>
-            @endforeach
-        </ul>
+    
+    <div class="col-md-8">
+      @include("admin/_user_details")
+    </div>
+
+    </div>    
+      @if (0 < $checkins->count())
+        <h2><span class="fa fa-pencil-square-o"></span> Checkin Activity for {!! DateUtils::labelFor($range) !!} <span class="badge">{!! $checkins->count() !!}</h2>
+        <div class="col-md-6">
+        <table class="table table-striped">
+          <thead>
+            <th class="col-md-2">Date</th>
+            <th class="col-md-2">Time</th>
+          </thead>
+          @foreach($checkins->sortBy("updated_at") as $checkin)
+          <tr>
+            <td>{!! DateUtils::format($checkin->updated_at) !!}</td>
+            <td>{!! DateUtils::format($checkin->updated_at, "h:i:s A") !!}</td>
+          </tr>
+          @endforeach
+        </table>
+        </div>
       @else
         <h4>There has been no activity over this period.</h4>
       @endif
-
-    </div>
     </div>
  @stop
