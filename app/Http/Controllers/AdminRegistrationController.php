@@ -2,13 +2,28 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\ILS\ILSInterface;
+use App\Repositories\PatronInterface;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class AdminRegistrationController extends Controller {
+    protected $patrons;
+    protected $ils;
+
+    /**
+     * Instantiate a new controller with access to services
+     *
+     * @param PatronInterface $patronRepo
+     * @return AdminRegistrationController
+     */
+    public function __construct(PatronInterface $patronRepo,
+      ILSInterface $ils) {
+      $this->patrons = $patronRepo;
+      $this->ils = $ils;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -17,9 +32,9 @@ class AdminRegistrationController extends Controller {
 	 */
 	public function getIndex()
 	{
-		$users = User::pendingRegistrations()->get();
+		$pending = $this->patrons->getPendingRegistrations();
 		return view('admin.registration.index')
-			->withUsers($users);
+			->withUsers($pending);
 	}
 
 	/**
@@ -27,9 +42,10 @@ class AdminRegistrationController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function getRegistration(User $user) {
-		return view('admin.registration.show')
-			->withUser($user);
+	public function getRegistration($uid) {
+      $user = $this->patrons->getUser($uid);
+      return view('admin.registration.show')
+	    ->withUser($user);
 	}
 
 	/**
@@ -40,58 +56,70 @@ class AdminRegistrationController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function postRegistration(User $user, Request $request) {
-		$event = $request->input('event');
+	public function postRegistration($uid, Request $request) {
+		$action = $request->input('action');
 
-		Log::info('[ADMIN] Preparing to process command ' . $event);
-		switch ($event) {
-			case 'hide_registration':
-				$this->hideRegistration($user);
-				Session::flash('alert', "Record is now archived in the database");
-				break;
-			case 'refresh_aleph_id':
-				$this->updateAlephID($user);
-				break;
-			case 'verify_id':
-				$this->setVerifiedStatus($user);
+		Log::info('[ADMIN] Preparing to process command ' . $action);
+		switch ($action) {
+		  case 'refresh_ils':
+		    $this->updateILSId($uid, $request);
+			break;
+		  case 'verify_id':
+			$this->setVerifiedStatus($uid, $request);
 		}
-
+    
+        $user = $this->patrons->getUser($uid);
 		return view('admin.registration.show')
-			->withUser($user);
-	}
-
-	/**
-	 * Soft delete the registration to hide it from the database without completely
-	 * removing the record for long term preservation
-	 */
-	protected function hideRegistration(User $user) {
-		Log::info('[ADMIN] Removing old record ' . $user->id . ' from the database');
-		$user->delete();
+		  ->withUser($user);
 	}
 
 	/**
 	 * Ping Aleph for a new ID and, if found, refresh the record
+     *
+     * @param $uid
+     * @return boolean
 	 */
-	protected function updateAlephID(User $user) {
-		Log::info('[ADMIN] Updating Aleph ID for ' . $user->email_address);
-		$user->importPatronDetails();
-		if (null == $user->aleph_id) {
-			Session::flash('error', 'Could not resolve a valid Aleph ID');
-			Log::info('[ADMIN] Unable to resolve an Aleph ID');
-			Log::info('[ADMIN] Check connection to service and email address');
-		} else {
-			Session::put('alert', 'The Aleph ID has been resolved to ' . $user->aleph_id);
-		}
-		$user->save();
+	protected function updateILSId($uid, $request) {
+      $user = $this->patrons->getUser($uid);
+ 	  Log::info('[ADMIN] Updating Aleph ID for ' . $user->email_address);
+
+      $default_ids = $request->has("ils_id") ?
+        [$request->get("ils_id")] :
+ 	    $this->ils->getIdentifiers($user->name);
+      $verified_id = null;
+
+      foreach ($default_ids as $ils_id) {
+        Log::info("DETAILS: ${ils_id}");
+
+        $details = $this->ils->getPatronDetails($ils_id);
+     
+        Log::info($details["name"]);
+        Log::info($user->name);
+
+        if (isset($details) && 
+           (0 == strcasecmp($details["name"], $user->name))) {
+          $this->patrons->update($user->id, ["aleph_id" => $details["id"]]); 
+          $verified_id = $ils_id;
+          break;
+        }
+      }
+
+	  if (null == $verified_id) {
+		Session::flash('error', 'Could not resolve ' . $default_ids[0]);
+		Log::info('[ADMIN] Unable to resolve an Aleph ID');
+	  } else {
+		Session::put('alert', 'Aleph ID has been set to ' . $verified_id);
+        Log::info("[ADMIN] Resolved identifier to ${verified_id}");
+	  }
 	}
 
 	/**
 	 * Sets the verified status to true for the given user
 	 */
-	protected function setVerifiedStatus(User $user) {
-		Log::info('[ADMIN] Setting verified status to true for ' . $user->email_address);
+	protected function setVerifiedStatus($uid, $request) {
+		Log::info('[ADMIN] Setting verified status for ' . $uid);
+        $this->patrons->update($uid, ["verified_user" => true]);
+
 		Session::flash('alert', "The visitor has now been marked as verified. If this is a renewal check Aleph to make sure that the expiration date has been updated.");
-		$user->verified_user = true;
-		$user->save();
 	}
 }

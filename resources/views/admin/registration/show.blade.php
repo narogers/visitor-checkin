@@ -8,141 +8,122 @@
         </ol>
       </div>
       @if(Session::has('alert')) 
-      <div class="col-md-12">
-        <div class="alert alert-success"><span class="fa fa-check-circle-o"></span> {!! Session::get('alert') !!}</div>
+      <div class="col-md-10">
+        <div class="alert alert-success"><span class="fa fa-check-circle-o fa-2x"></span> {!! Session::get('alert') !!}</div>
       </div>
       @endif
       @if(Session::has('error')) 
-      <div class="col-md-12">
-        <div class="alert alert-warning"><span class="fa fa-exclamation-circle"></span> {!! Session::get('error') !!}</div>
+      <div class="col-md-10">
+        <div class="alert alert-warning"><span class="fa fa-exclamation-circle fa-2x"></span> {!! Session::get('error') !!}</div>
       </div>
       @endif 
 
-      <div class="col-md-12">
+      <div class="col-md-10">
         <h1>{!! $user->name !!} ({!! $user->email_address !!})</h1>
 
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-12">
-        <h2><span class="fa fa-user"></span> {!! $user->role->role !!}</h2>
+    <div class="col-md-12">
+      <h2><span class="fa fa-user"></span> {!! $user->role->role !!}</h2>
+    </div>
+
+    <div class="clearfix double-padded">
+      <div class="col-md-2">
+        <label class="control-label" for="aleph_id">Aleph ID</label>
+      </div>
+
+      <div class="col-md-6">
+      @if ($user->aleph_id)
+        <p class="form-control-static" id="aleph_id">{!! $user->aleph_id !!}</p>
+      @else
+        {!! Form::open(
+          ['action' => ['AdminRegistrationController@postRegistration', 
+                        $user],
+           'class' => 'form-inline']) !!}
+        {!! Form::hidden('action', 'refresh_ils') !!}
+        {!! Form::text("ils_id", '',
+              ['class' => 'form-control']) !!}
+        {!! Form::submit('Look up ID',
+             ['class' => 'btn btn-primary']) !!}
+        {!! Form::close() !!}
+      @endif
+      </div>
+    </div>
+              
+    <div class="clearfix double-padded">
+      <div class="col-md-2">
+        <label class="control-label" for="verified">Status</label>
+      </div>
+
+      <div class="col-md-8">
+        @if ($user->verified_user)
+          <span class="fa fa-check-square-o"></span> Verified
+        @else
+          {!! Form::open(
+             ["action" => ["AdminRegistrationController@postRegistration",
+               $user],
+             "class" => "form-inline"]) !!}
+            <span class="fa fa-square-o"></span> Unverified
+            {!! Form::hidden("action", "verify_id") !!}
+            {!! Form::submit("Verify now",
+              ["class" => "btn"]) !!}
+          {!! Form::close() !!}
+        @endif
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-12">
-        <form class="form-horizontal">
-            <div class="col-md-2">
-              <label class="control-label" for="aleph_id">Aleph ID</label>
-            </div>
+    @if (1 == $user->registration()->count()) 
+    @if ($user->registration->address_street)
+      @include("admin/_field_summary", 
+        ["field" => "address",
+        "value" => $user->registration->address_street . "<br />" .
+          $user->registration->address_city . ", " .
+          $user->registration->address_state . " " .
+          $user->registration->address_zip])
+    @endif
 
-            <div class="col-md-10">
-              @if($user->aleph_id)
-              <p class="form-control-static" id="aleph_id">
-                {!! $user->aleph_id !!}
-              </p>
-              @else
-                {!! Form::open(
-                  ['action' => ['AdminRegistrationController@postRegistration', 
-                                $user],
-                   'class' => 'form-inline']) !!}
-                {!! Form::hidden('event', 'verify_id') !!}
-                {!! Form::submit('Get ID from Aleph', 
-                     ['class' => 'btn btn-primary']) !!}
-                {!! Form::close() !!}
-              @endif
-            </div>
+    @if ($user->registration->telephone)
+      @include("admin/_field_summary",
+        ["field" => "telephone", "value" => $user->registration->telephone])
+    @endif
 
-            @if (1 == $user->registration()->count()) 
-            @if($user->registration->address_street)
-            <div class="col-md-2">
-              <label class="control-label" for="address">Address</label>
-            </div>
+    @if($user->registration->department)
+      @include("admin/_field_summary",
+        ["field" => "department", "value" => $user->registration->department])
+    @endif
 
-            <div class="col-md-10">
-              <p class="form-control-static" id="address">
-                {!! $user->registration->address_street !!}
-                <br />
-                {!! $user->registration->address_city !!},
-                {!! $user->registration->address_state !!} 
-                {!! $user->registration->address_zip !!}
-              </p>
-            </div>
-            @endif
+    @if($user->registration->job_title)
+      @include("admin/_field_summary",
+        ["field" => "job_title", "value" => $user->registration->job_title])
+    @endif
 
-            @if($user->registration->telephone)
-            <div class="col-md-2">
-              <label class="control-label" for=
-              "telephone">Telephone</label>
-            </div>
+    @if($user->registration->extension)
+      @include("admin/_field_summary",
+        ["field" => "extension", "value" => $user->registration->extension])
+    @endif
 
-            <div class="col-md-10">
-              <p class="form-control-static" id="telephone">
-                {!! $user->registration->telephone !!}
-              </p>
-            </div>
-            @endif
+    @if($user->registration->supervisor)
+      @include("admin/_field_summary",
+        ["field" => "supervisor", "value" => $user->registration->supervisor])
+    @endif
 
-            @if($user->registration->department)
-            <div class="col-md-2">
-              <label class="control-label" for="department">Department</label>
-            </div>
+    @if($user->registration->expires_on)
+      @include("admin/_field_summary",
+        ["field" => "expires_on", 
+         "value" => DateUtils::labelFor($user->registration->expires_on)])
+    @endif
+  @endif
 
-            <div class="col-md-10">
-              <p class="form-control-static" id="department">
-                {!! $user->registration->department !!}
-            </div>
-            @endif
+  <div class="clearfix">
+    <div class="col-md-8 double-padded">
+      <img class="img-responsive" id="signature"
+           src="{!! $user->signature !!}" />
+    </div>
+  </div>
 
-            @if($user->registration->job_title)
-            <div class="col-md-2">
-              <label class="control-label" for="title">Title</label>
-            </div>
-
-            <div class="col-md-10">
-              <p class="form-control-static" id="title">
-                {!! $user->registration->job_title !!}
-            </div>
-            @endif
-
-            @if($user->registration->extension)
-            <div class="col-md-2">
-              <label class="control-label" for="extension">Extension</label>
-            </div>
-
-            <div class="col-md-10">
-              <p class="form-control-static" id="extension">
-                x{!! $user->registration->extension !!}
-            </div>
-            @endif
-
-            @if($user->registration->supervisor)
-            <div class="col-md-2">
-              <label class="control-label" for="supervisor">Supervisor</label>
-            </div>
-
-            <div class="col-md-10">
-              <p class="form-control-static" id="supervisor">
-                {!! $user->registration->supervisor !!}
-            </div>
-            @endif
-
-            @if($user->registration->expires_on)
-            <div class="col-md-2">
-              <label class="control-label" for="internship_end_date">Internship End Date</label>
-            </div>
-
-            <div class="col-md-10">
-              <p class="form-control-static" id="internship_end_date">
-                {!! $user->registration->expires_on !!}
-            </div>
-            @endif
-            @endif
-        </form>
-        <hr class="col-md-12">
-        <img class="img-responsive" src="{!! $user->signature !!}" />
-        <hr />
-        <a class="btn btn-primary" href="{!! URL::action('AdminRegistrationController@getIndex') !!}">&laquo; Back to pending registrations</a> 
-      </div>
+  <div class="col-md-12">
+    <a class="btn btn-primary" href="{!! URL::action('AdminRegistrationController@getIndex') !!}">&laquo; Back to pending registrations</a>
+  </div> 
+</div>
 @stop

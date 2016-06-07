@@ -196,10 +196,9 @@ return [
 		'Session'   => 'Illuminate\Support\Facades\Session',
 		'Storage'   => 'Illuminate\Support\Facades\Storage',
 		'URL'       => 'Illuminate\Support\Facades\URL',
-        'Utilities' => 'App\Helpers\Utilities',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-
+        'ViewUtils' => 'App\Helpers\ViewHelper'
 	],
 
     /**

@@ -129,7 +129,29 @@ class PatronRepository implements PatronInterface {
         ->orWhere('barcode', $limit);
     }
    
-    return $query->get()->toArray();
+    return $query->get();
+  }
+
+  /**
+   * Retrieve all pending registrations, or a subset if a filter is provided
+   *
+   * @param string $limit (optional)
+   * @return array
+   */
+  public function getPendingRegistrations($limit = null) {
+    $query = $this->patronModel->select();
+    $query->whereNull('aleph_id')
+      ->orWhere('verified_user', false);
+    
+    /**
+     * Now filter further if the limit is set
+     */
+    if ($limit) {
+      $query->where('name', 'LIKE', "%${limit}")
+        ->orWhere('barcode', $limit);
+    }
+   
+    return $query->get();
   }
 
   /**

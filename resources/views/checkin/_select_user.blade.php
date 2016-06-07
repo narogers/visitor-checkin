@@ -3,7 +3,7 @@
     <div class="col-sm-6 double-padded">
 	    <span class="fa fa-user"></span>
 	    {{ $user["name"] }}
-	    (<em>{{ Utilities::mask($user["email_address"]) }} </em>)
+	    (<em>{{ ViewUtils::mask($user["email_address"]) }} </em>)
 
       {!! Form::hidden('name', $user["aleph_id"]) !!}
     </div>

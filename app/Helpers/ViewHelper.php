@@ -6,7 +6,7 @@ namespace App\Helpers;
  * General purpose methods that are needed through the code base but that do
  * really fit elsewhere.
  */
-class Utilities {
+class ViewHelper {
   /**
    * Masks an email string to hide details
    *
@@ -23,6 +23,16 @@ class Utilities {
     $tld = array_pop($domain_components);
 
     return "${account_mask}@${domain_mask}.${tld}";
+  }
+
+  /**
+   * Renders a field as a human readable label
+   *
+   * @param $field
+   * @return string
+   */
+  public static function labelFor($field) {
+    return ucwords($field);
   }
 }
 

@@ -47,6 +47,14 @@ interface PatronInterface {
   public function getRegisteredUsers($limit = null);
   
   /**
+   * Retrieves all users which have not completed the registration process
+   *
+   * @param string $limit (optional)
+   * @return array
+   */
+  public function getPendingRegistrations($limit = null);
+
+  /**
    * Assign a role to a patron
    *
    * @param Role
