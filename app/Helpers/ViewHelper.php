@@ -14,15 +14,20 @@ class ViewHelper {
    * @return string
    */
   public static function mask($email) {
-    list($account, $domain) = explode("@", $email);
-    // Display account as fo******
-    $account_mask = substr($account, 0, 2) . str_repeat("*", 6);
-    // Display domain as gm****.com
-    $domain_components = explode(".", $domain);
-    $domain_mask = substr($domain_components[0], 0, 2) . str_repeat("*", 6);
-    $tld = array_pop($domain_components);
-
-    return "${account_mask}@${domain_mask}.${tld}";
+    $email_parts = explode("@", $email);
+    if (2 == count($email_parts)) {
+      // Display account as fo******
+      $account_mask = substr($email_parts[0], 0, 2) . str_repeat("*", 6);
+      // Display domain as gm****.com
+      $domain_components = explode(".", $email_parts[1]);
+      $domain_mask = substr($domain_components[0], 0, 2) . str_repeat("*", 6);
+      $tld = array_pop($domain_components);
+    
+      return "${account_mask}@${domain_mask}.${tld}";
+    } else {
+      // If not a valid email address just return null
+      return null;
+    }
   }
 
   /**
@@ -32,7 +37,7 @@ class ViewHelper {
    * @return string
    */
   public static function labelFor($field) {
-    return ucwords($field);
+    return ucwords(strtolower($field));
   }
 }
 
