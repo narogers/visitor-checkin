@@ -25,23 +25,21 @@
     </div>
 
    <div class="row">
-      <!-- Begin the main page which just lists all checkins without any sort of pagination. If thisS
-           gets unwieldly adding pagination should be fairly straightforward -->
       <div class="col-md-10">
         @if(!$checkins->isEmpty())
 
         @foreach ($checkins->sortBy("user.role.role")->groupBy("user.role.role") as $role => $checkins_for_role)
         <table class="table table-striped" 
-                 id="{!! $role !!}-table">
+                 id="{!! strtolower($role) !!}-table">
           <caption class="h2">{!! $role !!}</h2>
                     </caption>
           <thead>
             <tr>
               <th class="col-md-2">
                 <a href="#{!! $role !!}" data-toggle='collapse' 
-                   data-target='#{!! $role !!}-entries'
+                   data-target='#{!! strtolower($role) !!}-entries'
                    aria-expanded='true' 
-                   aria-controls="{!! $role !!}-entries">
+                   aria-controls="{!! strtolower($role) !!}-entries">
                    <span class="caret"></span>
                    Name 
                    <span class="badge">
@@ -52,7 +50,7 @@
               <th class="col-md-2">Last checkin</th>
             </tr>
           </thead>
-          <tbody class='collapse in' id="{!! $role !!}-entries">
+          <tbody class='collapse in' id="{!! strtolower($role) !!}-entries">
             @foreach($checkins_for_role->groupBy("user.name") as $name => $checkins_for_user)
             <tr>
               <td><a href="{!! URL::action('AdminCheckinController@getCheckins', [$checkins_for_user->first()->user, $range]) !!}" alt="Checkin activity for {!! $name !!}">{!! $name !!}</a></td>

@@ -13,6 +13,7 @@
 		"laravelcollective/html": "^5.2"
 	},
 	"require-dev": {
+        "fzaninotto/faker": "~1.0",
 		"phpunit/phpunit": "~5.0",
 		"phpspec/phpspec": "~2.5",
 		"mockery/mockery": "0.9.*@dev",

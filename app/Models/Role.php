@@ -20,19 +20,4 @@ class Role extends Model {
 	public function users() {
 		return $this->hasMany('App\Models\User');
 	}
-
-    /**
-     * WIP: Migrate this logic higher up in the tree
-     */
-	public function scopeOfType($query, $type) {
-		if (key_exists($type, $this->roles_map)) {
-			$type = $this->roles_map[$type];
-		}
-		// If null then return the special type 'Unknown'
-		if (empty($type)) {
-			$type = "Unknown";
-		}
-		 
-		return $query->whereRole($type);
-	} 
 }

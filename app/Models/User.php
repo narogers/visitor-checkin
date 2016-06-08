@@ -46,10 +46,9 @@ class User extends Model {
     }
 
 	/**
-	 * Generates a fake email address by hashing the date and time. This is only
-	 * a placeholder for edge cases where the email field is empty and not meant to
-	 * be used routinely
-	 *
+	 * Generate a placeholder email address for situations where a stub is
+     * needed
+     *
 	 * @return String
 	 */
 	protected function generateEmailStub() {

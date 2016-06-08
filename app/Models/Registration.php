@@ -4,17 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Registration extends Model {
-	/**
-	 * For archival reasons we hang on to all registrations but hide them
-	 * using this handy helper
-	 */
 	use SoftDeletes;
 
-	/**
-	 * Only the intermediate screen needs to be mass assignable. Everything
-	 * else should be handled by explicitly setting the name, email address,
-	 * signature, and so on.
-	 */
 	protected $fillable = [
 		'address_city',
 		'address_street',
@@ -41,17 +32,12 @@ class Registration extends Model {
 		return $this->belongsTo('App\Models\User');
 	}
 	
-	public function getBadgeNumberAttribute() {
-		return $this->barcode;
-	}
-	public function setBadgeNumberAttribute($value) {
-		$this->barcode = $value;
-	}
-
 	/**
 	 * Convert the integer into xxxxxx-xxxx format when it comes out of the 
-	 * database. Normally you would place a break between each case but since 
-	 * they return the function will end anyways.
+	 * database. 
+     *
+     * @param $value
+     * @return string $telephone
 	 */
 	public function getTelephoneAttribute($value) {
 	    $value = strval($value);
@@ -67,8 +53,9 @@ class Registration extends Model {
 	}
 
 	/**
-	 * On the flip side when saving a telephone number strip out anything that is not
-	 * a digit such as '(', ')', or '-'
+	 * Sets the telephone attribute
+     *
+     * @param $value
 	 */
 	public function setTelephoneAttribute($value) {
 		$this->attributes['telephone'] = preg_replace("/\D/", "", $value);
