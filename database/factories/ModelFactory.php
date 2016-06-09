@@ -3,9 +3,10 @@
 $factory->define(App\Models\User::class, function($faker) {
   return [
     'name' => $faker->name,
+    'aleph_id' => $faker->unique()->lastName,
     'email_address' => $faker->unique()->safeEmail,
     'signature' => 'aaaaaaaaaaaaaaaaaaaaaa',
-    'verified_user' => false
+    'verified_user' => true
   ];
 });
 

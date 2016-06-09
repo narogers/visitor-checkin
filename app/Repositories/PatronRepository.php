@@ -208,11 +208,11 @@ class PatronRepository implements PatronInterface {
    * @param integer
    * @return boolean
    */
-  public function checkin($uid, Date $timestamp = null) {
+  public function checkin($uid, $timestamp = null) {
     $user = $this->patronModel->find($uid);
     if (null == $timestamp) {
       $timestamp = time();
-    }
+    } 
     $user->checkins()->create(['created_at' => $timestamp]);
 
     // The only way for this to fail is to throw an exception

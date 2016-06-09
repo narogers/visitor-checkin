@@ -22,8 +22,7 @@ abstract class TestUsersSeeder extends Seeder {
    */
   public function run() {
     $role = Role::where(["role" => $this->role()])->first();
-
-    $users = factory(App\Models\User::class, 4)
+    $users = factory(App\Models\User::class, 5)
       ->create()
       ->each(function($u, $role) {
         $u->role()->associate($role);
@@ -48,5 +47,9 @@ abstract class TestUsersSeeder extends Seeder {
     $checkin_pastmonth = new App\Models\Checkin;
     $checkin_pastmonth->created_at = $faker->dateTimeBetween("2015-02-01", "2015-02-28");
     $users[3]->checkins()->save($checkin_pastmonth);
+
+    // And for good measure add a fifth user who has yet to be verified
+    $users[4]->verified_user = false;
+    $users[4]->save();
   }
 }

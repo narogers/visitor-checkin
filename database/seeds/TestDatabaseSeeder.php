@@ -12,6 +12,7 @@ class TestDatabaseSeeder extends Seeder {
 	public function run()
 	{
         $this->call(DatabaseSeeder::class);
+
         // Now call any custom classes for testing only
 		$this->call(AcademicTestUsersSeeder::class);
 		$this->call('DocentTestUsersSeeder');

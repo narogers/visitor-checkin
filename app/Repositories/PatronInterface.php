@@ -87,7 +87,7 @@ interface PatronInterface {
    * @param Date (optional)
    * @return boolean
    */
-  public function checkin($uid, Date $timestamp = null);
+  public function checkin($uid, $timestamp = null);
 
   /**
    * Retrieve checkins for a given patron
