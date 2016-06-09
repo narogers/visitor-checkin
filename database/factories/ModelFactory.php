@@ -24,7 +24,7 @@ $factory->define(App\Models\Registration::class, function($faker) {
   ];
 });
 
-$factory->defineAs(App\Models\Registration::class, "fellow", function($faker) {
+$factory->defineAs(App\Models\Registration::class, "fellow_or_staff", function($faker) {
   return [
     'department' => $faker->catchphrase,
     'job_title' => $faker->jobTitle,
@@ -47,13 +47,3 @@ $factory->defineAs(App\Models\Registration::class, "member", function($faker) {
   $registration->badge_number = $factory->ean13;
   return $registration;
 });
-
-$factory->defineAs(App\Models\Registration::class, "staff", function($faker) {
-  return [
-    "department" => $faker->catchphrase,
-    "job_title" => $faker->jobTitle,
-    "extension" => $faker->numberBetween(2000, 8000)
-  ];
-});
-
-

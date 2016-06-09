@@ -89,13 +89,8 @@ class AdminRegistrationController extends Controller {
       $verified_id = null;
 
       foreach ($default_ids as $ils_id) {
-        Log::info("DETAILS: ${ils_id}");
-
         $details = $this->ils->getPatronDetails($ils_id);
-     
-        Log::info($details["name"]);
-        Log::info($user->name);
-
+ 
         if (isset($details) && 
            (0 == strcasecmp($details["name"], $user->name))) {
           $this->patrons->update($user->id, ["aleph_id" => $details["id"]]); 
@@ -105,10 +100,10 @@ class AdminRegistrationController extends Controller {
       }
 
 	  if (null == $verified_id) {
-		Session::flash('error', 'Could not resolve ' . $default_ids[0]);
+		Session::flash('errors', 'Could not resolve ' . $default_ids[0]);
 		Log::info('[ADMIN] Unable to resolve an Aleph ID');
 	  } else {
-		Session::put('alert', 'Aleph ID has been set to ' . $verified_id);
+		Session::flash('alert', 'Aleph ID has been set to ' . $verified_id);
         Log::info("[ADMIN] Resolved identifier to ${verified_id}");
 	  }
 	}

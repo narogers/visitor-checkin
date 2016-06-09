@@ -12,9 +12,9 @@
         <div class="alert alert-success"><span class="fa fa-check-circle-o fa-2x"></span> {!! Session::get('alert') !!}</div>
       </div>
       @endif
-      @if(Session::has('error')) 
+      @if(Session::has('errors')) 
       <div class="col-md-10">
-        <div class="alert alert-warning"><span class="fa fa-exclamation-circle fa-2x"></span> {!! Session::get('error') !!}</div>
+        <div class="alert alert-danger"><span class="fa fa-exclamation-circle fa-2x"></span> {!! Session::get('errors') !!}</div>
       </div>
       @endif 
 
