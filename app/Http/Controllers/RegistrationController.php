@@ -45,9 +45,10 @@ class RegistrationController extends Controller {
         return redirect()->action('RegistrationController@getDetails',
           ['role' => strtolower($request->role)]);
       } else {
-        // Because we are not doing this in the RegistrationTypeRequest we
-        // have to do it here
-        return back()->withInput()->with('error', 'Email address has already been registered.');
+        return redirect()
+          ->action("RegistrationController@getIndex")
+          ->withInput()
+          ->with('error', 'Email address has already been registered.');
       }
 	}
 
@@ -59,13 +60,13 @@ class RegistrationController extends Controller {
      * @return Response
      */
     public function getDetails($role) {
-     if ($this->patrons->hasRole($role)) {
+      if ($this->patrons->hasRole($role)) {
         Session::put('role', $role);
         $form = "registration.forms.${role}";
         return view($form);
-     } else {
-       return redirect()->action('RegistrationController@getIndex');
-     }
+      } else {
+        return redirect()->action('RegistrationController@getIndex');
+      }
     }
 
     /**

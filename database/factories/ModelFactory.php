@@ -42,8 +42,9 @@ $factory->defineAs(App\Models\Registration::class, "intern", function($faker) {
   ];
 });
 
-$factory->defineAs(App\Models\Registration::class, "member", function($faker) {
-  $registration = $factory->raw(App\Models\Registration, "academic");
-  $registration->badge_number = $factory->ean13;
+$factory->defineAs(App\Models\Registration::class, "member", function($faker)
+  use ($factory) {
+  $registration = $factory->raw(App\Models\Registration::class);
+  $registration["barcode"] = $faker->ean13;
   return $registration;
 });

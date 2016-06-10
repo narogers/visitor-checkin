@@ -10,7 +10,7 @@
                 ['id' => 'signature_data']) !!}
           <div class="row">
             <div class="col-sm-1">
-               {!! Form::submit('Register <span class="fa fa-pencil-square-o"></span>',
+               {!! Form::submit('Register',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'next_step']) !!}
             </div>
