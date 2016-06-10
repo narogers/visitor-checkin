@@ -56,10 +56,11 @@ class CheckinController extends Controller {
       if (1 == $total) {
         Session::put("uid", $users[0]["id"]);
         $this->patrons->checkin($users[0]["id"]);
+
         if ($this->ils->isActive($users[0]["aleph_id"])) {
           return redirect()->action("CheckinController@getConfirmation");
         } else {
-          return redirect()->action("CheckinController@getTermsOfUse");
+          return redirect()->action("CheckinController@getExpired");
         }
       } 
 
@@ -85,7 +86,7 @@ class CheckinController extends Controller {
         return redirect()->action("CheckinController@postCheckin");
       }
       
-      return redirect()->action("CheckinController@getCheckin");
+      return redirect()->action("CheckinController@getIndex");
 	}
 
     /**
@@ -120,6 +121,8 @@ class CheckinController extends Controller {
         $uid = Session::get("uid");
 		$signature = $request->get("signature_data");
         $this->patrons->update($uid, ["signature" => $signature]);
+        $u = $this->patrons->getUser($uid);
+
         // TODO: Send a reminder email to the circulation staff?
         return redirect()->action("CheckinController@getConfirmation");
 	}
