@@ -73,10 +73,10 @@ class PatronRepository implements PatronInterface {
    * @return User
    */
   public function getUserWhere(array $properties) {
-    $results = getUsers($properties);
-    
+    $results = $this->getUsers($properties);
+   
     if (0 < count($results)) {
-      $results->first();
+      return $results->first();
     } else {
       return null;
     }
@@ -88,12 +88,12 @@ class PatronRepository implements PatronInterface {
    * @param array [optional]
    * @return collection
    */
-  public function getUsers(array $properties = []) {
+  public function getUsers(array $filters = []) {
     $results = [];
 
     $query = $this->patronModel->select();     
     if (count($filters) > 0) {
-      foreach (array_keys($filters) as $filter => $value) {
+      foreach ($filters as $filter => $value) {
         /**
          * For names allow loose matches. For all other fields exact matches
          * only are needed to get a list of users
