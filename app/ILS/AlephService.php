@@ -165,7 +165,7 @@ class AlephService implements ILSInterface {
    * @param string $identifier
    * @return string $path
    */
-  protected function endpointFor($endpoint, $identifier) {
+  public function endpointFor($endpoint, $identifier) {
     $uri = null;
 
     switch ($endpoint) {

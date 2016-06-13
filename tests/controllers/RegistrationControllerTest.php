@@ -110,18 +110,21 @@ class RegistrationControllerTest extends TestCase {
     $patron = $patrons->getUser($patron->id);
  
     // 3. Validate results
-    $this->assertEquals($user->signature, $signature);
+    $this->assertEquals($patron->signature, $signature);
     $this->assertRedirectedToAction("RegistrationController@getConfirmation"); 
   }
  
   public function testConfirmationDetailsAreAccurate() {
+    $repo = App::make("App\Repositories\PatronInterface");
     $patron = factory(App\Models\User::class)->create();
-    $registration = factory(App\Models\Registration::class)->create();
-    $patron->registration()->save($registration);
+    $registration = factory(App\Models\Registration::class)->make();
+    $repo->setRegistration($patron->id, $registration->toArray());
+    $repo->setRole($patron->id, "Member");
     Session::put("uid", $patron->id);
    
     $response = $this->action("GET", "RegistrationController@getConfirmation");
-    
+    $view = $response->original;
+  
     $this->assertSessionHas("uid");
     $this->assertViewHas("user");
   }
