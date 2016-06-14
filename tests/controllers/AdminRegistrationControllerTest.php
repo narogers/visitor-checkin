@@ -14,6 +14,12 @@ class AdminRegistrationControllerTest extends TestCase {
     $this->seed("DatabaseSeeder");
     $this->mock = Mockery::mock('App\ILS\ILSInterface');
     Carbon::setTestNow(Carbon::createFromDate(2015, 3, 19));
+
+    $this->mockZip = Mockery::mock(App\Services\ZipCodeInterface::class);
+    $this->mockZip
+      ->shouldReceive("lookup")
+      ->andReturn(["city" => "Saint Louis", "state" => "XX"]);
+    $this->app->instance(App\Services\ZipCodeInterface::class, $this->mockZip);
   } 
 
   public function testIndex() {

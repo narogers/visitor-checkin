@@ -4,9 +4,14 @@ use App\Models\Checkin;
 use App\Models\Registration;
 use App\Models\User;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;
 
 class PatronRepositoryTest extends TestCase {
+  use DatabaseTransactions;
+
   public function setUp() {
     parent::setUp();
     $this->repository = App::make(App\Repositories\PatronInterface::class);
@@ -91,5 +96,72 @@ class PatronRepositoryTest extends TestCase {
     $this->assertTrue($status);
     $this->assertEquals($updated_user->id, $user->id);
     $this->seeInDatabase("users", ["name" => "PHPUnit Test User"]);
+  }
+
+  public function testCheckin() {
+    $user = factory(App\Models\User::class)->create();
+    $this->assertEquals(0, $user->checkins()->count());
+
+    Carbon::setTestNow(Carbon::createFromDate(2016, 4, 1));
+    $this->repository->checkin($user->id);
+    $user = $this->repository->getUser($user->id);
+
+    $this->assertEquals(1, $user->checkins()->count());
+    $this->seeInDatabase("checkins", ["user_id" => $user->id]);
+    // Reset date for future tests
+    Carbon::setTestNow();
+  }
+
+  public function testSetKnownRole() {
+    $user = factory(App\Models\User::class)->create();
+    $this->seed("DatabaseSeeder");
+
+    $this->assertNull($user->role);
+    $this->repository->setRole($user->id, "Staff");
+    $user = $user->fresh();
+    $this->assertEquals($user->role->role, "Staff");
+  }
+
+  public function testSetInvalidRole() {
+    $user = factory(App\Models\User::class)->create();
+    $this->seed("DatabaseSeeder");
+ 
+    $this->assertNull($user->role);
+    $this->setExpectedException(ModelNotFoundException::class);
+    $this->repository->setRole($user->id, "InvalidRole");
+  }
+
+  public function testDefaultRolesExist() {
+    $this->seed("DatabaseSeeder");
+   
+    $this->assertTrue($this->repository->hasRole("Academic"));
+    $this->assertTrue($this->repository->hasRole("Docent"));
+    $this->assertTrue($this->repository->hasRole("Fellow"));
+    $this->assertTrue($this->repository->hasRole("Intern"));
+    $this->assertTrue($this->repository->hasRole("Member"));
+    $this->assertTrue($this->repository->hasRole("Public"));
+    $this->assertTrue($this->repository->hasRole("Staff"));
+    $this->assertTrue($this->repository->hasRole("Volunteer"));
+  }
+
+  public function testRegisteredUsers() {
+    factory(App\Models\User::class, 3)->create(["aleph_id" => null,
+      "verified_user" => false]);
+    factory(App\Models\User::class, 3)->create(["aleph_id" => null,
+      "verified_user" => true]);
+    factory(App\Models\User::class, 3)->create(["verified_user" => true]);
+    
+    $this->assertEquals(3, count($this->repository->getRegisteredUsers()));
+  }
+
+  public function testPendingRegistrations() {
+    factory(App\Models\User::class, 3)->create(["aleph_id" => null,
+      "verified_user" => false]);
+    factory(App\Models\User::class, 3)->create(["aleph_id" => null,
+      "verified_user" => true]);
+    factory(App\Models\User::class, 3)->create(["verified_user" => true]);
+  
+    $this->assertEquals(6, 
+      count($this->repository->getPendingRegistrations()));  
   }
 }

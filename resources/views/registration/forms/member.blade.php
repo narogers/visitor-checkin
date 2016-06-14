@@ -30,8 +30,8 @@
           </div>
 
           <div class="form-group">
-              {!! Form::label('badge_number', "Membership number") !!}
-              {!! Form::text('badge_number', null, 
+              {!! Form::label('barcode', "Membership number") !!}
+              {!! Form::text('barcode', null, 
                     ['class' => 'form-control']) !!} 
           </div>
 @endsection

@@ -141,12 +141,14 @@ return [
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+        'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
 
 		/**
 		 * Custom providers
 		 */
         'App\Repositories\PatronRepositoryServiceProvider',
-        'App\ILS\ILSServiceServiceProvider'
+        'App\ILS\ILSServiceServiceProvider',
+        'App\Providers\ZipCodeServiceProvider'
 	],
 
 	/*

@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 
 class Registration extends Model {
 	use SoftDeletes;
@@ -59,5 +60,6 @@ class Registration extends Model {
 	 */
 	public function setTelephoneAttribute($value) {
 		$this->attributes['telephone'] = preg_replace("/\D/", "", $value);
+      Log::debug("PHONE: " . $this->attributes["telephone"]);
 	}
 }

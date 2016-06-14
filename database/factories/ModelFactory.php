@@ -20,7 +20,8 @@ $factory->define(App\Models\Registration::class, function($faker) {
     'address_street' => $faker->streetAddress,
     'address_city' => $faker->city,
     'address_zip' => $faker->postcode,
-    'telephone' => $faker->phoneNumber, 
+    // Truncate the extension 
+    'telephone' => $faker->tollFreePhoneNumber
   ];
 });
 
@@ -45,6 +46,6 @@ $factory->defineAs(App\Models\Registration::class, "intern", function($faker) {
 $factory->defineAs(App\Models\Registration::class, "member", function($faker)
   use ($factory) {
   $registration = $factory->raw(App\Models\Registration::class);
-  $registration["barcode"] = $faker->ean13;
+  $registration["barcode"] = $faker->numberBetween(10000000, 9999999);
   return $registration;
 });

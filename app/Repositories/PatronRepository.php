@@ -163,7 +163,9 @@ class PatronRepository implements PatronInterface {
    */
   public function setRole($uid, $role) {
     $user = $this->patronModel->findOrFail($uid);
-    $role = Role::where('role', $role)->firstOrFail();
+    $role = ucwords($role);
+
+    $role = Role::where(['role' => $role])->firstOrFail();
     $user->role()->associate($role);
 
     return $user->save();

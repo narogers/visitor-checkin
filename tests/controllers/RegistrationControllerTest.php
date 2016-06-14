@@ -12,6 +12,12 @@ class RegistrationControllerTest extends TestCase {
     parent::setUp();
     $this->seed("DatabaseSeeder");
     Carbon::setTestNow(Carbon::createFromDate(2015, 3, 19));
+   
+    $this->mockZip = Mockery::mock(App\Services\ZipCodeInterface::class);
+    $this->mockZip
+     ->shouldReceive("lookup")
+     ->andReturn(["city" => "Gotham City", "state" => "XX"]);  
+    $this->app->instance(App\Services\ZipCodeInterface::class, $this->mockZip);
   }
 
   public function testRegistrationWithNoEmail() {
@@ -74,23 +80,27 @@ class RegistrationControllerTest extends TestCase {
   }
 
   public function testSaveRegistrationDetails() {
+    // 1. Set up mocks
     $patron = factory(App\Models\User::class)
       ->create(["aleph_id" => null, "verified_user" => false]);
     $registration = factory(App\Models\Registration::class, "member")
       ->make()
       ->toArray();
-    $patrons = App::make(App\Repositories\PatronInterface::class);
+    $this->assertNull($patron->registration);
+    $this->seeInDatabase("roles", ["role" => "Member"]);
 
+    // 2. Run test
     Session::put("uid", $patron->id);
-    Session::put("role", "Member");
-
+    Session::put("role", "member");
     $response = $this->action("POST", "RegistrationController@postDetails",
       [], $registration);
-    $patron = $patrons->getUser($patron->id);
+    $patron = $patron->fresh();
 
-    $this->seeInDatabase("registrations", ["user_id" => $patron->id]);
-    $this->assertEquals($patron->role->role, "Member");    
+    // 3. Test assertions
     $this->assertRedirectedToAction("RegistrationController@getTermsOfUse");
+    $this->assertEquals(1, count($patron->registration));
+    $this->assertNotNull($patron->role);
+    $this->assertEquals($patron->role->role, "Member");    
   }
 
   public function testAgreeToTermsOfUse() {
@@ -131,5 +141,6 @@ class RegistrationControllerTest extends TestCase {
 
   public function tearDown() {
     Carbon::setTestNow();
+    Mockery::close();
   }
 }

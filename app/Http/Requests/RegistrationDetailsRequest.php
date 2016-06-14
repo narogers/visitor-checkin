@@ -27,6 +27,9 @@ class RegistrationDetailsRequest extends Request {
         $role = Session::get('role');
 		$rules = $this->rules;
 
+        Log::debug("Rules Rule!"); 
+        Log::debug($role);
+
 		/**
 		 * Apply custom rules for each field that rely on the specified role to
 		 * determine if they should apply or not. Note that everything is prefixed
@@ -38,7 +41,7 @@ class RegistrationDetailsRequest extends Request {
 			$rules['address_zip'] = 'required|regex:/\d{5}/';
 		}
 		if (!in_array($role, ['fellow', 'staff', 'intern'])) {
-			$rules['telephone'] = 'required|alpha_dash|min:7|max:13';
+			$rules['telephone'] = 'required|phone:AUTO,US';
 		}
 
 		/**
@@ -46,7 +49,7 @@ class RegistrationDetailsRequest extends Request {
 		 * single case
 		 */
 		if ('member' == $role) {
-			$rules['badge_number'] = 'required|integer';
+			$rules['barcode'] = 'required|integer';
 		}
 
 		/**
@@ -69,7 +72,7 @@ class RegistrationDetailsRequest extends Request {
 			$rules['supervisor'] = 'required';
 			$rules['expires_on'] = 'required|date';
 		}
-
+  
 		return $rules;
 	}
 }
