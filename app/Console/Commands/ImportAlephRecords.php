@@ -1,18 +1,24 @@
 <?php namespace App\Console\Commands;
 
-use App\Services\AlephClient;
-use App\User;
-
 use Illuminate\Console\Command;
+
+use App\ILS\ILSInterface;
+use App\Repositories\PatronInterface;
 
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
 class ImportAlephRecords extends Command {
 
-	protected $name = 'aleph:import';
-	protected $description = 'Import records from Aleph into the local database';
+	protected $name = 'ils:import';
+	protected $description = 'Import records from ILS into the local database';
 
+    /**
+     * Interfaces to underlying services
+     */
+    protected $ils;
+    protected $patrons;
+    
 	/**
 	 * Create a new command instance. The list of Aleph IDs to resolve
 	 * should be passed as a flat text with one value per line. Any valid
@@ -20,14 +26,15 @@ class ImportAlephRecords extends Command {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(ILSInterface $ils, PatronInterface $patrons)
 	{
-		parent::__construct();
+	  $this->ils = $ils;
+      $this->patrons = $patrons;
+      parent::__construct();
 	}
 
 	public function getArguments() {
-		return [['source', InputArgument::REQUIRED, 
-								"List of Aleph IDs"]];
+	  return [['source', InputArgument::REQUIRED, "List of IDs from ILS"]];
 	}
 
 	/**
@@ -35,39 +42,26 @@ class ImportAlephRecords extends Command {
 	 *
 	 * @return void
 	 */
-	public function fire()
-	{
-			$client = new AlephClient;
+	public function fire() {
+	  $ils_ids = file($this->argument('source'), FILE_IGNORE_NEW_LINES);
+	  foreach ($ils_ids as $id) {
+		$user_information = $ils->getPatronDetails($id);
+        $user_information["aleph_id"] = $id;
+        $user_information["signature"] = "";
+        $user_information["verified_user"] = true;
 
-			$aleph_ids = file($this->argument('source'), 
-				FILE_IGNORE_NEW_LINES);
-			foreach ($aleph_ids as $aleph_id) {
-				$user = new User;
-				$user->importPatronDetails($aleph_id);
+		if (null == $user["name"]) {
+		  $this->error("[ERROR] Could not resolve " . $aleph_id);
+		  continue;
+		}
 
-        # If no record was found skip over this entry
-				if (null == $user->name) {
-					$this->error("[ERROR] Could not resolve " . $aleph_id);
-					continue;
-				}
+        $user = $this->patrons->createOrFindUser($user_information);
+        if ($user) {
+          // Push the rest of the properties and save again
+          $this->patrons->update($user->id, $user_information);
+        }        
 
-				$is_existing_record = (0 < User::where('email_address', $user->email_address)->count());
-				if ($is_existing_record) {
-					$user_record = User::where("email_address", $user->email_address)->first();
-					$user_record->name = $user->name;
-					$user_record->aleph_id = $user->aleph_id;
-					$user = $user_record;
-				}
-
-				# Otherwise we've got nothing to do because this is a new
-				# record and we can assume that the person is already valid
-				# since they have an Aleph ID
-				$user->verified_user = true;
-				$user->signature = '';
-				$user->save();
-
-				$this->info('[SUCCESS] ' . $aleph_id . ' has been imported into the local database');
-			}
-	}
-
+		$this->info('[SUCCESS] ' . $aleph_id . ' has been imported into the local database');
+	  }
+   }
 }

@@ -6,6 +6,7 @@
 composer.phar
 .bowerrc
 .bundle/
+/test/coverage
 
 # Laravel specific exclusions
 /bootstrap/compiled.php

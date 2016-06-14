@@ -23,11 +23,11 @@ Route::group(['before' => 'fw-allow-wl'], function ()
   {
 	  Route::get('/', 'AdminController@getIndex');
 	  Route::get('/registrations', 'AdminRegistrationController@getIndex');
-	  Route::get('/registration/{user}', 'AdminRegistrationController@getRegistration');
-	  Route::post('/registration/{user}', 
+	  Route::get('/registration/{uid}', 'AdminRegistrationController@getRegistration');
+	  Route::post('/registration/{uid}', 
 		'AdminRegistrationController@postRegistration');
 	  Route::get('/checkins/{range?}', 'AdminCheckinController@getIndex');
-	  Route::get('/checkins/{user}/{range?}',
+	  Route::get('/checkins/{uid}/{range?}',
 		'AdminCheckinController@getCheckins');
   });
 });

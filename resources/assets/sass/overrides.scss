@@ -28,6 +28,8 @@ a:focus {
  */
 #signature {
   border: 1px dashed $gray;
+  background: $gray-lighter;
+  padding: $padding-large-horizontal $padding-large-vertical;
 }
 
 /**
@@ -48,3 +50,4 @@ a:focus {
 .noborder {
   border: 0;
 }
+

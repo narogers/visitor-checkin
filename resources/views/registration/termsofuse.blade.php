@@ -1,22 +1,21 @@
 @extends('layouts/master')
 
 @section('content')
-
         @include('shared/_terms_of_use')
 
-        {!! Form::open(['action' => 'RegistrationController@postWelcome']) !!}
+        {!! Form::open(['action' => 'RegistrationController@postTermsOfUse']) !!}
           <div id="signature" class="double-padded"></div>
 
           {!! Form::hidden('signature_data', '',
                 ['id' => 'signature_data']) !!}
           <div class="row">
             <div class="col-sm-1">
-               {!! Form::submit('Register &raquo;',
+               {!! Form::submit('Register',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'next_step']) !!}
             </div>
              <div class="col-sm-1 col-sm-offset-1">
-               {!! Form::button('<span class="fa fa-eraser"></span> Clear',
+               {!! Form::button('Clear <span class="fa fa-eraser"></span> ',
                 ['class' => 'btn btn-primary btn-lg',
                  'name' => 'reset_signature',
                  'id' => 'reset']) !!}

@@ -2,15 +2,35 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Role;
-use App\User;
-use App\Services\Aleph;
+// Models used to pass information to views
+use App\Models\User;
+// Interfaces with backend services
+use App\ILS\ILSInterface;
+use App\Repositories\PatronInterface;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class CheckinController extends Controller {
-	/**
+    /**
+     * Interfaces to data stores 
+     */
+    protected $ils;
+    protected $patrons;
+  
+    /**
+     * Construct a new instance 
+     *
+     * @param PatronInterface
+     * @return CheckinController
+     */
+    public function __construct(PatronInterface $patrons, ILSInterface $ils) {
+      $this->patrons = $patrons;
+      $this->ils = $ils;
+    }	
+   
+    /**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
@@ -20,103 +40,74 @@ class CheckinController extends Controller {
 		return view('checkin.index');
 	}
 
-	public function getNew(Request $request)
-	{
-		/**
-		 * Check the request URL for the 'code' parameter. If passed
-		 * clean it to only digits before passing on to Aleph. If not
-		 * present then kick back to the 'Not found' page with a
-		 * helpful error message
-		 */
-		if ($request->input('code')) {
-			$barcode = preg_replace("/[^0-9]/", "", $request->input('code'));
-		  $user = User::whereBarcode($barcode)->first();
-			if (null == $user) {
-				$user = new User;
-			}
-			
-			$is_active = $user->isActive($barcode);
-			if (is_bool($is_active)) {
-		  	Log::info('[USER] Adding shadow details to local database for quick lookup');
-		  	// The Aleph ID is resolved when you query for the active
-		  	// user
-			  $user->importPatronDetails($barcode);
+    public function postIndex(Request $request) {
+      $limit = $request->has('barcode') ?
+        $request->get('barcode') :
+        $request->get('name', null);
+      $users = $this->patrons->getRegisteredUsers($limit);
+ 
+      Log::info("[CHECKIN] " . count($users) . " results found for ${limit}");
+      $total = count($users);
 
-			  /**
-			   * Since it is possible that the email address has already
-			   * been used let's circumvent that possibility before we
-			   * save by doing a query. If the user already exists then
-			   * we just copy over the barcode and aleph_id before
-			   * committing it to the database
-			   */
-			  if (null == $user->created_at) {
-			  	$is_existing_user = (0 < User::whereEmailAddress($user->email_address)->count());
-			  	// TODO: Refactor this into the User model?
-			  	if ($is_existing_user) {
-			  		$aleph_import = $user; 
-			  		$user = User::whereEmailAddress($aleph_import->email_address)->first();
-			  		$user->barcode = $barcode;
-			  		$user->aleph_id = $aleph_import->aleph_id;
-			  	}
-			  }
+      /**
+       * Exit point #1
+       * Exactly one match found
+       */
+      if (1 == $total) {
+        Session::put("uid", $users[0]["id"]);
+        $this->patrons->checkin($users[0]["id"]);
 
-			  // If the information is loaded via barcode it exists in 
-			  // Aleph. Assume if it is active that there is no need to
-			  // check ID. Otherwise leave it alone
-			  if (true == $is_active) {
-			    $user->verified_user = true;
-			  }
-				$user->save();
-				$user->addCheckin();
-			}
-			list($view, $message_key) = $this->viewFor($is_active);
+        if ($this->ils->isActive($users[0]["aleph_id"])) {
+          return redirect()->action("CheckinController@getConfirmation");
+        } else {
+          return redirect()->action("CheckinController@getExpired");
+        }
+      } 
 
-			return view($view)
-				->withMessageKey($message_key)
-				->withUser($user);		
-		} else {
-			// If no barcode was supplied
-		  return view('checkin.index');
-		}
+      /**
+       * Exit point #2
+       * No results or too many results found
+       */
+      if ((0 == $total) || ($total > config('app.select_threshold', 5))) {
+        return redirect()->action("CheckinController@getNotFound");
+      }
+
+      /**
+       * Exit point #3
+       * Need to provide a list of users to help select the correct
+       * person
+       */
+      Session::put("users", $users);
+      return redirect()->action("CheckinController@getSelect");
 	}
 
-	public function postNew(Request $request)
-	{
-		// Search by email address and name to find any hits in the
-		// registration database. For more on the limits see the scope
-		// in the User model
-		$user = null;
-		$query_string = $request->input('query');
-    
-        Log::info("[CHECKIN] Looking up users for query ${query_string}");		
-		$user_matches = User::registeredUsers($query_string);
-        Log::info("[CHECKIN] " . $user_matches->count() . " matches found");
-
-        /**
-         * Default to Not Found then try to determine if any other cases
-         * apply
-         */
-        $message_key = 'checkin.notfound';
-        $view = 'checkin.retry';
-
-        if (1 == $user_matches->count()) {
-          $user = $user_matches->first();
-          $is_active = $user->isActive();
-           list($view, $message_key) = $this->viewFor($is_active);
-          if ($is_active) {
-            $user->addCheckin();
-          }         
-        } elseif (0 == $user_matches->count()) {
-          $message_key = "checkin.notfound";
-        } elseif ($user_matches->count() < Config('app.match_threshold')) {
-		  $message_key = "checkin.multiplefound";
-		  $user = $user_matches->get();
-		}
-
-		return view($view)
-			->withMessageKey($message_key)
-			->withUser($user);
+    public function getCheckin(Request $request) {
+      if ($request->has('barcode') || $request->has('name')) {
+        return redirect()->action("CheckinController@postCheckin");
+      }
+      
+      return redirect()->action("CheckinController@getIndex");
 	}
+
+    /**
+     * Permit patrons to select from a list of available options to check
+     * in to the library
+     *
+     * @return Response
+     */
+    public function getSelect() {
+      $users = Session::pull('users', []);
+      return view("checkin.select")->withUsers($users);
+    }
+
+    /**
+     * Allow for expired guests to resign the terms of use
+     *
+     * @return Response
+     */
+    public function getExpired() {
+      return view("checkin.expired");
+    }
 
 	/**
 	 * API call that updates the signature data for a user and
@@ -127,49 +118,35 @@ class CheckinController extends Controller {
 	 * this scenario
 	 */
 	public function postExpired(Request $request) {
-        Log::info("[RENEWAL] Looking for user with id " . $request->input('uid'));
-		$user = User::find($request->input('uid'));
-		$view = '';
-		$message_key = '';
+        $uid = Session::get("uid");
+		$signature = $request->get("signature_data");
+        $this->patrons->update($uid, ["signature" => $signature]);
+        $u = $this->patrons->getUser($uid);
 
-		if (null == $user) {
-          $view = 'checkin.retry';
-          $message_key = 'checkin.notfound';
-        } else {
-		  $user->signature = $request->input['signature'];
-		  $user->addCheckin();
-		  $user->save();
-
-		  $view = 'checkin.welcome';
-		  $message_key = 'checkin.success';
-	    }
-
-		return view($view)
-			->withMessageKey($message_key)
-			->withUser($user);
+        // TODO: Send a reminder email to the circulation staff?
+        return redirect()->action("CheckinController@getConfirmation");
 	}
 
-	/**
-	 * Uses a registration status to determine which view to return for the
-	 * checkin process (getNew and postNew)
-	 */
-	public function viewFor($status) {
-		  Log::info('[VIEW] Resolving status ' . $status . '...');
+    /**
+     * Show confirmation of successful check in
+     *
+     * @return Response
+     */
+    public function getConfirmation() {
+      $uid = Session::pull("uid");
+      $user = $this->patrons->getUser($uid);
+    
+      return view("checkin.confirmation")
+        ->withUser($user);
+    }
 
-		  $view = '';
-		  $message_key = '';
-
-			if ($status) {
-			  $view = 'checkin.welcome';
-			  $message_key = 'checkin.success';
-		  } elseif (is_null($status)) {
-			  $view = 'checkin.retry';
-			  $message_key = 'checkin.notfound';
-		  } else {
-			  $view = 'checkin.expired';
-			  $message_key = 'checkin.expired';
-			}
-
-			return [$view, $message_key];
-	}
+    /**
+     * Report no results found and offer an opportunity to reenter a
+     * search parameter 
+     *
+     * @return Response
+     */
+    public function getNotFound() {
+      return view("checkin.notfound");
+    }
 }

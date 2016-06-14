@@ -24,12 +24,15 @@ class RegistrationTable extends Migration {
 			$table->binary('signature');
 			$table->string('address_street')->nullable();
 			$table->string('address_state')->nullable();
+            $table->string('address_city')->nullable();
 			$table->integer('address_zip')->nullable();
 			/*
 			 * Store just digits and format on the view end
 			 */
 			$table->string('telephone', 10)->nullable();
 			$table->string('department')->nullable();
+            $table->string('job_title')->nullable();
+            $table->string('supervisor')->nullable();
 			/*
 			 * Likewise with the extension - store only the digits
 			 */

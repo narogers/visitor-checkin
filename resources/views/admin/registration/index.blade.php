@@ -2,9 +2,9 @@
 
 @section('content')
       <div class="col-md-12">
-        <h1>Pending Registration 
-          @if (sizeof($users) > 0)
-            <span class="badge">{!! sizeof($users) !!}</span>
+        <h1>Pending Registrations 
+          @if ($users->count() > 0)
+            <span class="badge">{!! $users->count() !!}</span>
           @endif
         </h1>
         <hr>
@@ -12,7 +12,7 @@
 
     <div class="row">
       <div class="col-md-12">
-        @if (sizeof($users) > 0)
+        @if ($users->count())
         <table class="table table-striped">
           <thead>
             <tr>
@@ -30,15 +30,15 @@
                 $user->name, 
                 ['user' => $user]) !!}
               <td>{!! $user->email_address !!}</td>
-              <td>{!! $user->formattedCreationDate() !!}</td>
+              <td>{!! DateUtils::format($user->created_at) !!}</td>
               <td>
                 @if (empty($user->aleph_id))
   {!! Form::open(
       ['action' => ['AdminRegistrationController@postRegistration', $user],
-       'class' => 'form-inline pending-step']) !!}
+       'class' => 'form-inline double-padded']) !!}
   <span class="fa fa-square-o"></span> No Aleph ID set 
-    {!! Form::hidden('event', 'refresh_aleph_id') !!}
-    {!! Form::submit('Refresh record', ['class' => 'btn btn-primary']) !!}
+    {!! Form::hidden('action', 'refresh_ils') !!}
+    {!! Form::submit('Look up ID', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
                 @else
 <p class="completed-step"><span class="fa fa-check-square-o"></span> Aleph ID verified</p>
@@ -50,9 +50,9 @@
 <p class="pending-step">
   {!! Form::open(
       ['action' => ['AdminRegistrationController@postRegistration', $user],
-       'class' => 'form-inline']) !!}
+       'class' => 'form-inline double-padded']) !!}
   <span class="fa fa-square-o"></span> Check patron's ID
-    {!! Form::hidden('event', 'verify_id') !!}
+    {!! Form::hidden('action', 'verify') !!}
     {!! Form::submit('Confirm verification', ['class' => 'btn btn-primary']) !!}
   {!! Form::close() !!}
 </p>

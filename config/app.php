@@ -114,7 +114,6 @@ return [
 		 */
 		'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Broadcasting\BroadcastServiceProvider',
-		//'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
@@ -139,16 +138,17 @@ return [
 		 * Application Service Providers...
 		 */
 		'App\Providers\AppServiceProvider',
-		//'App\Providers\BusServiceProvider',
-		//'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
 		'PragmaRX\Firewall\Vendor\Laravel\ServiceProvider',
+        'Propaganistas\LaravelPhone\LaravelPhoneServiceProvider',
 
 		/**
 		 * Custom providers
 		 */
-		'App\Providers\AlephServiceProvider',
+        'App\Repositories\PatronRepositoryServiceProvider',
+        'App\ILS\ILSServiceServiceProvider',
+        'App\Providers\ZipCodeServiceProvider'
 	],
 
 	/*
@@ -173,6 +173,7 @@ return [
 		'Config'    => 'Illuminate\Support\Facades\Config',
 		'Cookie'    => 'Illuminate\Support\Facades\Cookie',
 		'Crypt'     => 'Illuminate\Support\Facades\Crypt',
+        'DateUtils' => 'App\Helpers\DateHelper',
 		'DB'        => 'Illuminate\Support\Facades\DB',
 		'Eloquent'  => 'Illuminate\Database\Eloquent\Model',
 		'Event'     => 'Illuminate\Support\Facades\Event',
@@ -199,7 +200,7 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-
+        'ViewUtils' => 'App\Helpers\ViewHelper'
 	],
 
     /**
@@ -210,5 +211,5 @@ return [
     * Number of matches to display before you consider a search too generic
     * and return "Too many results found"
     */
-  "match_threshold" => 5
+  "select_threshold" => 5
 ];

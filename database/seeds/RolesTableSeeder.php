@@ -3,45 +3,43 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-use App\Role;
+use App\Models\Role;
 
 class RolesTableSeeder extends Seeder {
 	public function run() {
-		DB::table('roles')->delete();
-
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Academic',
 			'description' => 'Student, staff, and faculty guests'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Docent',
 			'description' => 'Museum docents'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Fellow',
 			'description' => 'Research fellows'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Intern',
 			'description' => 'Temporary interns'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Member',
 			'description' => 'CMA Member'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Public',
 			'description' => 'Public library user without other affiliation'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Staff',
 			'description' => 'CMA Employee'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => 'Volunteer',
 			'description' => 'CMA Volunteer'
 		]);
-		Role::create([
+		Role::firstOrCreate([
 			'role' => "Unknown",
 			"description" => "Undefined role"
 		]);

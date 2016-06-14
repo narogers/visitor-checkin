@@ -18,15 +18,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 	 * Set up the environment for tests
 	 */
 	public function setUp() {
-		parent::setUp();
-		$this->prepareForTests();
+      parent::setUp();
+	  Artisan::call("migrate:refresh");
+      // Globally disable events 
+      $this->withoutEvents();
 	}
-
-	/**
-	 * Migrate the database since it will be empty during tests
-	 */
-	private function prepareForTests() {
-		Artisan::call('migrate');
-	}
-
 }

@@ -7927,7 +7927,9 @@ a:focus {
  * Emphasize signature panel
  */
 #signature {
-  border: 1px dashed #555555; }
+  border: 1px dashed #555555;
+  background: #eeeeee;
+  padding: 16px 10px; }
 
 /**
  * Highlight steps which are completed by marking them green. Use red for

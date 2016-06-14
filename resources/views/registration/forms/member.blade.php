@@ -1,3 +1,8 @@
+@extends('layouts.role')
+
+@section('title', 'Member')
+
+@section('form')
             <div class="form-group">
               {!! Form::label('address_street', 'Address') !!}
               {!! Form::text('address_street', null, 
@@ -25,7 +30,8 @@
           </div>
 
           <div class="form-group">
-              {!! Form::label('badge_number', "Membership number") !!}
-              {!! Form::text('badge_number', null, 
+              {!! Form::label('barcode', "Membership number") !!}
+              {!! Form::text('barcode', null, 
                     ['class' => 'form-control']) !!} 
           </div>
+@endsection

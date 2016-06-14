@@ -22,15 +22,9 @@ class RegistrationTypeRequest extends Request {
 	 */
 	public function rules()
 	{
-		/**
-		 * TODO: Query the database to make sure the name / email address 
-		 *       combination are unique. If not tell the person they are
-		 *       already registered and (if local) kick them over to the
-		 *		 check in side
-		 */
 		return [
 			'name' => 'required',
-			'email_address' => 'required|email|unique:users',
+			'email_address' => 'required|email',
 			'role' => 'required|in:Academic,Docent,Fellow,Intern,Member,Public,Staff,Volunteer'
 		];
 	}

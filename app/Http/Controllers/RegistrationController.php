@@ -1,24 +1,28 @@
-<?php namespace App\Http\Controllers;
+<?php 
+
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Http\Requests\RegistrationDetailsRequest;
 use App\Http\Requests\RegistrationTypeRequest;
 use App\Http\Requests\TermsOfUseAgreementRequest;
-use App\Registration;
-use App\Role;
-use App\User;
+use App\Repositories\PatronInterface;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class RegistrationController extends Controller {
+    protected $patrons;
 
 	/**
 	 * Instantiate a new RegistrationController
+     *
+     * @param PatronInterface $patrons
 	 */
-	public function __construct() {
+	public function __construct(PatronInterface $patrons) {
+      $this->patrons = $patrons;
 	}
 
 	/**
@@ -30,168 +34,92 @@ class RegistrationController extends Controller {
 	 */
 	public function getIndex()
 	{
-        return view('registration.index');
+      return view('registration.index');
 	}
-
-	public function postIndex() {
-		return view('registration.index');
-	}
-
-	public function getNew() {
-		/*
-		 * We can be certain that the session exists because a filter
-		 * in the middleware will redirect all requests without one to
-		 * the index with a 'Session expired' flash notice
-		 */
-		$user = Session::get('user');
-		if ($user->role) {
-			$properties = $this->getRoleView($user->role->role);
-		} else {
-		    $properties = $this->getRoleView($request->input('role'));
-		}
-		Log::info('[GET] Directing request to ' . $properties['view']);
-
- 		return view('registration.new')
- 		  ->withLabel($properties['label'])
-          ->withRegistration(new Registration)
-		  ->withRegistrationForm($properties['view']);
- 	}
-
+  
 	public function postNew(RegistrationTypeRequest $request) {
-		/**
-		 * Switch on the role input to determine which view to
-		 * render in the form. If given an invalid role (or no role
-		 * at all) redirect to the index page with a flash notice
-		 * about the missing role
-		 *
-		 * It might be helpful not to hardcode this views but that can come
-		 * in a later refactoring
-		 */
-		$properties = $this->getRoleView($request->input('role'));
+      $patron = $this->patrons->createOrFindUser($request->only('name', 'email_address'));
 
-		Log::info('[POST] Directing request to ' . $properties['view']);
- 		/**
- 		 * Bail if you don't have a view to supply
- 		 */
- 		if (null == $properties['view']) {
- 			return redirect('register')
- 			  ->with('notice', 'Please select a valid role');
- 		}
-
- 		/**
- 		 * Store everything in the session so that at the end of the
- 		 * registration process you can build up a Registration object
- 		 * that gets stored to the database
- 		 *
- 		 * Also cache the request object so that you can extract it in
- 		 * case somebody navigates backwards
- 		 */
- 		$user = Session::get('user', new User);
- 		$user->name = $request->input('name');
- 		$user->email_address = $request->input('email_address');
- 		// We do it this way to avoid having to save an incomplete
- 		// version of the User record prematurely
- 		$role = Role::where('role', '=', $request->input('role'))->first();
- 		$user->role()->associate($role);
- 		
- 		Session::put('user', $user);
-
- 		/**
- 		 * Otherwise continue the process by loading the registration 
- 		 * form and supplying it the proper content. Since all forms 
- 		 * funnel to the terms of use there is no need for the 
- 		 * workflow to diverge here
- 		 */
- 		return view('registration.new')
- 		  ->withLabel($properties['label'])
-		  ->withRegistrationForm($properties['view']);
+      if (isset($patron) && $patron->isIncomplete()) {
+        Session::put('uid', $patron->id);
+        return redirect()->action('RegistrationController@getDetails',
+          ['role' => strtolower($request->role)]);
+      } else {
+        return redirect()
+          ->action("RegistrationController@getIndex")
+          ->withInput()
+          ->with('error', 'Email address has already been registered.');
+      }
 	}
 
-	public function getTermsOfUse() {
-		return view('registration.termsofuse');
+    /**
+     * Captures registration details depending on the provided role. If none
+     * is provided then it will redirect to the index page
+     *
+     * @param string 
+     * @return Response
+     */
+    public function getDetails($role) {
+      if ($this->patrons->hasRole($role)) {
+        Session::put('role', $role);
+        $form = "registration.forms.${role}";
+        return view($form);
+      } else {
+        return redirect()->action('RegistrationController@getIndex');
+      }
+    }
 
-	}
-	public function postTermsOfUse(RegistrationDetailsRequest $request) {
-		$user = Session::get('user');
+    /**
+     * Store registration details and then proceed to the terms of use
+     *
+     * @param RegistrationTypeRequest $request
+     * @return Response
+     */
+   public function postDetails(RegistrationDetailsRequest $request) {
+     $uid = Session::get('uid');
+     $role = Session::get('role');
 
-		$registration = new Registration;
-		$registration->fill($request->all());
+     $this->patrons->setRegistration($uid, $request->all());
+     $this->patrons->setRole($uid, $role);
+ 
+     return redirect()->action('RegistrationController@getTermsOfUse');
+   }
 
-		Session::put('user', $user);
-		Session::put('registration', $registration);
+   /*
+    * Show terms of use for final acceptance before the record is commited
+    * to the database
+    *
+    * @return Response
+    */
+  public function getTermsOfUse() {
+    return view('registration.termsofuse');
+  }
 
-		return view('registration.termsofuse');
-	}
+  /**
+   * Write the signature to the database and finish the registration
+   * process
+   *
+   * @param TermsOfUseAgreementRequest $request
+   * @return Response
+   */
+  public function postTermsOfUse(TermsOfUseAgreementRequest $request) {
+    $uid = Session::get("uid");
+    $signature =  $request->get('signature_data');
+    $this->patrons->update($uid, ["signature" => $signature]);
 
-	public function postWelcome(TermsOfUseAgreementRequest $request) {
-		$user = Session::get('user');
-		$user->signature = $request->get('signature_data');
-		// If we don't do this the registration will be lost forever
-		$registration = Session::get('registration');
-		$user->save();
-		$user->registration()->save($registration);
-		
-		/**
-		 * For now hardcode the internal / external flag but eventually
-		 * this too can be neatly handled by a piece of middleware
-		 */
-		return view('registration.welcome')
-			->withInternalIp('false')
-			->withUser($user);
-	}
+    return redirect()->action("RegistrationController@getConfirmation"); 
+  }
 
-	/**
-	 * Safe methd that captures any requests which could not be matched. It 
-	 * logs the request to the system and then redirects to the New Visitor 
-	 * Registration page. This does not replace the need for proper error 
-	 * handling - think of it more as a debugging tool and safeguard
-	 */
-	public function missingMethod($parameters = array()) {
-		Log::error('Could not match request to a specified route - redirecting to the index page');
-		return redirect()->action('RegistrationController@getIndex');
-	}
+  /**
+   * Confirmation of registration
+   *
+   * @return Response
+   */
+  public function getConfirmation() {
+    $uid = Session::get('uid');
+    $user = $this->patrons->getUser($uid);
 
-	/**
-	 * This could be refactored as a helper instead
-	 */
-	protected function getRoleView($role = '') {
-		Log::info('Processing registration for a(n) ' . $role);
-
- 		switch ($role) {
- 			case "Academic":
- 				return ['view' => 'registration.forms.academic',
- 						'label' => 'Academic'];
-
- 			case "Docent":
- 				return ['view' => 'registration.forms.docent',
- 						'label' => 'Docent'];
-
- 			case "Fellow":
- 				return ['view' => 'registration.forms.fellow',
- 						'label' => 'Fellow'];
-
- 			case "Intern":
- 				return ['view' => 'registration.forms.intern',
- 						'label' => 'Intern'];
-
- 			case "Member":
- 				return ['view' => 'registration.forms.member',
- 						'label' => 'Member'];
-
- 			case "Public":
- 				return ['view' => 'registration.forms.public',
- 						'label' => 'Public'];
-
- 			case "Staff":
- 				return ['view' => 'registration.forms.staff',
- 						'label' => 'Staff'];
-
- 			case "Volunteer":
- 				return ['view' => 'registration.forms.volunteer',
- 						'label' => 'Volunteer'];
- 			default:
- 				return ['view' => null,
- 						'label' => null];
- 		}
-	}
+    return view('registration.confirmation')
+      ->withUser($user);
+  }
 }

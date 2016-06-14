@@ -15,10 +15,10 @@ class AllowOptionalFields extends Migration {
 	public function up()
 	{
 		Schema::table('registrations', function(Blueprint $table) {
-			#$table->string('job_title')->nullable()->change();
-			#$table->string('supervisor')->nullable()->change();
+			#$table->string('job_title')->nullable(true)->change();
+			#$table->string('supervisor')->nullable(true)->change();
 
-			#$table->string('address_city')->nullable()->change();
+			#$table->string('address_city')->nullable(true)->change();
 		});
 	}
 

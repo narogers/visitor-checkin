@@ -1,3 +1,8 @@
+@extends('layouts.role')
+
+@section('title', 'Fellow')
+
+@section('form')
            <div class="form-group">
               {!! Form::label('department', 'Department') !!}
               {!! Form::text('department', null, 
@@ -15,3 +20,4 @@
               {!! Form::text('extension', null, 
                     ['class' => 'form-control']) !!}
           </div>
+@endsection
