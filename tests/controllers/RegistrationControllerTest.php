@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery;
+use \Mockery as Mock;
 
 class RegistrationControllerTest extends TestCase {
   use DatabaseTransactions;
@@ -13,7 +13,7 @@ class RegistrationControllerTest extends TestCase {
     $this->seed("DatabaseSeeder");
     Carbon::setTestNow(Carbon::createFromDate(2015, 3, 19));
    
-    $this->mockZip = Mockery::mock(App\Services\ZipCodeInterface::class);
+    $this->mockZip = Mock::mock(App\Services\ZipCodeInterface::class);
     $this->mockZip
      ->shouldReceive("lookup")
      ->andReturn(["city" => "Gotham City", "state" => "XX"]);  
@@ -141,6 +141,6 @@ class RegistrationControllerTest extends TestCase {
 
   public function tearDown() {
     Carbon::setTestNow();
-    Mockery::close();
+    Mock::close();
   }
 }

@@ -2,7 +2,6 @@
 
 use App\ILS\AlephService;
 use Carbon\Carbon;
-use Mockery;
 use phpmock\mockery\PHPMockery;
 
 class AlephServiceTest extends TestCase {

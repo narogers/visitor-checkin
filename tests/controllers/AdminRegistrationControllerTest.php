@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithoutMiddle;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery;
+use \Mockery as Mock;
 use Symfony\Component\DomCrawler\Crawler;
 
 class AdminRegistrationControllerTest extends TestCase {
@@ -12,10 +12,10 @@ class AdminRegistrationControllerTest extends TestCase {
   public function setUp() {
     parent::setUp();
     $this->seed("DatabaseSeeder");
-    $this->mock = Mockery::mock('App\ILS\ILSInterface');
+    $this->mock = Mock::mock('App\ILS\ILSInterface');
     Carbon::setTestNow(Carbon::createFromDate(2015, 3, 19));
 
-    $this->mockZip = Mockery::mock(App\Services\ZipCodeInterface::class);
+    $this->mockZip = Mock::mock(App\Services\ZipCodeInterface::class);
     $this->mockZip
       ->shouldReceive("lookup")
       ->andReturn(["city" => "Saint Louis", "state" => "XX"]);

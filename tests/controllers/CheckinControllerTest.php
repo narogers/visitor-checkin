@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Mockery;
+use \Mockery as Mock;
 use Symfony\Component\DomCrawler\Crawler;
 
 class CheckinControllerTest extends TestCase {
@@ -12,8 +12,8 @@ class CheckinControllerTest extends TestCase {
   public function setUp() {
     parent::setUp();
     Carbon::setTestNow(Carbon::createFromDate(2015, 3, 19));
-    $this->mockPatron = Mockery::mock("App\Repositories\PatronInterface");
-    $this->mockILS = Mockery::mock("App\ILS\ILSInterface");
+    $this->mockPatron = Mock::mock("App\Repositories\PatronInterface");
+    $this->mockILS = Mock::mock("App\ILS\ILSInterface");
     
     // DO not mock up the patron in the same way since the underlying database
     // is ephemeral
@@ -137,6 +137,6 @@ class CheckinControllerTest extends TestCase {
 
   public function tearDown() {
     Carbon::setTestNow();
-    Mockery::close();
+    Mock::close();
   }
 }
