@@ -1,17 +1,15 @@
 # config valid only for current version of Capistrano
-lock '3.4.0'
+lock '3.9.1'
 
 set :application, 'visitor_checkin'
-set :repo_url, 'git@github.com:ClevelandArtGIT/visitor-checkin.git'
+set :repo_url, 'https://github.com/ClevelandMuseumArt/visitor-checkin'
+set :laravel_version, 5.2
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
-# Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/home/web/www/library/apps/visitor-checkin'
-
 # Default value for :scm is :git
-set :scm, :git
+#set :scm, :git
 
 # Default value for :format is :pretty
 set :format, :pretty
@@ -23,13 +21,9 @@ set :log_level, :debug
 # set :pty, true
 
 # Default value for :linked_files is []
-set :linked_files, fetch(:linked_files, []).push(
-	'.env',
-	'public/.htaccess')
-
-# Default value for linked_dirs is []
-set :linked_dirs, fetch(:linked_dirs, []).push(
-	'storage/logs')
+set :linked_files, fetch(:linked_files, []).push('.env')
+set :linked_dirs, fetch(:linked_dirs, []).push('storage/logs')
+set :laravel_upload_dotenv_file_on_deploy, false
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
@@ -37,4 +31,14 @@ set :linked_dirs, fetch(:linked_dirs, []).push(
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
-SSHKit.config.command_map[:composer] = "php #{shared_path.join("composer")}"
+namespace :deploy do
+  before :starting, :map_composer_command do
+    on roles(:app) do |server|
+      SSHKit.config.command_map[:composer] = "#{shared_path.join("composer.phar")}"
+    end
+  end
+
+  after :starting, 'composer:install_executable'
+  after :updating, "composer:install"
+  after :updating, "laravel:migrate" 
+end

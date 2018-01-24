@@ -2,6 +2,7 @@ set :stage, :production
 # Peg to a previous commit until the server is ready for PHP 7
 #set :branch, :master
 set :branch, ENV.fetch('REVISION', 'master')
+set :deploy_to, '/home/web/www/library/apps/visitor-checkin'
 
 set :laravel_server_user, "apache"
 set :laravel_artisan_flags, "--env=production"
@@ -29,19 +30,3 @@ set :file_permissions_groups, %w{web}
 # multiple properties.
 # You can define all roles on a single server, or split them:
 server 'lib-secundo.clevelandart.org', user: 'nrogers', roles: %w{app db web}
-
-namespace :deploy do
-	# During startup bring down the server so that everyone knows
-	# it is being refreshed and you minize weird state errors due to
-	# code changes
-	after :starting, "libcma:stop_artisan"
-
-	after :updating, :migrate do
-	  on roles(:all) do
-			info "Running database migrations"
-			invoke "laravel:artisan", "migrate"
-		end
-	end
-
-	after :finishing, "libcma:start_artisan"
-end
